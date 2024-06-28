@@ -39,15 +39,15 @@ const Navbar = () => {
           <button onClick={()=>{navigate("/addListing")}}>Have something to sell?</button>
           {user && (
             <div>
-              <Link to="/profile">{user.email}</Link>
-              <Link to="/settings">Settings</Link>
-              <button onClick={handleClick}>Log out</button>
+              <Link to="/profile" className="custom-link outline">{user.email}</Link>
+              <Link to="/settings" className="custom-link outline">Settings</Link>
+              <button onClick={handleClick} className="custom-link outline">Log out</button>
             </div>
           )}
           {!user && (
             <div>
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Signup</Link>
+              <Link to="/login" className="custom-link outline">Login</Link>
+              <Link to="/signup" className="custom-link outline">Signup</Link>
             </div>
           )}
         </nav>

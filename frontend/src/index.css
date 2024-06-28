@@ -5,6 +5,9 @@
 :root {
   --primary: #1aac83;
   --error: #e7195a;
+  --accent-green: #00ff38;
+  --accent-orange: #ff7a00;
+  --accent-red: #ff0000;
 }
 body {
   background: #164067;
@@ -27,7 +30,7 @@ header a {
   text-decoration: none;
 }
 header h1 {
-  color: #00ff38;
+  color: var(--accent-green);
   text-shadow: 1px 1px 2.5px #000;
 }
 .pages {
@@ -45,7 +48,7 @@ header h1 {
 .profile img {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 5px solid var(--primary);
 }
 .profile h2,
@@ -102,7 +105,7 @@ h4 {
   box-shadow: 0px 1px 0px #fff;
 }
 .profile-tabs .tab.active:before {
-  background: #00ff38;
+  background: var(--accent-green);
 }
 .profile-tabs .content-tabs {
   padding: 30px 20px;
@@ -123,13 +126,54 @@ h4 {
   display: block;
 }
 
+/* settings page */
+.settings {
+  background: #fff;
+  border-radius: 4px;
+  margin: 20px auto;
+  padding: 5%;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+.settings img {
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+  border: 5px solid var(--primary);
+}
+.settings h2 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.settings .upload-image-container {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+  gap: 40px;
+}
+.settings .desc-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 500px;
+}
+.settings .desc-details button {
+  align-self: start;
+}
+.settings .img-details {
+  margin-top: 10px;
+  margin-top: 20px;
+}
+.settings .img-details label {
+  margin-bottom: 10px;
+}
+
 /* homepage */
 .home {
   display: grid;
   grid-template-columns: 3fr 1fr;
   gap: 100px;
 }
-.workout-details {
+.details {
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
@@ -137,17 +181,17 @@ h4 {
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
-.workout-details h4 {
+.details h4 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
   color: var(--primary);
 }
-.workout-details p {
+.details p {
   margin: 0;
   font-size: 0.9em;
   color: #555;
 }
-.workout-details span {
+.details span {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -201,10 +245,11 @@ nav {
 nav a {
   margin-left: 10px;
 }
-nav button {
-  background: #fff;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+nav button,
+.custom-link {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
   padding: 6px 10px;
   border-radius: 4px;
   font-family: 'Poppins';
@@ -212,6 +257,21 @@ nav button {
   font-size: 1em;
   margin-left: 10px;
 }
+.outline {
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+/* .red {
+  color: #fff;
+  background: var(--accent-red);
+  border: none;
+}
+.orange {
+  color: #fff;
+  background: var(--accent-orange);
+  border: none;
+} */
 
 /* auth forms */
 form.signup,
@@ -223,62 +283,64 @@ form.login {
   border-radius: 4px;
 }
 
-.searchDiv{
+/* add listings */
+.searchDiv {
   display: flex;
   flex-flow: row nowrap;
   align-self: center;
   justify-self: center;
   padding: 0;
-  width:40%;
+  width: 40%;
 }
 
-.searchDiv input{
+.searchDiv input {
   padding: 0;
   margin: 0;
 }
 
-.listingWindow{
-  width: 100%;
+.listingWindow {
+  /* width: 100%; */
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: center;
-  gap:2%;
+  gap: 2%;
+  margin: 20px auto;
 }
 
-.materialWhite{
- background-color: white;
- box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1);
- border-radius: 10px;
+.materialWhite {
+  background-color: white;
+  /* box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1); */
+  border-radius: 10px;
 }
 
-.listingItem{
- display: flex;
- flex-flow: column nowrap;
- width:30%;
- flex-basis: 20%;
- height:auto;
- padding:1%;
+.listingItem {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 30%;
+  flex-basis: 20%;
+  height: auto;
+  padding: 1%;
 }
 
-.Thumbnail{
- width:300px;
- height:150px;
+.Thumbnail {
+  width: 300px;
+  height: 150px;
 }
 
-.addListingDiv{
- display: flex;
- flex-flow: column nowrap;
- align-items: flex-start;
- padding:5%
+.addListingDiv {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  padding: 5%;
 }
 
-.addButton{
- margin-top: 3%;
- width:100%
+.addButton {
+  margin-top: 3%;
+  width: 100%;
 }
 
-.imageInputContent{
- display: flex;
- flex-flow: row nowrap;
+.imageInputContent {
+  display: flex;
+  flex-flow: row nowrap;
 }

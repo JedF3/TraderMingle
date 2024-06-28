@@ -1,6 +1,6 @@
 const ProfileDetails = ({ workout }) => {
   return (
-    <div className="workout-details">
+    <div className="details">
       
     </div>
   );

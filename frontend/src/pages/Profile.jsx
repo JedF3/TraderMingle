@@ -9,7 +9,7 @@ import ProfileTabs from '../components/ProfileTabs';
 const Profile = () => {
   return (
     <div className="profile">
-      <div className="workout-details">
+      <div className="details">
         <img
           src="https://preview.redd.it/confession-i-though-pain-was-going-to-be-revealed-as-v0-y8xbcb5tiooa1.jpg?width=640&crop=smart&auto=webp&s=f5f28b9d9cb5eff7b6368030181c2ef47be7395d"
           alt=""
