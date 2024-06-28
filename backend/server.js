@@ -8,6 +8,9 @@ import listingsRouter from "./routes/listings.js";
 import cors from "cors";
 import helmet from "helmet";
 dotenv.config();
+// To handle this warning: 
+// [MONGOOSE] DeprecationWarning: Mongoose: the strictQuery option will be switched back to false by default in Mongoose 7. Use mongoose.set('strictQuery', false); if you want to prepare for this change.
+mongoose.set('strictQuery', false);
 
 // express app
 const app = express();
