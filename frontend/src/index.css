@@ -172,7 +172,7 @@ input {
   border-radius: 4px;
   box-sizing: border-box;
 }
-form button {
+button {
   background: var(--primary);
   border: 0;
   color: #fff;
@@ -221,4 +221,64 @@ form.login {
   padding: 20px;
   background: #fff;
   border-radius: 4px;
+}
+
+.searchDiv{
+  display: flex;
+  flex-flow: row nowrap;
+  align-self: center;
+  justify-self: center;
+  padding: 0;
+  width:40%;
+}
+
+.searchDiv input{
+  padding: 0;
+  margin: 0;
+}
+
+.listingWindow{
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap:2%;
+}
+
+.materialWhite{
+ background-color: white;
+ box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1);
+ border-radius: 10px;
+}
+
+.listingItem{
+ display: flex;
+ flex-flow: column nowrap;
+ width:30%;
+ flex-basis: 20%;
+ height:auto;
+ padding:1%;
+}
+
+.Thumbnail{
+ width:300px;
+ height:150px;
+}
+
+.addListingDiv{
+ display: flex;
+ flex-flow: column nowrap;
+ align-items: flex-start;
+ padding:5%
+}
+
+.addButton{
+ margin-top: 3%;
+ width:100%
+}
+
+.imageInputContent{
+ display: flex;
+ flex-flow: row nowrap;
 }

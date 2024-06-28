@@ -4,7 +4,6 @@ import multer from "multer";
 import {storage} from "../config/listingStorage.js";
 import requireAuth from "../middleware/requireAuth.js";
 
-const baseURL="/api/v1/users";
 const listingsRouter = Router();
 const listingImages = multer({storage})
 listingsRouter.post("/addListing", listingImages.array("listing-img"), requireAuth, addListing);
