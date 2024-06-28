@@ -14,11 +14,18 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import ListingScreen from './pages/ListingScreen';
+import AddListing from './pages/AddListing';
+import { useState } from 'react';
+import searchTermContext from './context/searchTermContext';
 
 function App() {
   const { user } = useAuthContext();
+  let [searchTerm, setSearchTerm] = useState("");
+  const search = {searchTerm, setSearchTerm}; 
   const router = createBrowserRouter(
     createRoutesFromElements(
+      
       <Route path="/" element={<MainLayout />}>
         <Route index element={user ? <Home /> : <Navigate to="/login" />} />
         <Route
@@ -37,13 +44,23 @@ function App() {
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/" />}
         />
+        <Route
+          path="/search/"
+          element={<ListingScreen />}
+        />
+        <Route
+          path="/addListing"
+          element={<AddListing />}
+        />
       </Route>
     )
   );
 
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <searchTermContext.Provider value={search}>
+        <RouterProvider router={router} />
+      </searchTermContext.Provider>
     </div>
   );
 }
