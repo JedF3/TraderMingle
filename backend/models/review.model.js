@@ -23,6 +23,16 @@ const reviewSchema = new Schema(
       type: String,
       required: false,
     },
+    image: {
+      path: {
+        type: String,
+        required: false,
+      },
+      filename: {
+        type: String,
+        required: false,
+      },
+    },
   },
   { timestamps: true }
 );
