@@ -1,42 +1,50 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 
 // pages & components
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Navbar from './components/Navbar';
 import Profile from './pages/Profile';
+import MainLayout from './layouts/MainLayout';
 
 function App() {
   const { user } = useAuthContext();
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route
+          path="profile"
+          element={user ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="login"
+          element={!user ? <Login /> : <Navigate to="/" />}
+        />
+        <Route
+          path="signup"
+          element={!user ? <Signup /> : <Navigate to="/" />}
+        />
+      </Route>
+    )
+  );
+
   return (
     <div className="App">
-      <BrowserRouter>
-        <Navbar />
-        <div className="pages">
-          <Routes>
-            <Route
-              path="/"
-              element={user ? <Home /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/profile"
-              element={user ? <Profile /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/login"
-              element={!user ? <Login /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/signup"
-              element={!user ? <Signup /> : <Navigate to="/" />}
-            />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </div>
   );
 }
 
 export default App;
+
+// references: 
+// static navigation logic: https://www.youtube.com/watch?v=LDB4uaJ87e0&t=4681s
+// modification: https://chatgpt.com/share/3e6b1017-4213-481f-9a6c-52999d2cf484
