@@ -103,6 +103,8 @@ h4 {
   border: 1px solid #bbb;
   border-bottom: none;
   box-shadow: 0px 1px 0px #fff;
+  /* color: var(--accent-green); */
+  text-shadow: 1px 1px px #000;
 }
 .profile-tabs .tab.active:before {
   background: var(--accent-green);
