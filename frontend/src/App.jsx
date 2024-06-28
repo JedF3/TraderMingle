@@ -8,11 +8,12 @@ import {
 import { useAuthContext } from './hooks/useAuthContext';
 
 // pages & components
+import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
-import MainLayout from './layouts/MainLayout';
+import Settings from './pages/Settings';
 
 function App() {
   const { user } = useAuthContext();
@@ -23,6 +24,10 @@ function App() {
         <Route
           path="profile"
           element={user ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="settings"
+          element={user ? <Settings /> : <Navigate to="/settings" />}
         />
         <Route
           path="login"
