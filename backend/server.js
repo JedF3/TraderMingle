@@ -3,22 +3,28 @@ import mongoose from 'mongoose';
 import workoutRoutes from './routes/workouts.js';
 import userRoutes from './routes/user.js';
 import dotenv from 'dotenv';
+import listingsRouter from './routes/listings.js';
+import cors from "cors";
+import helmet from "helmet";
 dotenv.config();
 
 // express app
 const app = express();
 
 // middleware
+app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  console.log(req.path, req.method, req.body);
   next();
 });
 
 // routes
 app.use('/api/v1/workouts', workoutRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/listings', listingsRouter);
 
 // connect to db
 mongoose
