@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
-    "start:frontend": "cd /d C:/Users/adfinem/Documents/ecommerce/p5-ecommerce/frontend && npm start",
-    "start:backend": "cd /d C:/Users/adfinem/Documents/ecommerce/p5-ecommerce/backend && nodemon"
+    "start:frontend": "cd /d C:/Users/adfinem/Documents/Uplift Code Camp/group/fs-mern-app/frontend && npm start",
+    "start:backend": "cd /d C:/Users/adfinem/Documents/Uplift Code Camp/group/fs-mern-app/backend && nodemon"
   },
   "keywords": [],
   "author": "",
