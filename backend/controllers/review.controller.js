@@ -47,6 +47,7 @@ const getReview = async (req, res) => {
 // create new workout
 const createReview = async (req, res) => {
   const { rating, content } = req.body;
+  const { path, filename } = req.file;
 
   if (!rating) {
     return res.status(400).json({ error: "Please leave a rating" });
@@ -55,7 +56,11 @@ const createReview = async (req, res) => {
   // add document to db
   try {
     const user_id = req.user._id;
-    const review = await Review.create({ rating, content });
+    const review = await Review.create({
+      rating,
+      content,
+      image: { path, filename },
+    });
     res.status(200).json(review);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -84,6 +89,7 @@ const deleteReview = async (req, res) => {
 const updateReview = async (req, res) => {
   const { id } = req.params;
   const { rating, content } = req.body;
+  const { path, filename } = req.file;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such review" });
@@ -91,7 +97,7 @@ const updateReview = async (req, res) => {
 
   const review = await Review.findOneAndUpdate(
     { _id: id },
-    { rating, content }
+    { rating, content, image: { path, filename } }
   );
 
   if (!review) {
