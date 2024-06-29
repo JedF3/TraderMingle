@@ -1,7 +1,5 @@
 import express from 'express';
-
-// controller functions
-import { loginUser, signupUser } from '../controllers/user.controller.js';
+import { loginUser, signupUser, updateUser } from '../controllers/user.controller.js';
 
 const router = express.Router();
 
@@ -10,5 +8,8 @@ router.post('/login', loginUser);
 
 // signup route
 router.post('/signup', signupUser);
+
+// update user route
+router.patch('/:id', updateUser);
 
 export default router;

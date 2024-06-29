@@ -105,6 +105,8 @@ h4 {
   box-shadow: 0px 1px 0px #fff;
   /* color: var(--accent-green); */
   text-shadow: 1px 1px px #000;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 .profile-tabs .tab.active:before {
   background: var(--accent-green);

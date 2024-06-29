@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import no_avatar from "../images/no-avatar.svg"
 
 function Settings() {
   const { user } = useAuthContext();
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
+    username: '',
+    image: '',
     phone: '',
     locations: '',
   });
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      try {
+        const response = await fetch(`/api/v1/user/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const data = await response.json();
+        setFormData({
+          email: data.email || '',
+          password: '', // Leave blank for security reasons
+          username: data.username || '',
+          image: data.image[0]?.path || '',
+          phone: data.phone || '',
+          locations: data.meetupLocations || '',
+        });
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({
@@ -28,7 +57,7 @@ function Settings() {
       return;
     }
 
-    const response = await fetch('/api/v1/signup', {
+    const response = await fetch(`/api/v1/user/${user._id}`, {
       method: 'PATCH',
       body: JSON.stringify(formData),
       headers: {
@@ -43,13 +72,6 @@ function Settings() {
       setError(json.error);
       setEmptyFields(json.emptyFields || []);
     } else {
-      setFormData({
-        username: '',
-        email: '',
-        password: '',
-        phone: '',
-        locations: '',
-      });
       setError(null);
       setEmptyFields([]);
       console.log('Profile updated', json);
@@ -65,8 +87,8 @@ function Settings() {
           <div className="img-details">
             <label>Profile photo</label>
             <img
-              src="https://preview.redd.it/confession-i-though-pain-was-going-to-be-revealed-as-v0-y8xbcb5tiooa1.jpg?width=640&crop=smart&auto=webp&s=f5f28b9d9cb5eff7b6368030181c2ef47be7395d"
-              alt=""
+              src={formData.image || no_avatar}
+              alt="Profile"
             />
           </div>
           <div className="desc-details">
@@ -74,9 +96,10 @@ function Settings() {
               Clear frontal face photos are an important way for buyers and
               sellers to learn about each other.
             </p>
-            <button>Upload a photo</button>
+            <button type="button">Upload a photo</button>
           </div>
         </div>
+
         <div>
           <label htmlFor="username">Username</label>
           <input
@@ -132,7 +155,7 @@ function Settings() {
           />
         </div>
 
-        <button>Save Changes</button>
+        <button type="submit">Save Changes</button>
         {error && <div className="error">{error}</div>}
       </form>
     </div>
