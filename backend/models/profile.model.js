@@ -2,18 +2,22 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const workoutSchema = new Schema(
+const profileSchema = new Schema(
   {
-    title: {
+    username: {
       type: String,
       required: true,
     },
-    reps: {
+    phone: {
       type: Number,
       required: true,
     },
-    load: {
-      type: Number,
+    image: {
+      type: String,
+      required: true,
+    },
+    meetupLocations: {
+      type: String,
       required: true,
     },
     user_id: {
@@ -24,6 +28,6 @@ const workoutSchema = new Schema(
   { timestamps: true }
 );
 
-const Workout = mongoose.model('Workout', workoutSchema);
+const Profile = mongoose.model('Profile', profileSchema);
 
-export default Workout;
+export default Profile;

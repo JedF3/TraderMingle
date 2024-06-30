@@ -1,41 +1,40 @@
-import { useEffect } from 'react';
-import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
+import React, { useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useProfilesContext } from '../hooks/useProfilesContext';
 
 // components
-import WorkoutDetails from '../components/WorkoutDetails';
-import WorkoutForm from '../components/WorkoutForm';
+import ProfileDetails from '../components/ProfileDetails';
+import ProfileForm from '../components/ProfileForm';
 
 const Home = () => {
-  const { workouts, dispatch } = useWorkoutsContext();
+  const { profiles, dispatch } = useProfilesContext();
   const { user } = useAuthContext();
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      const response = await fetch('/api/v1/workouts', {
+    const fetchProfiles = async () => {
+      const response = await fetch('/api/v1/profiles', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
       const json = await response.json();
-
       if (response.ok) {
-        dispatch({ type: 'SET_WORKOUTS', payload: json });
+        dispatch({ type: 'SET_PROFILES', payload: json });
       }
     };
 
-    fetchWorkouts();
-  }, [dispatch]);
+    fetchProfiles();
+  }, [user.token]);
 
   return (
     <div className="home">
       <div className="workouts">
-        {workouts &&
-          workouts.map((workout) => (
-            <WorkoutDetails key={workout._id} workout={workout} />
+        {profiles &&
+          profiles.map((profile) => (
+            <ProfileDetails key={profile._id} profile={profile} />
           ))}
       </div>
-      <WorkoutForm />
+      <ProfileForm />
     </div>
   );
 };

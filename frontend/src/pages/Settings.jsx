@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
-import no_avatar from "../images/no-avatar.svg"
+import no_avatar from '../images/no-avatar.svg';
 
 function Settings() {
   const { user } = useAuthContext();
@@ -20,7 +20,7 @@ function Settings() {
       if (!user) return;
 
       try {
-        const response = await fetch(`/api/v1/user/${user._id}`, {
+        const response = await fetch(`/api/v1/user/signup${user._id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -57,7 +57,7 @@ function Settings() {
       return;
     }
 
-    const response = await fetch(`/api/v1/user/${user._id}`, {
+    const response = await fetch(`/api/v1/user/signup${user._id}`, {
       method: 'PATCH',
       body: JSON.stringify(formData),
       headers: {
@@ -86,10 +86,7 @@ function Settings() {
         <div className="upload-image-container">
           <div className="img-details">
             <label>Profile photo</label>
-            <img
-              src={formData.image || no_avatar}
-              alt="Profile"
-            />
+            <img src={formData.image || no_avatar} alt="Profile" />
           </div>
           <div className="desc-details">
             <p>
