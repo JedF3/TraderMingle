@@ -6,7 +6,12 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import no_avatar from '../images/pain.jpg';
 // react-icons
-import { FaUser, FaGear, FaArrowRightFromBracket } from 'react-icons/fa6';
+import {
+  FaUser,
+  FaGear,
+  FaArrowRightFromBracket,
+  FaChevronDown
+} from 'react-icons/fa6';
 
 const Navbar = () => {
   const { logout } = useLogout();
@@ -104,6 +109,7 @@ const Navbar = () => {
                   ? profiles[0].username
                   : 'Profile'}
                 <img src={no_avatar} alt="no-avatar" />
+                <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
                 className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}

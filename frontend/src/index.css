@@ -403,3 +403,6 @@ nav {
   vertical-align: middle;
   color: var(--primary);
 }
+.icon-small{
+  font-size: 12px;
+}
