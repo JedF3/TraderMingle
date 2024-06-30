@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
-import no_avatar from '../images/no-avatar.svg';
+import no_avatar from '../images/pain.jpg';
 
 function Settings() {
   const { user } = useAuthContext();
 
   const [username, setUsername] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [phone, setPhone] = useState('');
   const [image, setImage] = useState('');
   const [meetupLocations, setMeetupLocations] = useState('');
@@ -36,7 +38,14 @@ function Settings() {
       return;
     }
 
-    const profile = { username, phone, image, meetupLocations };
+    const profile = {
+      username,
+      firstname,
+      lastname,
+      phone,
+      image,
+      meetupLocations,
+    };
 
     const response = await fetch('/api/v1/profiles', {
       method: 'POST',
@@ -54,6 +63,8 @@ function Settings() {
     }
     if (response.ok) {
       setUsername('');
+      setFirstname('');
+      setLastname('');
       setPhone('');
       setImage('');
       setMeetupLocations('');
@@ -98,6 +109,30 @@ function Settings() {
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             className={emptyFields.includes('username') ? 'error' : ''}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="firstname">First name</label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            onChange={(e) => setFirstname(e.target.value)}
+            value={firstname}
+            className={emptyFields.includes('firstname') ? 'error' : ''}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="lastname">Last name</label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            onChange={(e) => setLastname(e.target.value)}
+            value={lastname}
+            className={emptyFields.includes('lastname') ? 'error' : ''}
           />
         </div>
 

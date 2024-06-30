@@ -29,13 +29,42 @@ const getProfile = async (req, res) => {
 
 // create new profile
 const createProfile = async (req, res) => {
-  const { username, phone, image, meetupLocations } = req.body;
+  const { username, firstname, lastname, phone, image, meetupLocations } =
+    req.body;
+
+  let emptyFields = [];
+
+  if (!username) {
+    emptyFields.push('username');
+  }
+  if (!firstname) {
+    emptyFields.push('firstname');
+  }
+  if (!lastname) {
+    emptyFields.push('lastname');
+  }
+  if (!phone) {
+    emptyFields.push('phone');
+  }
+  if (!image) {
+    emptyFields.push('image');
+  }
+  if (!meetupLocations) {
+    emptyFields.push('meetupLocations');
+  }
+  if (emptyFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: 'Please fill in all the fields', emptyFields });
+  }
 
   // add document to db
   try {
     const user_id = req.user._id;
     const profile = await Profile.create({
       username,
+      firstname,
+      lastname,
       phone,
       image,
       meetupLocations,

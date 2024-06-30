@@ -8,6 +8,14 @@ const profileSchema = new Schema(
       type: String,
       required: true,
     },
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
     phone: {
       type: Number,
       required: true,

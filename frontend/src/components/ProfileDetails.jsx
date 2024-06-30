@@ -5,7 +5,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 // components
-import no_avatar from '../images/no-avatar.svg';
+import no_avatar from '../images/pain.jpg';
 
 const ProfileDetails = ({ profile }) => {
   const { dispatch } = useProfilesContext();
@@ -33,7 +33,9 @@ const ProfileDetails = ({ profile }) => {
   return (
     <>
       <img src={no_avatar} alt="" />
-      <h2>Pain</h2>
+      <h2>
+        {profile.firstname} {profile.lastname}
+      </h2>
       <p>@{profile.username}</p>
       <p>
         <strong>Phone Number: </strong>
