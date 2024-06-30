@@ -4,6 +4,9 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import { useProfilesContext } from '../hooks/useProfilesContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
+import no_avatar from '../images/pain.jpg';
+// react-icons
+import { FaUser, FaGear, FaArrowRightFromBracket } from 'react-icons/fa6';
 
 const Navbar = () => {
   const { logout } = useLogout();
@@ -11,13 +14,12 @@ const Navbar = () => {
   const { profiles, dispatch } = useProfilesContext();
   const [searchText, setSearchText] = useState('');
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
+  // dropdown menu
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const navigate = useNavigate();
   let firstRun = useRef(true);
-
-  const handleClick = () => {
-    logout();
-  };
 
   const handleSearch = () => {
     setSearchTerm(searchText);
@@ -29,7 +31,7 @@ const Navbar = () => {
     } else {
       firstRun.current = false;
     }
-  }, [searchTerm, navigate]);
+  }, [searchTerm]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -49,6 +51,32 @@ const Navbar = () => {
     }
   }, [user, dispatch]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
+
+  // menu buttons
+  const handleLogout = () => {
+    logout();
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleMenuItemClick = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <header>
       <div className="container">
@@ -63,19 +91,63 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          <button onClick={() => navigate('/addListing')}>Have something to sell?</button>
+          <button onClick={() => navigate('/addListing')}>
+            Have something to sell?
+          </button>
           {user ? (
-            <div>
-              <Link to="/profile" className="custom-link outline">
-                {profiles && profiles.length > 0 ? profiles[0].username : 'Profile'}
-              </Link>
-              <Link to="/settings" className="custom-link outline">Settings</Link>
-              <button onClick={handleClick} className="custom-link outline">Log out</button>
+            <div ref={menuRef}>
+              <button
+                className="drop-down-menu custom-link outline"
+                onClick={toggleMenu}
+              >
+                {profiles && profiles.length > 0
+                  ? profiles[0].username
+                  : 'Profile'}
+                <img src={no_avatar} alt="no-avatar" />
+              </button>
+              <div
+                className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}
+                id="subMenu"
+              >
+                <div className="sub-menu">
+                  <Link
+                    to="/profile"
+                    className="sub-menu-link"
+                    onClick={handleMenuItemClick}
+                  >
+                    <FaUser className="react-icons" />
+                    <p>Profile</p>
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className="sub-menu-link"
+                    onClick={handleMenuItemClick}
+                  >
+                    <FaGear className="react-icons" />
+                    <p>Settings</p>
+                  </Link>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      handleLogout();
+                      handleMenuItemClick();
+                    }}
+                    className="sub-menu-link"
+                  >
+                    <FaArrowRightFromBracket className="react-icons" />
+                    <p>Logout</p>
+                  </Link>
+                </div>
+              </div>
             </div>
           ) : (
             <div>
-              <Link to="/login" className="custom-link outline">Login</Link>
-              <Link to="/signup" className="custom-link outline">Signup</Link>
+              <Link to="/login" className="custom-link outline">
+                Login
+              </Link>
+              <Link to="/signup" className="custom-link outline">
+                Signup
+              </Link>
             </div>
           )}
         </nav>
@@ -85,3 +157,8 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+// font awesome react icons:
+// guide: https://www.youtube.com/watch?v=LDB4uaJ87e0&t=4562s
+// finding react-icon names: https://react-icons.github.io/react-icons/icons/fa6/
+// finding font-awesome icon names: https://fontawesome.com/search?q=settings&o=r
