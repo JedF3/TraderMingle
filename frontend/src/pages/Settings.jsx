@@ -4,50 +4,29 @@ import no_avatar from '../images/no-avatar.svg';
 
 function Settings() {
   const { user } = useAuthContext();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    username: '',
-    image: '',
-    phone: '',
-    locations: '',
-  });
+
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
+  const [image, setImage] = useState('');
+  const [meetupLocations, setMeetupLocations] = useState('');
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!user) return;
-
-      try {
-        const response = await fetch(`/api/v1/user/signup${user._id}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-        const data = await response.json();
-        setFormData({
-          email: data.email || '',
-          password: '', // Leave blank for security reasons
-          username: data.username || '',
-          image: data.image[0]?.path || '',
-          phone: data.phone || '',
-          locations: data.meetupLocations || '',
-        });
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
+    const fetchProfiles = async () => {
+      const response = await fetch('/api/v1/profiles', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+      if (response.ok) {
+        dispatch({ type: 'SET_PROFILES', payload: json });
       }
     };
 
-    fetchUserData();
-  }, [user]);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    fetchProfiles();
+  }, [user.token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,24 +36,31 @@ function Settings() {
       return;
     }
 
-    const response = await fetch(`/api/v1/user/signup${user._id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(formData),
+    const profile = { username, phone, image, meetupLocations };
+
+    const response = await fetch('/api/v1/profiles', {
+      method: 'POST',
+      body: JSON.stringify(profile),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${user.token}`,
       },
     });
-
     const json = await response.json();
 
     if (!response.ok) {
       setError(json.error);
       setEmptyFields(json.emptyFields || []);
-    } else {
+    }
+    if (response.ok) {
+      setUsername('');
+      setPhone('');
+      setImage('');
+      setMeetupLocations('');
       setError(null);
       setEmptyFields([]);
-      console.log('Profile updated', json);
+      console.log('new profile added', json);
+      dispatch({ type: 'CREATE_PROFILE', payload: json });
     }
   };
 
@@ -86,13 +72,19 @@ function Settings() {
         <div className="upload-image-container">
           <div className="img-details">
             <label>Profile photo</label>
-            <img src={formData.image || no_avatar} alt="Profile" />
+            <img src={no_avatar} alt="Profile" />
           </div>
           <div className="desc-details">
             <p>
               Clear frontal face photos are an important way for buyers and
               sellers to learn about each other.
             </p>
+            <input
+              type="text"
+              onChange={(e) => setImage(e.target.value)}
+              value={image}
+              className={emptyFields.includes('image') ? 'error' : ''}
+            />
             <button type="button">Upload a photo</button>
           </div>
         </div>
@@ -103,41 +95,21 @@ function Settings() {
             type="text"
             id="username"
             name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            className={emptyFields.includes('username') ? 'error' : ''}
           />
         </div>
 
         <div>
           <label htmlFor="phone">Phone Number</label>
           <input
-            type="tel"
+            type="number"
             id="phone"
             name="phone"
-            value={formData.phone}
-            onChange={handleChange}
+            onChange={(e) => setPhone(e.target.value)}
+            value={phone}
+            className={emptyFields.includes('phone') ? 'error' : ''}
           />
         </div>
 
@@ -147,8 +119,9 @@ function Settings() {
             type="text"
             id="locations"
             name="locations"
-            value={formData.locations}
-            onChange={handleChange}
+            onChange={(e) => setMeetupLocations(e.target.value)}
+            value={meetupLocations}
+            className={emptyFields.includes('meetupLocations') ? 'error' : ''}
           />
         </div>
 
