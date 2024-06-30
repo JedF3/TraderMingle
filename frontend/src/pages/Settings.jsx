@@ -133,3 +133,7 @@ function Settings() {
 }
 
 export default Settings;
+
+// references for creating profile page + settings:
+// useContext: https://www.youtube.com/watch?v=NKsVV7wJcDM&list=PL4cUxeGkcC9iJ_KkrkBZWZRHVwnzLIoUE&index=11
+// useReducer: https://vimeo.com/938650951/9c03f94370
