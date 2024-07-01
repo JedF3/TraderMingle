@@ -1,12 +1,12 @@
 import express from 'express';
 
 import {
-  createWorkout,
-  getWorkouts,
-  getWorkout,
-  deleteWorkout,
-  updateWorkout,
-} from '../controllers/workout.controller.js';
+  getProfiles,
+  getProfile,
+  createProfile,
+  deleteProfile,
+  updateProfile,
+} from '../controllers/profile.controller.js';
 import requireAuth from '../middleware/requireAuth.js';
 
 const router = express.Router();
@@ -15,18 +15,18 @@ const router = express.Router();
 router.use(requireAuth);
 
 // GET all workouts
-router.get('/', getWorkouts);
+router.get('/', getProfiles);
 
 //GET a single workout
-router.get('/:id', getWorkout);
+router.get('/:id', getProfile);
 
 // POST a new workout
-router.post('/', createWorkout);
+router.post('/', createProfile);
 
 // DELETE a workout
-router.delete('/:id', deleteWorkout);
+router.delete('/:id', deleteProfile);
 
 // UPDATE a workout
-router.patch('/:id', updateWorkout);
+router.patch('/:id', updateProfile);
 
 export default router;

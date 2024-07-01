@@ -9,7 +9,6 @@ import { useAuthContext } from './hooks/useAuthContext';
 
 // pages & components
 import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
@@ -21,13 +20,15 @@ import searchTermContext from './context/searchTermContext';
 
 function App() {
   const { user } = useAuthContext();
-  let [searchTerm, setSearchTerm] = useState("");
-  const search = {searchTerm, setSearchTerm}; 
+  let [searchTerm, setSearchTerm] = useState('');
+  const search = { searchTerm, setSearchTerm };
   const router = createBrowserRouter(
     createRoutesFromElements(
-      
       <Route path="/" element={<MainLayout />}>
-        <Route index element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route
+          index
+          element={user ? <ListingScreen /> : <Navigate to="/login" />}
+        />
         <Route
           path="profile"
           element={user ? <Profile /> : <Navigate to="/login" />}
@@ -36,22 +37,13 @@ function App() {
           path="settings"
           element={user ? <Settings /> : <Navigate to="/settings" />}
         />
-        <Route
-          path="login"
-          element={!user ? <Login /> : <Navigate to="/" />}
-        />
+        <Route path="login" element={!user ? <Login /> : <Navigate to="/" />} />
         <Route
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/" />}
         />
-        <Route
-          path="/search/"
-          element={<ListingScreen />}
-        />
-        <Route
-          path="/addListing"
-          element={<AddListing />}
-        />
+        <Route path="/search/" element={<ListingScreen />} />
+        <Route path="/addListing" element={<AddListing />} />
       </Route>
     )
   );
@@ -67,6 +59,6 @@ function App() {
 
 export default App;
 
-// references: 
+// references:
 // static navigation logic: https://www.youtube.com/watch?v=LDB4uaJ87e0&t=4681s
 // modification: https://chatgpt.com/share/3e6b1017-4213-481f-9a6c-52999d2cf484

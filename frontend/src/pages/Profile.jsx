@@ -1,27 +1,37 @@
-// import { useEffect } from 'react';
-// import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
-// import { useAuthContext } from '../hooks/useAuthContext';
+import React, { useEffect } from 'react';
+import { useAuthContext } from '../hooks/useAuthContext';
+import { useProfilesContext } from '../hooks/useProfilesContext';
 
 // components
-// import ProfileDetails from '../components/ProfileDetails';
+import ProfileDetails from '../components/ProfileDetails';
 import ProfileTabs from '../components/ProfileTabs';
 
 const Profile = () => {
+  const { profile, dispatch } = useProfilesContext();
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await fetch('/api/v1/profiles', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+      if (response.ok && json.length > 0) {
+        dispatch({ type: 'SET_PROFILE', payload: json[0] });
+      }
+    };
+
+    if (user) {
+      fetchProfile();
+    }
+  }, [dispatch, user]);
+
   return (
     <div className="profile">
-      <div className="workout-details">
-        <img
-          src="https://preview.redd.it/confession-i-though-pain-was-going-to-be-revealed-as-v0-y8xbcb5tiooa1.jpg?width=640&crop=smart&auto=webp&s=f5f28b9d9cb5eff7b6368030181c2ef47be7395d"
-          alt=""
-        />
-        <h2>Pain</h2>
-        <p>@edgelord619</p>
-        <h4>Meet up locations:</h4>
-        <ul>
-          <li>Cubao</li>
-          <li>Marikina</li>
-          <li>Sm North</li>
-        </ul>
+      <div className="details">
+        {profile && <ProfileDetails profile={profile} />}
       </div>
       <ProfileTabs />
     </div>
@@ -29,3 +39,8 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+// references for creating profile page + settings:
+// useContext: https://www.youtube.com/watch?v=NKsVV7wJcDM&list=PL4cUxeGkcC9iJ_KkrkBZWZRHVwnzLIoUE&index=11
+// useReducer: https://vimeo.com/938650951/9c03f94370
