@@ -349,6 +349,59 @@ form.login {
   flex-flow: row nowrap;
 }
 
+.categorySelect{
+  width:100%;
+}
+
+input[type="file"]{
+  display:none;
+}
+
+img[src=""] {
+  display: none;
+}
+
+.noPointers{
+  pointer-events: none;
+}
+
+.imgUploadDisplay{
+  flex-basis: 20%;
+  height:auto;
+  padding:1%;
+ }
+
+ .uploadThumb{
+   width:300px;
+   height:150px;
+   object-fit: contain;
+ }
+
+.error{
+  color:red;
+}
+
+.listingItem:hover{
+  box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.3);
+  color:#00ff38;
+}
+
+.categoryDiv{
+
+}
+.infoDiv{
+  display: flex;
+  flex-flow: row nowrap;
+  width:100%;
+  padding-top: 5%;
+}
+
+.listingInfo{
+  display: flex;
+  flex-flow: column nowrap;
+  width:40%;
+}
+
 /* submenu */
 nav {
   position: relative;

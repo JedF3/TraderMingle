@@ -4,6 +4,7 @@ import MongooseDelete from "mongoose-delete";
 const listingSchema = new Schema({
     userID:{
         type:Schema.Types.ObjectId,
+        ref:'User',
         required:[true, "UserID is required"],
     },
     title:{
