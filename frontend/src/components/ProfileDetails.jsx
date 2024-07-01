@@ -39,7 +39,7 @@ const ProfileDetails = ({ profile }) => {
       <p>@{profile.username}</p>
       <p>
         <strong>Phone Number: </strong>
-        {profile.phone}
+        0{profile.phone}
       </p>
       <p>
         <strong>Image: </strong>

@@ -5,6 +5,7 @@ import { useProfilesContext } from '../hooks/useProfilesContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import no_avatar from '../images/pain.jpg';
+
 // react-icons
 import {
   FaUser,

@@ -22,14 +22,12 @@ const profileSchema = new Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     meetupLocations: {
       type: String,
-      required: true,
     },
     user_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
     },
   },
