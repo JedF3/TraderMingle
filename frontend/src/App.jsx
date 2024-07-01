@@ -17,6 +17,7 @@ import ListingScreen from './pages/ListingScreen';
 import AddListing from './pages/AddListing';
 import { useState } from 'react';
 import searchTermContext from './context/searchTermContext';
+import ViewListing from './pages/ViewListing';
 
 function App() {
   const { user } = useAuthContext();
@@ -42,8 +43,18 @@ function App() {
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/" />}
         />
-        <Route path="/search/" element={<ListingScreen />} />
-        <Route path="/addListing" element={<AddListing />} />
+        <Route
+          path="/search/"
+          element={<ListingScreen />}
+        />
+        <Route
+          path="/addListing"
+          element={<AddListing />}
+        />
+        <Route
+          path="/viewListing/:id"
+          element={<ViewListing />}
+        />
       </Route>
     )
   );

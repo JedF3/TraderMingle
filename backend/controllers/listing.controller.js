@@ -8,7 +8,7 @@ const getListings = asyncHandler(async(req, res, next)=>{
 
 const searchForListing = asyncHandler(async(req, res, next)=>{
     const searchTerm = new RegExp(req.params.searchTerm);
-    const searchedListings = await listings.find({$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]});
+    const searchedListings = await listings.find({$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]}).populate({path:"userID", select:["_id", "email"]});
     res.status(200).send({message:"Retrieved all listings", data:searchedListings});
 });
 

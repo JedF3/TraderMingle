@@ -6,11 +6,9 @@ import { AuthContextProvider } from './context/AuthContext';
 import { ProfilesContextProvider } from './context/ProfilesContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <AuthContextProvider>
       <ProfilesContextProvider>
         <App />
       </ProfilesContextProvider>
     </AuthContextProvider>
-  </React.StrictMode>
 );
