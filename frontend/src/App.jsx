@@ -52,6 +52,10 @@ function App() {
           element={<AddListing />}
         />
         <Route
+          path="/editListing/:id"
+          element={<AddListing />}
+        />
+        <Route
           path="/viewListing/:id"
           element={<ViewListing />}
         />
