@@ -4,34 +4,68 @@ import validator from 'validator';
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: Number,
+      required: true,
+    },
+    // image: [
+    //   {
+    //     path: String,
+    //     filename: String,
+    //   },
+    // ],
+    image: {
+      type: String,
+    },
+    meetupLocations: {
+      type: String,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  username: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 // static signup method
-userSchema.statics.signup = async function (email, password) {
+userSchema.statics.signup = async function (
+  email,
+  password,
+  username,
+  firstname,
+  lastname,
+  phone,
+  image,
+  meetupLocations
+) {
   // validation
-  if (!email || !password) {
-    throw Error('All fields must be filled');
+  if (!email || !password || !username || !firstname || !lastname || !phone) {
+    throw Error('All required fields must be filled');
   }
   if (!validator.isEmail(email)) {
     throw Error('Email not valid');
   }
 
-  // docs: https://www.npmjs.com/package/validator
-  // { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1, returnScore: false, pointsPerUnique: 1, pointsPerRepeat: 0.5, pointsForContainingLower: 10, pointsForContainingUpper: 10, pointsForContainingNumber: 10, pointsForContainingSymbol: 10 }
-  // Define custom options
   const options = {
     minLength: 8,
     minLowercase: 1,
@@ -52,7 +86,16 @@ userSchema.statics.signup = async function (email, password) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({ email, password: hash });
+  const user = await this.create({
+    email,
+    password: hash,
+    username,
+    firstname,
+    lastname,
+    phone,
+    image,
+    meetupLocations,
+  });
 
   return user;
 };

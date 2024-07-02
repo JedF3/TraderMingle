@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { AuthContextProvider } from './context/AuthContext';
-import { ProfilesContextProvider } from './context/ProfilesContext';
+import { UserProfileContextProvider } from './context/UserProfileContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
     <AuthContextProvider>
-      <ProfilesContextProvider>
+      <UserProfileContextProvider>
         <App />
-      </ProfilesContextProvider>
+      </UserProfileContextProvider>
     </AuthContextProvider>
+  </React.StrictMode>
 );

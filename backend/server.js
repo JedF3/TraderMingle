@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import profileRoutes from './routes/profiles.js';
 import reviewRoutes from './routes/reviews.js';
 import userRoutes from './routes/user.js';
 import dotenv from 'dotenv';
@@ -26,7 +25,6 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use('/api/v1/profiles', profileRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/listings', listingsRouter);
 app.use('/api/v1/reviews', reviewRoutes);

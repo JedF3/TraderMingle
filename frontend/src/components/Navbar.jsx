@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { useProfilesContext } from '../hooks/useProfilesContext';
+import { useUserProfileContext } from '../hooks/useUserProfileContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import no_avatar from '../images/pain.jpg';
@@ -17,7 +17,7 @@ import {
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  const { profiles, dispatch } = useProfilesContext();
+  const { profiles, dispatch } = useUserProfileContext();
   const [searchText, setSearchText] = useState('');
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   // dropdown menu
@@ -42,7 +42,7 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfiles = async () => {
-        const response = await fetch('/api/v1/profiles', {
+        const response = await fetch('/api/v1/user/profile', {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
