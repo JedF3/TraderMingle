@@ -3,11 +3,11 @@ import { useUserProfileContext } from '../hooks/useUserProfileContext';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 const ProfileForm = () => {
-  const { profile, dispatch } = useUserProfileContext();
+  const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useAuthContext();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -17,16 +17,17 @@ const ProfileForm = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (profile) {
-      setEmail(profile.email || '');
-      setUsername(profile.username || '');
-      setFirstname(profile.firstname || '');
-      setLastname(profile.lastname || '');
-      setPhone(profile.phone || '');
-      setImage(profile.image || '');
-      setMeetupLocations(profile.meetupLocations || '');
+    if (userProfile) {
+      // setEmail(userProfile.email || '');
+      // setPassword(userProfile.password || '');
+      setUsername(userProfile.username || '');
+      setFirstname(userProfile.firstname || '');
+      setLastname(userProfile.lastname || '');
+      setPhone(userProfile.phone || '');
+      setImage(userProfile.image || '');
+      setMeetupLocations(userProfile.meetupLocations || '');
     }
-  }, [profile]);
+  }, [userProfile]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,8 +38,8 @@ const ProfileForm = () => {
     }
 
     const updatedProfile = {
-      email,
-      password,
+      // email,
+      // password,
       username,
       firstname,
       lastname,
@@ -72,7 +73,7 @@ const ProfileForm = () => {
     <form className="create" onSubmit={handleSubmit}>
       <h3>Edit Profile</h3>
 
-      <label>Email address:</label>
+      {/* <label>Email address:</label>
       <input
         type="email"
         onChange={(e) => setEmail(e.target.value)}
@@ -85,8 +86,7 @@ const ProfileForm = () => {
         type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        required
-      />
+      /> */}
 
       <label>Username:</label>
       <input

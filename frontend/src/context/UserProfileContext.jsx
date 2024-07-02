@@ -1,13 +1,13 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useContext } from 'react';
 
 export const UserProfileContext = createContext();
 
-export const userProfileReducer = (state, action) => {
+const userProfileReducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER_PROFILE':
-      return { userProfile: action.payload };
-    case 'UPDATE_USER_PROFILE':
-      return { userProfile: action.payload };
+      return { ...state, userProfile: action.payload };
+    case 'UPDATE_PROFILE':
+      return { ...state, userProfile: action.payload };
     default:
       return state;
   }
@@ -22,3 +22,7 @@ export const UserProfileContextProvider = ({ children }) => {
     </UserProfileContext.Provider>
   );
 };
+
+export const useUserProfileContext = () => useContext(UserProfileContext);
+
+

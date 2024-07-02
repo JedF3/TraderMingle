@@ -48,9 +48,9 @@ const ProfileDetails = ({ profile }) => {
       <ul>
         <li> {profile.meetupLocations}</li>
       </ul>
-      {/* <p>
+      <p>
         {formatDistanceToNow(new Date(profile.createdAt), { addSuffix: true })}
-      </p> */}
+      </p>
       {/* <span className="material-symbols-outlined" onClick={handleClick}>
         ❌
       </span> */}
