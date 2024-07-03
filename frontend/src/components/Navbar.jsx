@@ -1,24 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useLogout } from '../hooks/useLogout';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { useProfilesContext } from '../hooks/useProfilesContext';
-import { useContext, useEffect, useRef, useState } from 'react';
-import searchTermContext from '../context/searchTermContext';
-import no_avatar from '../images/pain.jpg';
+import { Link, useNavigate } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useProfilesContext } from "../hooks/useProfilesContext";
+import { useContext, useEffect, useRef, useState } from "react";
+import searchTermContext from "../context/searchTermContext";
+import no_avatar from "../images/pain.jpg";
 
 // react-icons
 import {
   FaUser,
   FaGear,
   FaArrowRightFromBracket,
-  FaChevronDown
-} from 'react-icons/fa6';
+  FaChevronDown,
+} from "react-icons/fa6";
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const { profiles, dispatch } = useProfilesContext();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,7 +33,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!firstRun.current) {
-      navigate('/search/');
+      navigate("/search/");
     } else {
       firstRun.current = false;
     }
@@ -42,14 +42,14 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfiles = async () => {
-        const response = await fetch('/api/v1/profiles', {
+        const response = await fetch("/api/v1/profiles", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
         const json = await response.json();
         if (response.ok) {
-          dispatch({ type: 'SET_PROFILES', payload: json });
+          dispatch({ type: "SET_PROFILES", payload: json });
         }
       };
 
@@ -64,9 +64,9 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
 
@@ -97,7 +97,7 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          <button onClick={() => navigate('/addListing')}>
+          <button onClick={() => navigate("/addListing")}>
             Have something to sell?
           </button>
           {user ? (
@@ -108,12 +108,12 @@ const Navbar = () => {
               >
                 {profiles && profiles.length > 0
                   ? profiles[0].username
-                  : 'Profile'}
+                  : "Profile"}
                 <img src={no_avatar} alt="no-avatar" />
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
-                className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}
+                className={`sub-menu-wrap ${menuOpen ? "open-menu" : ""}`}
                 id="subMenu"
               >
                 <div className="sub-menu">

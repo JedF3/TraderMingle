@@ -1,11 +1,11 @@
-import { useProfilesContext } from '../hooks/useProfilesContext';
-import { useAuthContext } from '../hooks/useAuthContext';
+import { useProfilesContext } from "../hooks/useProfilesContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 // date fns
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 // components
-import no_avatar from '../images/pain.jpg';
+import no_avatar from "../images/pain.jpg";
 
 const ProfileDetails = ({ profile }) => {
   const { dispatch } = useProfilesContext();
@@ -32,14 +32,13 @@ const ProfileDetails = ({ profile }) => {
 
   return (
     <>
-      <img src={no_avatar} alt="" />
+      <img src={no_avatar} alt="" className="avatar" />
       <h2>
         {profile.firstname} {profile.lastname}
       </h2>
       <p>@{profile.username}</p>
       <p>
-        <strong>Phone Number: </strong>
-        0{profile.phone}
+        <strong>Phone Number: </strong>0{profile.phone}
       </p>
       <p>
         <strong>Image: </strong>
