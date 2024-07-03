@@ -1,14 +1,15 @@
 import listings from "../models/listing.model.js";
 import { asyncHandler } from "../middleware/errorHandler.js";
+import { cloudinary } from "../config/listingStorage.js";
 
 const getListings = asyncHandler(async(req, res, next)=>{
-    const allListings = await listings.find();
+    const allListings = await listings.find({deleted:{$ne:true}}).populate({path:"userID", select:["_id", "email"]});
     res.status(200).send({message:"Retrieved all listings", data:allListings});
 });
 
 const searchForListing = asyncHandler(async(req, res, next)=>{
-    const searchTerm = new RegExp(req.params.searchTerm);
-    const searchedListings = await listings.find({$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]}).populate({path:"userID", select:["_id", "email"]});
+    const searchTerm = new RegExp(req.params.searchTerm, "i");
+    const searchedListings = await listings.find({$and:[{$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]}, {deleted:{$ne:true}}]}).populate({path:"userID", select:["_id", "email"]});
     res.status(200).send({message:"Retrieved all listings", data:searchedListings});
 });
 
@@ -42,6 +43,7 @@ const addListing = asyncHandler(async(req, res, next)=>{
         })
     }
     await newListing.save();
+    res.header("Access-Control-Allow-Origin", "*");
     res.status(201).send({message:"New listing posted!", data:newListing});
 })
 
@@ -70,13 +72,38 @@ const editListing = asyncHandler(async(req, res, next)=>{
                 }
             })
         }
+        target.image.forEach(async (image)=>{
+            const cloudDelete = await cloudinary.uploader.destroy(image.filename);
+        })
         updateEntry();
-        res.status(200).send({message:"Listing Edited"});  
+        const result = await listings.findOne({_id:listingID}).populate({path:"userID", select:["_id", "email"]});
+        res.status(200).send({message:"Listing Edited", data:result});  
     }
     else{
         res.status(404).send({Message:"Target not found"});
     }
 })
+
+const markListingSold = asyncHandler(async(req, res, next)=>{
+    const listingID = req.params.id;
+    const target = await listings.findOne({_id:listingID});
+    const isSold = true;
+    if(target){
+        async function updateEntry(){
+            await listings.updateOne({_id:listingID},{
+                $set:{
+                    isSold,
+                }
+            })
+        }
+        updateEntry();
+        res.status(200).send({message:"Marked as sold!"});  
+    }
+    else{
+        res.status(404).send({Message:"Target not found!"});
+    }
+})
+
 const deleteListing = asyncHandler(async(req, res, next)=>{
     const listingID = req.params.id;
     const target = await listings.findOne({_id:listingID});
@@ -88,4 +115,4 @@ const deleteListing = asyncHandler(async(req, res, next)=>{
         res.status(404).send({message:"Listing not found"});
     }
 })
-export {getListings, addListing, viewOneListing, editListing, searchForListing, deleteListing};
+export {getListings, addListing, viewOneListing, editListing, searchForListing, deleteListing, markListingSold};

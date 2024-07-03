@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addListing, deleteListing, editListing, getListings, searchForListing, viewOneListing } from "../controllers/listing.controller.js";
+import { addListing, deleteListing, editListing, getListings, markListingSold, searchForListing, viewOneListing } from "../controllers/listing.controller.js";
 import multer from "multer";
 import {storage} from "../config/listingStorage.js";
 import requireAuth from "../middleware/requireAuth.js";
@@ -12,4 +12,5 @@ listingsRouter.get("/viewListing/:id", viewOneListing);
 listingsRouter.get("/search/:searchTerm", searchForListing);
 listingsRouter.put("/editListing/:id", listingImages.array("listing-img"), requireAuth, editListing);
 listingsRouter.put("/deleteListing/:id", requireAuth, deleteListing);
+listingsRouter.put("/markSold/:id", requireAuth, markListingSold)
 export default listingsRouter;

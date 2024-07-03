@@ -4,24 +4,25 @@ import {
   RouterProvider,
   Route,
   Navigate,
-} from 'react-router-dom';
-import { useAuthContext } from './hooks/useAuthContext';
+} from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 // pages & components
-import MainLayout from './layouts/MainLayout';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
-import ListingScreen from './pages/ListingScreen';
-import AddListing from './pages/AddListing';
-import { useState } from 'react';
-import searchTermContext from './context/searchTermContext';
-import ViewListing from './pages/ViewListing';
+import MainLayout from "./layouts/MainLayout";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import ListingScreen from "./pages/ListingScreen";
+import AddListing from "./pages/AddListing";
+import { useState } from "react";
+import searchTermContext from "./context/searchTermContext";
+import ViewListing from "./pages/ViewListing";
+import ReviewsTest from "./pages/ReviewsTest";
 
 function App() {
   const { user } = useAuthContext();
-  let [searchTerm, setSearchTerm] = useState('');
+  let [searchTerm, setSearchTerm] = useState("");
   const search = { searchTerm, setSearchTerm };
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -43,18 +44,11 @@ function App() {
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/" />}
         />
-        <Route
-          path="/search/"
-          element={<ListingScreen />}
-        />
-        <Route
-          path="/addListing"
-          element={<AddListing />}
-        />
-        <Route
-          path="/viewListing/:id"
-          element={<ViewListing />}
-        />
+        <Route path="/search/" element={<ListingScreen />} />
+        <Route path="/addListing" element={<AddListing />} />
+        <Route path="/editListing/:id" element={<AddListing />} />
+        <Route path="/viewListing/:id" element={<ViewListing />} />
+        <Route path="/reviews" element={<ReviewsTest />} />
       </Route>
     )
   );

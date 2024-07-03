@@ -7,11 +7,13 @@ export const useLogout = () => {
 
   const logout = () => {
     // remove user from storage
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
+
+    localStorage.clear();
 
     // dispatch logout action
-    dispatch({ type: 'LOGOUT' });
-    workoutsDispatch({ type: 'SET_PROFILES', payload: null });
+    dispatch({ type: "LOGOUT" });
+    workoutsDispatch({ type: "SET_PROFILES", payload: null });
   };
 
   return { logout };
