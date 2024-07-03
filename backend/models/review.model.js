@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema(
   {
-    user_id: {
+    userID: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    listing_id: {
+    listingID: {
       type: Schema.Types.ObjectId,
       ref: "Listing",
       required: true,
@@ -19,18 +19,15 @@ const reviewSchema = new Schema(
       type: Number,
       required: [true, "Rating is required."],
     },
-    content: {
+    comment: {
       type: String,
-      required: false,
     },
     image: {
       path: {
         type: String,
-        required: false,
       },
       filename: {
         type: String,
-        required: false,
       },
     },
   },

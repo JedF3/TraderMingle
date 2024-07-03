@@ -1,5 +1,5 @@
 /* google font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap");
 
 /* layout */
 :root {
@@ -12,7 +12,7 @@
 body {
   background: #164067;
   margin: 0;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 header {
   background: #78beff;
@@ -45,7 +45,7 @@ header h1 {
   grid-template-columns: 0.2fr 1fr;
   gap: 10px;
 }
-.profile img {
+.avatar {
   width: 150px;
   height: 150px;
   border-radius: 4px;
@@ -68,6 +68,7 @@ h4 {
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  width: 90%;
 }
 .profile-tabs .header-tabs {
   display: flex;
@@ -90,7 +91,7 @@ h4 {
   user-select: none; /* Standard syntax */
 }
 .profile-tabs .tab:before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 10px;
   left: 20px;
@@ -225,7 +226,7 @@ button {
   border: 0;
   color: #fff;
   padding: 10px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
 }
@@ -256,7 +257,7 @@ nav button,
   color: #fff;
   padding: 6px 10px;
   border-radius: 4px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   cursor: pointer;
   font-size: 1em;
   margin-left: 10px;
@@ -350,88 +351,115 @@ form.login {
   flex-flow: row nowrap;
 }
 
-.imageRemoveButton{
+.imageRemoveButton {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top:0px;
-  right:0px;
-  width:30px;
-  height:30px;
+  top: 0px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 0px;
   background-color: rgba(53, 53, 53, 0.493);
-  color:white;
+  color: white;
   z-index: 999;
 }
 
-.imageRemoveButton:hover{
+.imageRemoveButton:hover {
   background-color: rgb(53, 53, 53);
 }
 
-.categorySelect{
-  width:100%;
+.imageRemoveButton {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: rgba(53, 53, 53, 0.493);
+  color: white;
+  z-index: 999;
 }
 
-input[type="file"]{
-  display:none;
+.imageRemoveButton:hover {
+  background-color: rgb(53, 53, 53);
+}
+
+.categorySelect {
+  width: 100%;
+}
+
+.imageInputContent input {
+  display: none;
 }
 
 img[src=""] {
   display: none;
 }
 
-.noPointers{
+.noPointers {
   pointer-events: none;
 }
-.havePointers{
+.havePointers {
   pointer-events: auto;
 }
-.imgUploadDisplay{
-  position:relative;
+.imgUploadDisplay {
+  position: relative;
   flex-basis: 20%;
-  height:auto;
-  padding:1%;
- }
-
- .uploadThumb{
-   width:300px;
-   height:150px;
-   object-fit: contain;
- }
-
-.error{
-  color:red;
+  height: auto;
+  padding: 1%;
 }
 
-.listingItem:hover{
+.uploadThumb {
+  width: 300px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.error {
+  color: red;
+}
+
+.listingItem:hover {
   box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.3);
-  color:#00ff38;
+  color: #00ff38;
 }
 
-.categoryDiv{
-
+.categoryDiv {
 }
-.infoDiv{
+.infoDiv {
   display: flex;
   flex-flow: row nowrap;
-  width:100%;
+  width: 100%;
   padding-top: 5%;
 }
 
-.listingInfo{
+.listingInfo {
   display: flex;
   flex-flow: column nowrap;
-  width:40%;
+  width: 40%;
 }
 
-.buttonNav{
+.buttonNav {
   display: flex;
   flex-flow: row nowrap;
-  gap:5%;
-  width:100%;
+  gap: 5%;
+  width: 100%;
+}
+
+.buttonNav {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 5%;
+  width: 100%;
 }
 
 /* submenu */
@@ -488,6 +516,6 @@ nav {
   vertical-align: middle;
   color: var(--primary);
 }
-.icon-small{
+.icon-small {
   font-size: 12px;
 }
