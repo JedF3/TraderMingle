@@ -39,7 +39,12 @@ const ListingScreen = ()=>{
     },[])
     useEffect(()=>{
         if(!firstRun.current){
-            getSearchItems();
+            if(searchTerm){
+                getSearchItems();
+            }
+            else{
+                getAllItems();
+            }
         }
         else{
             firstRun.current=false;

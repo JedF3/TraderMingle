@@ -400,7 +400,13 @@ form.login {
 .imageInputContent input {
   display: none;
 }
+.TMIconButton{
+  background-color: transparent;
+}
 
+.deleteButton{
+  background-color: red;
+}
 img[src=""] {
   display: none;
 }
