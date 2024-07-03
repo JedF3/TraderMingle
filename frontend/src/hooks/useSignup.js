@@ -30,7 +30,7 @@ export const useSignup = () => {
 
       setIsLoading(false);
     }
-  }
+  };
 
   return { signup, error, isLoading };
 }

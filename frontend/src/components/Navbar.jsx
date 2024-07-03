@@ -29,12 +29,17 @@ const Navbar = () => {
   let firstRun = useRef(true);
 
   const handleSearch = () => {
+    if(searchText!=searchTerm){
     setSearchTerm(searchText);
+    }
+    else{
+      navigate("/search/");
+    }
   };
 
   useEffect(() => {
     if (!firstRun.current) {
-      navigate('/search/');
+      navigate("/search/");
     } else {
       firstRun.current = false;
     }
@@ -50,7 +55,7 @@ const Navbar = () => {
         });
         const json = await response.json();
         if (response.ok) {
-          dispatch({ type: 'SET_PROFILES', payload: json });
+          dispatch({ type: "SET_PROFILES", payload: json });
         }
       };
 
@@ -65,9 +70,9 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
 
@@ -87,9 +92,17 @@ const Navbar = () => {
   return (
     <header>
       <div className="container">
-        <Link to="/">
-          <h1>TM!</h1>
-        </Link>
+        <button className="TMIconButton" onClick={()=>{
+          console.log("fire");
+          if(searchTerm){
+          setSearchTerm("")
+          }
+          else{
+            navigate("/");
+          }
+        }}>
+          <h1 className="noPointers">TM!</h1>
+        </button>
         <div className="searchDiv">
           <input
             type="text"
@@ -98,7 +111,7 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          <button onClick={() => navigate('/addListing')}>
+          <button onClick={() => navigate("/addListing")}>
             Have something to sell?
           </button>
           {user ? (
@@ -112,7 +125,7 @@ const Navbar = () => {
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
-                className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}
+                className={`sub-menu-wrap ${menuOpen ? "open-menu" : ""}`}
                 id="subMenu"
               >
                 <div className="sub-menu">

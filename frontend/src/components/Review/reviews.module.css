@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CreateReview */
+/* 5 Star rating by https://dev.to/vikas2426/5-star-rating-component-a-step-by-step-guide-37bk */
+.feedbackForm {
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.feedbackForm h2 {
+  margin-bottom: 10px;
+}
+
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-top: -10px;
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  font-size: 48px;
+  cursor: pointer;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  color: orange;
+}
+
+.rating input:checked ~ label {
+  color: orange;
+}
+
+.comment {
+  margin-bottom: 20px;
+}
+
+.comment textarea {
+  width: 100%;
+  height: 100px;
+  resize: none;
+}
+
+.fileInput {
+  display: block;
+}
+
+.submitBtn {
+  background-color: #1aac83;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.submitBtn:hover {
+  opacity: 80%;
+}
+
+/* ReviewCard */
+a,
+.card {
+  text-decoration: none;
+}
+
+.card {
+  background-color: #78beff;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin: 1rem 0;
+}
+
+.card p {
+  text-align: justify;
+  margin-bottom: 1rem;
+}
+
+.reviewIMG {
+  height: 150px;
+  float: right;
+  margin-left: 1rem;
+  border-radius: 4px;
+}
+
+.star {
+  color: orange;
+  font-size: 40px;
+  text-decoration: none;
+  margin-right: 1rem;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+.listingPrev {
+  background-color: #1aac83;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.listingPrev:hover {
+  opacity: 80%;
+}
+
+.listingPrev div {
+  margin-left: 10px;
+}
+
+.listingIMG {
+  height: 50px;
+  margin: 5px;
+}

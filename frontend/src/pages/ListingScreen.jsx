@@ -20,13 +20,31 @@ const ListingScreen = ()=>{
             console.log(error);
         })
     }
+    async function getAllItems(){
+        axios.get("http://127.0.0.1:4000/api/v1/listings/viewAllListings/")
+        .then((result)=>{
+            setSearchResults(result.data.data);
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
     useEffect(()=>{
-        console.log(location.state);
-        getSearchItems();
+        if(searchTerm){
+            getSearchItems();
+        }
+        else{
+            getAllItems();
+        }
     },[])
     useEffect(()=>{
         if(!firstRun.current){
-            getSearchItems();
+            if(searchTerm){
+                getSearchItems();
+            }
+            else{
+                getAllItems();
+            }
         }
         else{
             firstRun.current=false;
