@@ -31,6 +31,10 @@ const listingSchema = new Schema({
         type:Boolean,
         required:[true, "Need to know if sold or not"]
     },
+    deleted:{
+        type:Boolean,
+        default:false,
+    },
     createDate:{
         type:Date,
         default:Date.now

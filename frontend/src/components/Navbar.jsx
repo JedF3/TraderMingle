@@ -28,7 +28,12 @@ const Navbar = () => {
   let firstRun = useRef(true);
 
   const handleSearch = () => {
+    if(searchText!=searchTerm){
     setSearchTerm(searchText);
+    }
+    else{
+      navigate("/search/");
+    }
   };
 
   useEffect(() => {
@@ -86,9 +91,17 @@ const Navbar = () => {
   return (
     <header>
       <div className="container">
-        <Link to="/">
-          <h1>TM!</h1>
-        </Link>
+        <button className="TMIconButton" onClick={()=>{
+          console.log("fire");
+          if(searchTerm){
+          setSearchTerm("")
+          }
+          else{
+            navigate("/");
+          }
+        }}>
+          <h1 className="noPointers">TM!</h1>
+        </button>
         <div className="searchDiv">
           <input
             type="text"

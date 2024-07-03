@@ -1,17 +1,20 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams} from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import searchTermContext from "../context/searchTermContext";
 
 const ViewListing = ()=>{
     const location = useLocation();
     const {id} = useParams();
     const {user} = useAuthContext();
+    const { searchTerm, setSearchTerm } = useContext(searchTermContext);
     const navigate = useNavigate();
     const [item, setItem] = useState({title:"",image:[{path:""}],category:"",price:0,description:""});
     const [itemName, setItemName]=useState("");
     const [isMyItem, setIsMyItem] = useState(false);
     const [itemSold, setItemSold] = useState(false);
+    const [itemDeleted, setItemDeleted] = useState(false);
     let firstRun = useRef(true);
     async function getListingifNot(){
         console.log("not");
@@ -35,6 +38,19 @@ const ViewListing = ()=>{
         console.log(item._id);
         navigate("../editListing/"+item._id, {state:item});
     }
+    async function deleteItem(){
+        await axios.put("http://127.0.0.1:4000/api/v1/listings/deleteListing/"+id, {}, {headers:{Authorization:`Bearer ${user.token}`}})
+        .then(()=>{
+            setItemDeleted(true);
+            alert("Item has been deleted");
+            if(searchTerm){
+                setSearchTerm("")
+            }
+            else{
+                navigate("/");
+            }
+        })
+    }
     useEffect(()=>{
         if(!location.state){
             getListingifNot();
@@ -43,11 +59,14 @@ const ViewListing = ()=>{
             setItem(location.state);
         }
     },[]);
+    useEffect(() => {
+        if (!firstRun.current) {
+          navigate("/");
+        }
+      }, [searchTerm]);
     useEffect(()=>{
         if(!firstRun.current){
             if(user){
-                console.log("itemUserID")
-                console.log(item);
                 if(item.userID._id==user.id){
                     setIsMyItem(true);
                 }
@@ -63,6 +82,13 @@ const ViewListing = ()=>{
                 else{
                     setItemSold(false);
                     setItemName(item.title);
+                }
+                if(item.deleted){
+                    setItemDeleted(true);
+                    setItemName(item.title+"(Unavailable)");
+                }
+                else{
+                    setItemDeleted(false);
                 }
             }
         }
@@ -89,6 +115,9 @@ const ViewListing = ()=>{
                 }
                 {isMyItem&&
                     <button onClick={gotoEdit}>Edit Listing</button>
+                }
+                {isMyItem&&
+                    <button className="deleteButton" onClick={deleteItem}>Delete Listing</button>
                 }
             </div>
             <h1>{itemName}</h1>
