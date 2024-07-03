@@ -24,5 +24,3 @@ export const UserProfileContextProvider = ({ children }) => {
 };
 
 export const useUserProfileContext = () => useContext(UserProfileContext);
-
-

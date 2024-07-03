@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import profileRoutes from "./routes/profiles.js";
 import reviewRoutes from "./routes/reviews.js";
 import userRoutes from "./routes/user.js";
 import dotenv from "dotenv";
