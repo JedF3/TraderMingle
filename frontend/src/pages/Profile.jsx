@@ -1,37 +1,46 @@
 import React, { useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { useProfilesContext } from '../hooks/useProfilesContext';
+import { useUserProfileContext } from '../hooks/useUserProfileContext';
 
 // components
 import ProfileDetails from '../components/ProfileDetails';
 import ProfileTabs from '../components/ProfileTabs';
 
 const Profile = () => {
-  const { profile, dispatch } = useProfilesContext();
+  const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useAuthContext();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const response = await fetch('/api/v1/profiles', {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const json = await response.json();
-      if (response.ok && json.length > 0) {
-        dispatch({ type: 'SET_PROFILE', payload: json[0] });
+    const fetchUserProfile = async () => {
+      try {
+        if (!user || !user.id) {
+          throw new Error('User or user ID is undefined');
+        }
+
+        const response = await fetch(`/api/v1/user/profile/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile');
+        }
+
+        const json = await response.json();
+        dispatch({ type: 'SET_USER_PROFILE', payload: json });
+      } catch (error) {
+        console.error('Error fetching profile:', error.message);
       }
     };
 
-    if (user) {
-      fetchProfile();
-    }
+    fetchUserProfile();
   }, [dispatch, user]);
 
   return (
     <div className="profile">
       <div className="details">
-        {profile && <ProfileDetails profile={profile} />}
+        {userProfile && <ProfileDetails profile={userProfile} />}
       </div>
       <ProfileTabs />
     </div>
@@ -39,8 +48,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-
-// references for creating profile page + settings:
-// useContext: https://www.youtube.com/watch?v=NKsVV7wJcDM&list=PL4cUxeGkcC9iJ_KkrkBZWZRHVwnzLIoUE&index=11
-// useReducer: https://vimeo.com/938650951/9c03f94370

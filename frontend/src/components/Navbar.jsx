@@ -1,10 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useProfilesContext } from "../hooks/useProfilesContext";
-import { useContext, useEffect, useRef, useState } from "react";
-import searchTermContext from "../context/searchTermContext";
-import no_avatar from "../images/pain.jpg";
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogout } from '../hooks/useLogout';
+import { useAuthContext } from '../hooks/useAuthContext';
+import { useContext, useEffect, useRef, useState } from 'react';
+import searchTermContext from '../context/searchTermContext';
+import { useUserProfileContext } from '../hooks/useUserProfileContext';
+import no_avatar from '../images/pain.jpg';
 
 // react-icons
 import {
@@ -12,13 +12,13 @@ import {
   FaGear,
   FaArrowRightFromBracket,
   FaChevronDown,
-} from "react-icons/fa6";
+} from 'react-icons/fa6';
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  const { profiles, dispatch } = useProfilesContext();
-  const [searchText, setSearchText] = useState("");
+  const { userProfile, dispatch } = useUserProfileContext();
+  const [searchText, setSearchText] = useState('');
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,10 +28,9 @@ const Navbar = () => {
   let firstRun = useRef(true);
 
   const handleSearch = () => {
-    if(searchText!=searchTerm){
-    setSearchTerm(searchText);
-    }
-    else{
+    if (searchText !== searchTerm) {
+      setSearchTerm(searchText);
+    } else {
       navigate("/search/");
     }
   };
@@ -46,19 +45,21 @@ const Navbar = () => {
 
   useEffect(() => {
     if (user && user.token) {
-      const fetchProfiles = async () => {
-        const response = await fetch("/api/v1/profiles", {
+      const fetchProfile = async () => {
+        const response = await fetch('/api/v1/user/profile', {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
         const json = await response.json();
         if (response.ok) {
-          dispatch({ type: "SET_PROFILES", payload: json });
+          dispatch({ type: "SET_USER_PROFILE", payload: json });
+        } else {
+          console.error("Failed to fetch profile", json);
         }
       };
 
-      fetchProfiles();
+      fetchProfile();
     }
   }, [user, dispatch]);
 
@@ -91,12 +92,11 @@ const Navbar = () => {
   return (
     <header>
       <div className="container">
-        <button className="TMIconButton" onClick={()=>{
+        <button className="TMIconButton" onClick={() => {
           console.log("fire");
-          if(searchTerm){
-          setSearchTerm("")
-          }
-          else{
+          if (searchTerm) {
+            setSearchTerm("");
+          } else {
             navigate("/");
           }
         }}>
@@ -106,7 +106,7 @@ const Navbar = () => {
           <input
             type="text"
             onChange={(e) => setSearchText(e.target.value)}
-          ></input>
+          />
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
@@ -119,10 +119,9 @@ const Navbar = () => {
                 className="drop-down-menu custom-link outline"
                 onClick={toggleMenu}
               >
-                {profiles && profiles.length > 0
-                  ? profiles[0].username
-                  : "Profile"}
-                <img src={no_avatar} alt="no-avatar" />
+                {userProfile ? userProfile.username : 'Profile'}
+                {/* <img src={userProfile?.image || no_avatar} alt="avatar" /> */}
+                <img src={ no_avatar} alt="avatar" />
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
@@ -177,8 +176,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// font awesome react icons:
-// guide: https://www.youtube.com/watch?v=LDB4uaJ87e0&t=4562s
-// finding react-icon names: https://react-icons.github.io/react-icons/icons/fa6/
-// finding font-awesome icon names: https://fontawesome.com/search?q=settings&o=r

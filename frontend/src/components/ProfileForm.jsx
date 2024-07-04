@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useProfilesContext } from '../hooks/useProfilesContext';
+import { useUserProfileContext } from '../hooks/useUserProfileContext';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 const ProfileForm = () => {
-  const { profile, dispatch } = useProfilesContext();
+  const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useAuthContext();
 
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -13,18 +15,19 @@ const ProfileForm = () => {
   const [image, setImage] = useState('');
   const [meetupLocations, setMeetupLocations] = useState('');
   const [error, setError] = useState(null);
-  const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    if (profile) {
-      setUsername(profile.username);
-      setFirstname(profile.firstname);
-      setLastname(profile.lastname);
-      setPhone(profile.phone);
-      setImage(profile.image);
-      setMeetupLocations(profile.meetupLocations);
+    if (userProfile) {
+      // setEmail(userProfile.email || '');
+      // setPassword(userProfile.password || '');
+      setUsername(userProfile.username || '');
+      setFirstname(userProfile.firstname || '');
+      setLastname(userProfile.lastname || '');
+      setPhone(userProfile.phone || '');
+      setImage(userProfile.image || '');
+      setMeetupLocations(userProfile.meetupLocations || '');
     }
-  }, [profile]);
+  }, [userProfile]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,12 +37,21 @@ const ProfileForm = () => {
       return;
     }
 
-    const updatedProfile = { username, firstname, lastname, phone, image, meetupLocations };
-    const method = profile ? 'PATCH' : 'POST';
-    const url = profile ? `/api/v1/profiles/${profile._id}` : '/api/v1/profiles';
+    const updatedProfile = {
+      // email,
+      // password,
+      username,
+      firstname,
+      lastname,
+      phone,
+      image,
+      meetupLocations,
+    };
+
+    const url = `/api/v1/user/profile/${user.id}`;
 
     const response = await fetch(url, {
-      method: method,
+      method: 'PATCH',
       body: JSON.stringify(updatedProfile),
       headers: {
         'Content-Type': 'application/json',
@@ -49,27 +61,39 @@ const ProfileForm = () => {
 
     const json = await response.json();
 
-    if (!response.ok) {
-      setError(json.error);
-      setEmptyFields(json.emptyFields || []);
-    }
     if (response.ok) {
       setError(null);
-      setEmptyFields([]);
-      dispatch({ type: profile ? 'UPDATE_PROFILE' : 'CREATE_PROFILE', payload: json });
+      dispatch({ type: 'UPDATE_PROFILE', payload: json });
+    } else {
+      setError(json.error);
     }
   };
 
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <h3>{profile ? 'Edit Profile' : 'Add a New Profile'}</h3>
+      <h3>Edit Profile</h3>
+
+      {/* <label>Email address:</label>
+      <input
+        type="email"
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        required
+      />
+
+      <label>Password:</label>
+      <input
+        type="password"
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+      /> */}
 
       <label>Username:</label>
       <input
         type="text"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
-        className={emptyFields.includes('username') ? 'error' : ''}
+        required
       />
 
       <label>Firstname:</label>
@@ -77,7 +101,7 @@ const ProfileForm = () => {
         type="text"
         onChange={(e) => setFirstname(e.target.value)}
         value={firstname}
-        className={emptyFields.includes('firstname') ? 'error' : ''}
+        required
       />
 
       <label>Lastname:</label>
@@ -85,15 +109,15 @@ const ProfileForm = () => {
         type="text"
         onChange={(e) => setLastname(e.target.value)}
         value={lastname}
-        className={emptyFields.includes('lastname') ? 'error' : ''}
+        required
       />
 
       <label>Phone:</label>
       <input
-        type="number"
+        type="text"
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
-        className={emptyFields.includes('phone') ? 'error' : ''}
+        required
       />
 
       <label>Image:</label>
@@ -101,7 +125,6 @@ const ProfileForm = () => {
         type="text"
         onChange={(e) => setImage(e.target.value)}
         value={image}
-        className={emptyFields.includes('image') ? 'error' : ''}
       />
 
       <label>Meetup Locations:</label>
@@ -109,10 +132,9 @@ const ProfileForm = () => {
         type="text"
         onChange={(e) => setMeetupLocations(e.target.value)}
         value={meetupLocations}
-        className={emptyFields.includes('meetupLocations') ? 'error' : ''}
       />
 
-      <button>{profile ? 'Update Profile' : 'Add Profile'}</button>
+      <button type="submit">Update Profile</button>
       {error && <div className="error">{error}</div>}
     </form>
   );

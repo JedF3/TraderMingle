@@ -1,5 +1,5 @@
-import { useProfilesContext } from "../hooks/useProfilesContext";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useUserProfileContext } from '../hooks/useUserProfileContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 // date fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -8,7 +8,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import no_avatar from "../images/pain.jpg";
 
 const ProfileDetails = ({ profile }) => {
-  const { dispatch } = useProfilesContext();
+  const { dispatch } = useUserProfileContext();
   const { user } = useAuthContext();
 
   // delete button
@@ -48,9 +48,9 @@ const ProfileDetails = ({ profile }) => {
       <ul>
         <li> {profile.meetupLocations}</li>
       </ul>
-      <p>
+      {/* <p>
         {formatDistanceToNow(new Date(profile.createdAt), { addSuffix: true })}
-      </p>
+      </p> */}
       {/* <span className="material-symbols-outlined" onClick={handleClick}>
         ❌
       </span> */}
