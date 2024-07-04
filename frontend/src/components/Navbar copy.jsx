@@ -5,7 +5,6 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import { useUserProfileContext } from '../hooks/useUserProfileContext';
 import no_avatar from '../images/no-avatar.svg';
-import { Image } from 'cloudinary-react';
 
 // react-icons
 import {
@@ -47,20 +46,16 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfile = async () => {
-        try {
-          const response = await fetch('/api/v1/user/profile', {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          });
-          const json = await response.json();
-          if (response.ok) {
-            dispatch({ type: 'SET_USER_PROFILE', payload: json });
-          } else {
-            console.error('Failed to fetch profile', json);
-          }
-        } catch (error) {
-          console.error('Error fetching profile:', error);
+        const response = await fetch('/api/v1/user/profile', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const json = await response.json();
+        if (response.ok) {
+          dispatch({ type: 'SET_USER_PROFILE', payload: json });
+        } else {
+          console.error('Failed to fetch profile', json);
         }
       };
 
@@ -94,18 +89,13 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  // Check if userProfile exists and has image data
-  const profileImage =
-    userProfile && userProfile.image && userProfile.image.length > 0
-      ? userProfile.image[0].path
-      : null;
-
   return (
     <header>
       <div className="container">
         <button
           className="TMIconButton"
           onClick={() => {
+            console.log('fire');
             if (searchTerm) {
               setSearchTerm('');
             } else {
@@ -130,12 +120,8 @@ const Navbar = () => {
                 onClick={toggleMenu}
               >
                 {userProfile ? userProfile.username : 'Profile'}
-                {/* Show user avatar if available */}
-                {profileImage ? (
-                  <Image cloudName="dexuiicai" publicId={profileImage} />
-                ) : (
-                  <img src={no_avatar} alt="avatar" />
-                )}
+                {/* <img src={userProfile?.image || no_avatar} alt="avatar" /> */}
+                <img src={no_avatar} alt="avatar" />
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div

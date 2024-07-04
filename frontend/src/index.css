@@ -131,6 +131,8 @@ h4 {
   display: block;
 }
 
+
+
 /* settings page */
 .settings {
   background: #fff;
@@ -171,6 +173,7 @@ h4 {
 .settings .img-details label {
   margin-bottom: 10px;
 }
+
 
 /* homepage */
 .home {
@@ -525,3 +528,5 @@ nav {
 .icon-small {
   font-size: 12px;
 }
+
+

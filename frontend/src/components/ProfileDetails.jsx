@@ -1,60 +1,38 @@
-import { useUserProfileContext } from '../hooks/useUserProfileContext';
-import { useAuthContext } from '../hooks/useAuthContext';
-
-// date fns
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-
-// components
-import no_avatar from "../images/pain.jpg";
+import React from 'react';
+import { Image } from 'cloudinary-react';
+import no_avatar from '../images/no-avatar.svg';
 
 const ProfileDetails = ({ profile }) => {
-  const { dispatch } = useUserProfileContext();
-  const { user } = useAuthContext();
+  if (!profile) {
+    return <div>Loading...</div>;
+  }
+  console.log(profile.image); // image shape
 
-  // delete button
-  // const handleClick = async () => {
-  //   if (!user) {
-  //     return;
-  //   }
-
-  //   const response = await fetch('/api/v1/profiles/' + profile._id, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   });
-  //   const json = await response.json();
-
-  //   if (response.ok) {
-  //     dispatch({ type: 'DELETE_PROFILE', payload: json });
-  //   }
-  // };
+  // check to make sure that the image exists
+  const imagePath =
+    profile.image && profile.image.length > 0 ? profile.image[0].path : null;
 
   return (
-    <>
-      <img src={no_avatar} alt="" className="avatar" />
+    <div>
+      {profile.image ? (
+        <Image cloudName="dexuiicai" publicId={imagePath} className="avatar" />
+      ) : (
+        <img src={no_avatar} alt="" className="avatar" />
+      )}
+
       <h2>
         {profile.firstname} {profile.lastname}
       </h2>
       <p>@{profile.username}</p>
       <p>
-        <strong>Phone Number: </strong>0{profile.phone}
-      </p>
-      <p>
-        <strong>Image: </strong>
-        {profile.image}
+        <strong>Phone Number: </strong>
+        0{profile.phone}
       </p>
       <h4>Meet up locations:</h4>
       <ul>
-        <li> {profile.meetupLocations}</li>
+        <li>{profile.meetupLocations}</li>
       </ul>
-      {/* <p>
-        {formatDistanceToNow(new Date(profile.createdAt), { addSuffix: true })}
-      </p> */}
-      {/* <span className="material-symbols-outlined" onClick={handleClick}>
-        ❌
-      </span> */}
-    </>
+    </div>
   );
 };
 
