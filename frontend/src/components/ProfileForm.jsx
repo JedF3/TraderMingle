@@ -57,7 +57,7 @@ const ProfileForm = () => {
       );
       setImage({
         url: response.data.url,
-        filename: response.data.public_id,
+        filename: `uploads/${response.data.public_id}`,
       });
     } catch (error) {
       setError('Failed to upload image.');
@@ -73,13 +73,18 @@ const ProfileForm = () => {
       return;
     }
 
+    // Split meetupLocations string into array
+    const locationsArray = meetupLocations
+      .split(',')
+      .map((location) => location.trim());
+
     const updatedProfile = {
       username,
       firstname,
       lastname,
       phone,
       image: image ? [{ path: image.url, filename: image.filename }] : [],
-      meetupLocations,
+      meetupLocations: locationsArray, // Update meetupLocations to be an array,
     };
 
     const url = `/api/v1/user/profile/${user.id}`;
@@ -124,7 +129,7 @@ const ProfileForm = () => {
           </p>
           <input type="file" onChange={handleFileChange} className="upload" />
           <button type="button" onClick={uploadImage}>
-            Upload a photo
+            Upload photo
           </button>
         </div>
       </div>
@@ -175,3 +180,4 @@ const ProfileForm = () => {
 };
 
 export default ProfileForm;
+// upload image to cloudinary: https://www.youtube.com/watch?v=Y-VgaRwWS3o&t=643s

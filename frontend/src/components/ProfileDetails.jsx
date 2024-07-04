@@ -6,9 +6,8 @@ const ProfileDetails = ({ profile }) => {
   if (!profile) {
     return <div>Loading...</div>;
   }
-  console.log(profile.image); // image shape
 
-  // check to make sure that the image exists
+  // Check to make sure that the image exists
   const imagePath =
     profile.image && profile.image.length > 0 ? profile.image[0].path : null;
 
@@ -25,12 +24,18 @@ const ProfileDetails = ({ profile }) => {
       </h2>
       <p>@{profile.username}</p>
       <p>
-        <strong>Phone Number: </strong>
-        0{profile.phone}
+        <strong>Phone Number: </strong>0{profile.phone}
       </p>
-      <h4>Meet up locations:</h4>
+      <h4>Meetup Locations:</h4>
       <ul>
-        <li>{profile.meetupLocations}</li>
+        {/* Add a conditional check for meetupLocations */}
+        {profile.meetupLocations && Array.isArray(profile.meetupLocations) ? (
+          profile.meetupLocations.map((location, index) => (
+            <li key={index}>{location}</li>
+          ))
+        ) : (
+          <li>No meetup locations found</li>
+        )}
       </ul>
     </div>
   );
