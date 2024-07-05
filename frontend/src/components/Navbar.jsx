@@ -23,6 +23,7 @@ const Navbar = () => {
   const { userProfile, dispatch } = useUserProfileContext();
   const [searchText, setSearchText] = useState("");
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
+  const [profileImage, setProfileImage] = useState(null);
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -69,6 +70,9 @@ const Navbar = () => {
       };
 
       fetchProfile();
+      if(user.image[0]!=null){
+        setProfileImage(user.image[0].path)
+      }
     }
   }, [user, dispatch]);
 
@@ -99,10 +103,10 @@ const Navbar = () => {
   };
 
   // Check if userProfile exists and has image data
-  const profileImage =
-    userProfile && userProfile.image && userProfile.image.length > 0
-      ? userProfile.image[0].path
-      : null;
+  // const profileImage =
+  //   userProfile && userProfile.image && userProfile.image.length > 0
+  //     ? userProfile.image[0].path
+  //     : null;
   socket.on("pvt_msg", (data) => {
     setChatIconClass(chatNotifIconClass);
   });
@@ -145,7 +149,7 @@ const Navbar = () => {
                 {userProfile ? user.username : "Profile"}
                 {/* Show user avatar if available */}
                 {profileImage ? (
-                  <Image cloudName="dexuiicai" publicId={profileImage} />
+                  <img src={profileImage}/>
                 ) : (
                   <img src={no_avatar} alt="avatar" />
                 )}
