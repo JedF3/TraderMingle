@@ -9,7 +9,7 @@ import {
   getReviewsByListing,
   getReviewByID,
   deleteReview,
-  // updateReview,
+  updateReview,
 } from "../controllers/review.controller.js";
 
 const router = express.Router();
@@ -18,9 +18,9 @@ const reviewImage = multer({ storage });
 router.post("/", reviewImage.single("review-image"), requireAuth, createReview); // POST a new review
 router.get("/by-user/:userID", getReviewsByUser); // GET all reviews by user
 router.get("/by-user-listings/:userID", getAllReviewsOfUserByListing); // GET reviews for all listings of a user
-router.get("/by-listing/:listing_id", getReviewsByListing); // GET all reviews by listing
-router.get("/:id", getReviewByID); // GET a single review
-router.delete("/:id", requireAuth, deleteReview); // DELETE a review
-// router.patch("/:id", requireAuth, updateReview); // UPDATE a workout
+router.get("/by-listing/:listingID", getReviewsByListing); // GET all reviews by listing
+router.get("/:reviewID", getReviewByID); // GET a single review
+router.delete("/:reviewID", requireAuth, deleteReview); // DELETE a review
+router.patch("/:reviewID", requireAuth, updateReview); // UPDATE a review
 
 export default router;

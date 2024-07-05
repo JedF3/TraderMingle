@@ -61,7 +61,8 @@ h4 {
 }
 
 /* profile tabs */
-.profile-tabs {
+.profile-tabs,
+.review-tabs {
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
@@ -131,7 +132,11 @@ h4 {
   display: block;
 }
 
-
+.review-tabs {
+  margin: 0;
+  padding: 20px 0;
+  width: 100%;
+}
 
 /* settings page */
 .settings {
@@ -403,11 +408,11 @@ form.login {
 .imageInputContent input {
   display: none;
 }
-.TMIconButton{
+.TMIconButton {
   background-color: transparent;
 }
 
-.deleteButton{
+.deleteButton {
   background-color: red;
 }
 img[src=""] {
@@ -529,4 +534,6 @@ nav {
   font-size: 12px;
 }
 
-
+.reviews {
+  width: 70%;
+}

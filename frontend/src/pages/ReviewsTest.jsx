@@ -1,9 +1,9 @@
-import CreateReview from "../components/Review/CreateReview";
+import EditReview from "../components/Review/EditReview";
 
 const ReviewsTest = () => {
   return (
     <div>
-      <CreateReview />
+      <EditReview />
     </div>
   );
 };
