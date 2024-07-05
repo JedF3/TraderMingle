@@ -10,6 +10,14 @@ const reviewsReducer = (state, action) => {
       return { reviews: action.payload };
     case "CREATE_REVIEW":
       return { reviews: [action.payload, ...state.reviews] };
+    case "UPDATE_REVIEW":
+      return {
+        reviews: state.reviews.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          } else return item;
+        }),
+      };
     case "DELETE_REVIEW":
       return {
         reviews: state.reviews.filter(

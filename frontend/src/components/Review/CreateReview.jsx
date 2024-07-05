@@ -4,18 +4,35 @@ import { useAuthContext } from "../../hooks/useAuthContext.js";
 import styles from "./reviews.module.css";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
 
-const CreateReview = ({ listingID }) => {
+const CreateReview = ({ listingID, show, onClose, error, setError }) => {
   const { user } = useAuthContext();
-
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [dispatch] = useReducer(reviewsReducer, initialState);
+  const [preview, setPreview] = useState("/img/addImg.png");
+  const [state, dispatch] = useReducer(reviewsReducer, initialState);
+
+  const handlePreview = (e) => {
+    setImageFile(e.target.files[0]);
+    setPreview(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!rating) {
+      setError(true);
+      return console.error("Please at least enter a star rating.");
+    }
+
     const data = new FormData();
+    data.append("userID", user.id);
     data.append("listingID", listingID);
     data.append("rating", rating);
     data.append("comment", comment);
@@ -27,11 +44,41 @@ const CreateReview = ({ listingID }) => {
       { headers: { Authorization: `Bearer ${user.token}` } }
     );
 
-    dispatch({ type: "CREATE_REVIEW", payload: newReview });
+    setError(false);
+    onClose();
+
+    dispatch({ type: "CREATE_REVIEW", payload: newReview.data.data });
+
+    console.log(state);
   };
 
+  // Modal window controller
+  if (!show) {
+    return null;
+  }
+
+  const stars = [0, 0, 0, 0, 0]
+    .map((_, i) => {
+      return (
+        <Fragment key={i}>
+          <input
+            key={`star${i + 1}`}
+            type="radio"
+            id={`star${i + 1}`}
+            name="rating"
+            value={i + 1}
+            defaultChecked
+          />
+          <label htmlFor={`star${i + 1}`} key={`label${i + 1}`}>
+            &#9733;
+          </label>
+        </Fragment>
+      );
+    })
+    .reverse();
+
   return (
-    <div>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <form className={styles.feedbackForm} onSubmit={(e) => handleSubmit(e)}>
         <h2>How was your experience?</h2>
 
@@ -40,23 +87,9 @@ const CreateReview = ({ listingID }) => {
           className={styles.rating}
           onChange={(e) => {
             setRating(e.target.value);
-            return console.log("rating: " + e.target.value);
           }}
         >
-          <input type="radio" id="star5" name="rating" value="5" />
-          <label htmlFor="star5">&#9733;</label>
-
-          <input type="radio" id="star4" name="rating" value="4" />
-          <label htmlFor="star4">&#9733;</label>
-
-          <input type="radio" id="star3" name="rating" value="3" />
-          <label htmlFor="star3">&#9733;</label>
-
-          <input type="radio" id="star2" name="rating" value="2" />
-          <label htmlFor="star2">&#9733;</label>
-
-          <input type="radio" id="star1" name="rating" value="1" />
-          <label htmlFor="star1">&#9733;</label>
+          {stars}
         </div>
         <label>Any feedback?</label>
         <div className={styles.comment}>
@@ -64,12 +97,25 @@ const CreateReview = ({ listingID }) => {
         </div>
         <input
           type="file"
+          id="fileUpload"
           className={styles.fileInput}
-          onChange={(e) => setImageFile(e.target.files[0])}
+          onChange={(e) => handlePreview(e)}
         />
-        <button type="submit" className={styles.submitBtn}>
-          Submit
-        </button>
+        <label htmlFor="fileUpload">
+          <img src={preview} alt="preview" className={styles.previewIMG} />
+        </label>
+
+        <div className={error ? styles.error : styles.noError}>
+          Please at least enter a star rating.
+        </div>
+        <div className={styles.buttonDiv}>
+          <button className={styles.submitBtn} onClick={onClose}>
+            Cancel
+          </button>
+          <button type="submit" className={styles.submitBtn}>
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

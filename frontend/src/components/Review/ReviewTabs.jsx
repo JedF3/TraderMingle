@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import ReviewTabs from "./Review/ReviewTabs";
+import { useState } from "react";
+import ReviewsByUser from "./ReviewsByUser";
+import ReviewsOfUserByListing from "./ReviewsOfUserByListing";
 
-function ProfileTabs() {
+function ReviewTabs() {
   const [toggleState, setToggleState] = useState(1); // Initialize to a default value
 
   function handleTabToggle(index) {
@@ -9,43 +10,36 @@ function ProfileTabs() {
   }
 
   return (
-    <div className="profile-tabs">
+    <div className="review-tabs">
       <div className="header-tabs">
         <div
           onClick={() => handleTabToggle(1)}
           className={toggleState === 1 ? "tab active" : "tab"}
         >
-          Listings
+          By Others
         </div>
         <div
           onClick={() => handleTabToggle(2)}
           className={toggleState === 2 ? "tab active" : "tab"}
         >
-          Reviews
+          By User
         </div>
       </div>
 
       <div className="content-tabs">
         <div className={toggleState === 1 ? "content active" : "content"}>
-          <h2>Listings</h2>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-            repudiandae itaque praesentium, minima, provident tempora quos quas
-            error amet sunt corporis asperiores esse vero vitae obcaecati minus
-            laudantium rerum molestiae.
-          </p>
+          <ReviewsOfUserByListing />
         </div>
 
         <div className={toggleState === 2 ? "content active" : "content"}>
-          <h2>Reviews</h2>
-          <ReviewTabs />
+          <ReviewsByUser />
         </div>
       </div>
     </div>
   );
 }
 
-export default ProfileTabs;
+export default ReviewTabs;
 
 // references for creating tabs:
 // logic: https://www.youtube.com/watch?v=WkREeDy2WQ4

@@ -8,34 +8,13 @@ const ReviewsByUser = () => {
   const { user } = useAuthContext();
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
 
-  const reviewsList = state.reviews.map((review) => {
-    const imageUrl = review.image ? review.image.path : null;
-    return (
-      <ReviewCard
-        key={review._id}
-        creator={review.userID.username}
-        listing={review.listingID}
-        rating={review.rating}
-        comment={review.comment}
-        imageUrl={imageUrl}
-      />
-    );
-  });
-
   useEffect(() => {
     const fetchReviewsByUser = async () => {
       if (user) {
         try {
-          //   const apiURL = tab
-          //     ? `http://localhost:4000/api/v1/reviews/by-user/${user.id}`
-          //     : `http://localhost:4000/api/v1/reviews/by-user-listings/${user.id}`;
-
           const response = await axios.get(
             `http://localhost:4000/api/v1/reviews/by-user/${user.id}`
           );
-
-          console.log("GET successful");
-          console.log(response.data);
 
           localStorage.setItem("reviews", JSON.stringify(response.data.data));
 
@@ -47,6 +26,22 @@ const ReviewsByUser = () => {
     };
     fetchReviewsByUser();
   }, [user]);
+
+  const reviewsList = state.reviews.map((review) => {
+    const imageUrl = review.image ? review.image.path : null;
+    return (
+      <ReviewCard
+        key={review._id}
+        reviewID={review._id}
+        creator={review.userID.username}
+        listing={review.listingID}
+        rating={review.rating}
+        comment={review.comment}
+        date={review.updatedAt}
+        imageUrl={imageUrl}
+      />
+    );
+  });
 
   return <div>{reviewsList}</div>;
 };
