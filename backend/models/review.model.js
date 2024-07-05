@@ -34,7 +34,7 @@ const reviewSchema = new Schema(
   { timestamps: true }
 );
 
-reviewSchema.plugin(MongooseDelete);
+reviewSchema.plugin(MongooseDelete, { overrideMethods: "all" });
 
 const Review = mongoose.model("Review", reviewSchema);
 

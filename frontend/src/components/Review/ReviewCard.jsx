@@ -1,16 +1,18 @@
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import styles from "./reviews.module.css";
+// import EditReviewBtn from "./EditReviewBtn";
 
-const ReviewCard = ({ creator, listing, rating, comment, imageUrl }) => {
-  console.log(listing);
-  const stars = Array(5)
-    .fill("")
-    .map((_, i) => {
-      if (i <= rating - 1)
-        return <Fragment key={`star${i + 1}`}>&#9733;</Fragment>;
-    });
-
+const ReviewCard = ({
+  reviewID,
+  creator,
+  listing,
+  rating,
+  comment,
+  imageUrl,
+  inListing,
+}) => {
+  // How many days ago the review was posted.
   const daysAgo = (date) => {
     const parsedDate = new Date(date);
     const currentDate = new Date();
@@ -19,27 +21,39 @@ const ReviewCard = ({ creator, listing, rating, comment, imageUrl }) => {
     const ms = currentDate - parsedDate;
 
     // Convert milliseconds to days
-    const msToDay = 1000 * 60 * 60 * 24;
-    const days = Math.floor(ms / msToDay);
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
 
-    // Return formatted string
-    return `${days} day${days !== 1 ? "s" : ""} ago`;
+    if (days >= 30) {
+      const months = Math.floor(days / 30);
+      return `${months} month${months !== 1 ? "s" : ""} ago`;
+    } else if (days >= 365) {
+      const years = Math.floor(days / 365);
+      return `${years} year${years !== 1 ? "s" : ""} ago`;
+    } else {
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
+    }
   };
 
   const listingIMG = listing.image[0].path;
 
-  if (imageUrl) {
-    return (
-      <div className={styles.card}>
-        <span className={styles.star}>{stars}</span>
-        by <span>{creator}</span> <small>{daysAgo(listing.updatedAt)}</small>
-        <img
-          src="/img/addImg.png"
-          alt="reviewIMG"
-          className={styles.reviewIMG}
-        />
-        <p>{comment}</p>
-        <Link to={`listing/${listing._id}`} className={styles.listingPrev}>
+  const stars = [0, 0, 0, 0, 0].map((_, i) => {
+    if (i <= rating - 1)
+      return <Fragment key={`star${i + 1}`}>&#9733;</Fragment>;
+  });
+
+  return (
+    <div className={styles.cardInListing}>
+      <span className={styles.star}>{stars}</span>
+      by <span>{creator}</span> <small>{daysAgo(listing.updatedAt)}</small>
+      {imageUrl && (
+        <img src={imageUrl} alt="review image" className={styles.reviewIMG} />
+      )}
+      <p>{comment}</p>
+      {!inListing && (
+        <Link
+          to={`../viewListing/${listing._id}`}
+          className={styles.listingPrev}
+        >
           <img
             src={listingIMG}
             alt="listingImg"
@@ -50,28 +64,10 @@ const ReviewCard = ({ creator, listing, rating, comment, imageUrl }) => {
             <span>PHP {listing.price}</span>
           </div>
         </Link>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.card}>
-        <span className={styles.star}>{stars}</span>
-        by <span>{creator}</span> <small>{daysAgo(listing.updatedAt)}</small>
-        <p>{comment}</p>
-        <Link to={`listing/${listing._id}`} className={styles.listingPrev}>
-          <img
-            src={listingIMG}
-            alt="listingImg"
-            className={styles.listingIMG}
-          />
-          <div>
-            <h4>{listing.title}</h4>
-            <span>PHP {listing.price}</span>
-          </div>
-        </Link>
-      </div>
-    );
-  }
+      )}
+      {/* <EditReviewBtn reviewID={reviewID} /> */}
+    </div>
+  );
 };
 
 export default ReviewCard;

@@ -1,6 +1,7 @@
+import mongoose from "mongoose";
 import { asyncHandler } from "../middleware/errorHandler.js";
 import Review from "../models/review.model.js";
-import mongoose from "mongoose";
+import listings from "../models/listing.model.js";
 
 const createReview = asyncHandler(async (req, res) => {
   const { userID, listingID, rating, comment } = req.body;
@@ -52,7 +53,7 @@ const getReviewsByUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllReviewsOfUserByListing = asyncHandler(async (req, res) => {
+const getListingsByUser = asyncHandler(async (req, res) => {
   const { userID } = req.params;
 
   const listingsByID = await listings.find({ userID });
@@ -60,12 +61,33 @@ const getAllReviewsOfUserByListing = asyncHandler(async (req, res) => {
   if (!listingsByID) {
     res.status(404).json({ message: "User has no listings", error });
   } else {
-    const reviews = await Review.find({ listingID: listingsByID._id })
+    res.status(200).send({
+      message: `List of listings by user retrieved.`,
+      data: listingIDs,
+    });
+  }
+});
+
+const getAllReviewsOfUserByListing = asyncHandler(async (req, res) => {
+  const { userID } = req.params;
+
+  const listingsByID = await listings.find({ userID });
+
+  const listingIDs = listingsByID.map((object) => {
+    return object._id;
+  });
+
+  if (!listingsByID) {
+    res.status(404).json({ message: "User has no listings", error });
+  } else {
+    const reviews = await Review.find({ listingID: { $in: listingIDs } })
       .sort({ _id: -1 })
       .populate({
         path: "userID",
         select: "username",
-      });
+      })
+      .populate({ path: "listingID" });
+
     if (!reviews) {
       res
         .status(404)
@@ -94,7 +116,7 @@ const getReviewsByListing = asyncHandler(async (req, res) => {
     res.status(404).json({ message: "No reviews found", error });
   } else {
     res.status(200).send({
-      message: `List of reviews by user : ${userID} retrieved.`,
+      message: `List of reviews for listing: ${listingID} retrieved.`,
       data: reviews,
     });
   }
@@ -121,47 +143,63 @@ const getReviewByID = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteReview = async (req, res) => {
-  const { id } = req.params;
+const deleteReview = asyncHandler(async (req, res) => {
+  const { userID } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(userID)) {
     return res.status(404).json({ error: "No such review" });
   }
 
   // uses mongoose-delete's delete()
-  const review = await Review.delete({ _id: id });
+  const review = await Review.delete({ _id: userID });
 
   res.status(200).json(review);
-};
+});
 
-// // update a review
-// const updateReview = async (req, res) => {
-//   const { id } = req.params;
-//   const { rating, comment } = req.body;
-//   const { path, filename } = req.file;
+// update a review
+const updateReview = asyncHandler(async (req, res) => {
+  const { reviewID } = req.params;
+  const { rating, comment } = req.body;
 
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(404).json({ error: "No such review" });
-//   }
+  let path, filename;
+  if (req.file) {
+    ({ path, filename } = req.file);
+  } else {
+    path = "";
+    filename = "";
+  }
 
-//   const review = await Review.findOneAndUpdate(
-//     { _id: id },
-//     { rating, comment, image: { path, filename } }
-//   );
+  const isExist = await Review.findById(reviewID);
+  console.log(isExist);
+  if (!isExist) {
+    res.status(404);
+    throw new Error("The review does not exist.");
+  }
 
-//   if (!review) {
-//     return res.status(400).json({ error: "No such review" });
-//   }
+  try {
+    const review = await Review.findOneAndUpdate(
+      { _id: reviewID },
+      { rating, comment, image: { path, filename } },
+      { new: true }
+    );
 
-//   res.status(200).json(review);
-// };
+    res.status(200).send({
+      message: "Review has been updated.",
+      data: review,
+    });
+  } catch {
+    res.status(500);
+    throw new Error("Something went wrong while updating the review.");
+  }
+});
 
 export {
   createReview,
   getReviewsByUser,
+  getListingsByUser,
   getAllReviewsOfUserByListing,
   getReviewsByListing,
   getReviewByID,
   deleteReview,
-  // updateReview,
+  updateReview,
 };
