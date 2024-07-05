@@ -1,18 +1,33 @@
-import { useState } from 'react';
-import { useSignup } from '../hooks/useSignup';
+import axios from "axios";
+import { useState } from "react";
+import useLogin from "../hooks/useLogin";
 
 const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [phone, setPhone] = useState('');
-  const { signup, error, isLoading } = useSignup();
+  const [error, login] = useLogin();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await signup(email, password, username, firstname, lastname, phone);
+    try {
+      e.preventDefault();
+
+      await axios.post("http://localhost:4000/api/v1/user/signup", {
+        username,
+        email,
+        password,
+        firstname,
+        lastname,
+        phone,
+      });
+
+      login(e, { email, password });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -56,7 +71,7 @@ const Signup = () => {
         value={phone}
       />
 
-      <button disabled={isLoading}>Sign up</button>
+      <button>Sign up</button>
       {error && <div className="error">{error}</div>}
     </form>
   );

@@ -5,9 +5,10 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useAuthContext } from "./hooks/useAuthContext";
+import { useEffect, useRef, useState, useContext } from "react";
 
 // pages & components
+import MyContext from "./MyContext";
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -15,59 +16,63 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import ListingScreen from "./pages/ListingScreen";
 import AddListing from "./pages/AddListing";
-import { useEffect, useRef, useState } from "react";
 import searchTermContext from "./context/searchTermContext";
 import ViewListing from "./pages/ViewListing";
 import ReviewsTest from "./pages/ReviewsTest";
 import ChatBox from "./components/ChatBox";
-import {socket} from "./socket"
+import { socket } from "./socket";
 import ChatHistoryScreen from "./pages/ChatHistoryScreen";
+import EditReview from "./components/Review/EditReview";
 
 function App() {
-  const { user } = useAuthContext();
+  const { user } = useContext(MyContext);
+  const { isLoggedIn } = useContext(MyContext);
   let [searchTerm, setSearchTerm] = useState("");
   const search = { searchTerm, setSearchTerm };
-  let firstRun=useRef(true);
+  let firstRun = useRef(true);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
         <Route
           index
-          element={user ? <ListingScreen /> : <Navigate to="/login" />}
+          element={isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />}
         />
         <Route
           path="profile"
-          element={user ? <Profile /> : <Navigate to="/login" />}
+          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
         />
         <Route
           path="settings"
-          element={user ? <Settings /> : <Navigate to="/settings" />}
+          element={isLoggedIn ? <Settings /> : <Navigate to="/settings" />}
         />
-        <Route path="login" element={!user ? <Login /> : <Navigate to="/" />} />
+        <Route
+          path="login"
+          element={!isLoggedIn ? <Login /> : <Navigate to="/" />}
+        />
         <Route
           path="signup"
-          element={!user ? <Signup /> : <Navigate to="/" />}
+          element={!isLoggedIn ? <Signup /> : <Navigate to="/" />}
         />
         <Route path="/search/" element={<ListingScreen />} />
         <Route path="/addListing" element={<AddListing />} />
         <Route path="/editListing/:id" element={<AddListing />} />
         <Route path="/viewListing/:id" element={<ViewListing />} />
         <Route path="/reviews" element={<ReviewsTest />} />
-        <Route path="/messages" element={<ChatHistoryScreen/>}/>
-        <Route path="/messages/:id" element={<ChatBox/>}/>
+        <Route path="/messages" element={<ChatHistoryScreen />} />
+        <Route path="/messages/:id" element={<ChatBox />} />
+        <Route path="/edit-review" element={<EditReview />} />
       </Route>
     )
   );
-  useEffect(()=>{
-    if(!firstRun.current){
-      if(user){
-        socket.emit('join', user.id);
+  useEffect(() => {
+    if (!firstRun.current) {
+      if (user) {
+        socket.emit("join", user.id);
       }
+    } else {
+      firstRun.current = false;
     }
-    else{
-      firstRun.current=false;
-    }
-  },[user])
+  }, [user]);
   return (
     <div className="App">
       <searchTermContext.Provider value={search}>

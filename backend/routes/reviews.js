@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { storage } from "../config/listingStorage.js";
+import { storage } from "../config/reviewStorage.js";
 import requireAuth from "../middleware/requireAuth.js";
 import {
   createReview,

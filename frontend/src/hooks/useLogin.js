@@ -1,37 +1,32 @@
-import { useState } from 'react'
-import { useAuthContext } from './useAuthContext'
+import { useContext, useState } from "react";
+import MyContext from "../MyContext";
+import axios from "axios";
 
-export const useLogin = () => {
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(null)
-  const { dispatch } = useAuthContext()
+const useLogin = () => {
+  const { user, setIsLoggedIn, setUser } = useContext(MyContext);
+  const [error, setError] = useState("");
 
-  const login = async (email, password) => {
-    setIsLoading(true)
-    setError(null)
+  const handleLogin = async (e, userCredentials) => {
+    try {
+      e.preventDefault();
 
-    const response = await fetch('/api/v1/user/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ email, password })
-    })
-    const json = await response.json()
-
-    if (!response.ok) {
-      setIsLoading(false)
-      setError(json.error)
+      const login = await axios.post(
+        "http://localhost:4000/api/v1/user/login",
+        {
+          email: userCredentials.email,
+          password: userCredentials.password,
+        }
+      );
+      localStorage.setItem("user", JSON.stringify(login.data));
+      setIsLoggedIn(true);
+      setUser(login.data);
+    } catch (error) {
+      console.error(error);
+      setError(error.response.data.message);
     }
-    if (response.ok) {
-      // save the user to local storage
-      localStorage.setItem('user', JSON.stringify(json))
+  };
 
-      // update the auth context
-      dispatch({type: 'LOGIN', payload: json})
+  return [error, handleLogin];
+};
 
-      // update loading state
-      setIsLoading(false)
-    }
-  }
-
-  return { login, isLoading, error }
-}
+export default useLogin;

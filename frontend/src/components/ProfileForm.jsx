@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useUserProfileContext } from '../hooks/useUserProfileContext';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { Image } from 'cloudinary-react';
-import Axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import { useUserProfileContext } from "../hooks/useUserProfileContext";
+import MyContext from "../MyContext";
+import { Image } from "cloudinary-react";
+import Axios from "axios";
 
 const ProfileForm = () => {
   const { userProfile, dispatch } = useUserProfileContext();
-  const { user } = useAuthContext();
+  const { user } = useContext(MyContext);
 
-  const [username, setUsername] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
-  const [meetupLocations, setMeetupLocations] = useState('');
+  const [meetupLocations, setMeetupLocations] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (userProfile) {
-      setUsername(userProfile.username || '');
-      setFirstname(userProfile.firstname || '');
-      setLastname(userProfile.lastname || '');
-      setPhone(userProfile.phone || '');
-      setMeetupLocations(userProfile.meetupLocations || '');
+      setUsername(userProfile.username || "");
+      setFirstname(userProfile.firstname || "");
+      setLastname(userProfile.lastname || "");
+      setPhone(userProfile.phone || "");
+      setMeetupLocations(userProfile.meetupLocations || "");
 
       // Check if userProfile.image is an array and has at least one item
       if (userProfile.image && userProfile.image.length > 0) {
@@ -42,17 +42,17 @@ const ProfileForm = () => {
 
   const uploadImage = async () => {
     if (!image) {
-      setError('Please select an image.');
+      setError("Please select an image.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', image);
-    formData.append('upload_preset', 'alxmsvj9'); // uploud preset can be found inside settings of cloudinary. create an "unsigned" mode and paste it here. purpose: so that uploading to personal cloudinary is publicly accessible
+    formData.append("file", image);
+    formData.append("upload_preset", "alxmsvj9"); // uploud preset can be found inside settings of cloudinary. create an "unsigned" mode and paste it here. purpose: so that uploading to personal cloudinary is publicly accessible
 
     try {
       const response = await Axios.post(
-        'https://api.cloudinary.com/v1_1/dexuiicai/image/upload',
+        "https://api.cloudinary.com/v1_1/dexuiicai/image/upload",
         formData
       );
       setImage({
@@ -60,8 +60,8 @@ const ProfileForm = () => {
         filename: `uploads/${response.data.public_id}`,
       });
     } catch (error) {
-      setError('Failed to upload image.');
-      console.error('Error uploading image:', error);
+      setError("Failed to upload image.");
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -69,13 +69,13 @@ const ProfileForm = () => {
     e.preventDefault();
 
     if (!user) {
-      setError('You must be logged in');
+      setError("You must be logged in");
       return;
     }
 
     // Split meetupLocations string into array
     const locationsArray = meetupLocations
-      .split(',')
+      .split(",")
       .map((location) => location.trim());
 
     const updatedProfile = {
@@ -91,10 +91,10 @@ const ProfileForm = () => {
 
     try {
       const response = await fetch(url, {
-        method: 'PATCH',
+        method: "PATCH",
         body: JSON.stringify(updatedProfile),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
       });
@@ -103,13 +103,13 @@ const ProfileForm = () => {
 
       if (response.ok) {
         setError(null);
-        dispatch({ type: 'UPDATE_PROFILE', payload: json });
+        dispatch({ type: "UPDATE_PROFILE", payload: json });
       } else {
         setError(json.error);
       }
     } catch (error) {
-      setError('Failed to update profile.');
-      console.error('Error updating profile:', error);
+      setError("Failed to update profile.");
+      console.error("Error updating profile:", error);
     }
   };
 

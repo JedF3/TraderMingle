@@ -83,7 +83,8 @@
   justify-content: space-between;
 }
 
-.submitBtn {
+.submitBtn,
+.rightBtn {
   background-color: #1aac83;
   color: #fff;
   padding: 10px 20px;
@@ -94,6 +95,10 @@
 
 .submitBtn:hover {
   opacity: 80%;
+}
+
+.rightBtn {
+  /* flex-grow: 1; */
 }
 
 .error {
@@ -127,6 +132,8 @@ a,
 
 .cardInListing {
   height: 200px;
+  display: flex;
+  align-items: center;
 }
 
 .card p {
@@ -134,11 +141,28 @@ a,
   margin-bottom: 1rem;
 }
 
+.flexGrow {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reviewIMG,
+.listingIMG {
+  border-radius: 4px;
+}
+
 .reviewIMG {
   height: 150px;
-  float: right;
-  margin-left: 1rem;
-  border-radius: 4px;
+  margin: auto;
+  margin-left: 10px;
 }
 
 .star {

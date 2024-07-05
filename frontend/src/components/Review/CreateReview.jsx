@@ -1,16 +1,17 @@
 import axios from "axios";
-import { useState, useReducer, Fragment } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext.js";
+import { useState, useReducer, useContext, Fragment } from "react";
 import styles from "./reviews.module.css";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
+import MyContext from "../../MyContext.js";
 
 const CreateReview = ({ listingID, show, onClose, error, setError }) => {
-  const { user } = useAuthContext();
+  const { user } = useContext(MyContext);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("/img/addImg.png");
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
+  const { setReload } = useContext(MyContext);
 
   const handlePreview = (e) => {
     setImageFile(e.target.files[0]);
@@ -45,6 +46,7 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
     );
 
     setError(false);
+    setReload(true);
     onClose();
 
     dispatch({ type: "CREATE_REVIEW", payload: newReview.data.data });
