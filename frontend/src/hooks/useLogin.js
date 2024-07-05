@@ -18,6 +18,7 @@ const useLogin = () => {
         }
       );
       localStorage.setItem("user", JSON.stringify(login.data));
+      console.log(login.data)
       setIsLoggedIn(true);
       setUser(login.data);
     } catch (error) {
