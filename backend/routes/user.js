@@ -6,10 +6,12 @@ import {
   getAllUsers,
   getUser,
 } from "../controllers/user.controller.js";
+import multer from "multer";
+import {storage} from "../config/userStorage.js";
 import requireAuth from "../middleware/requireAuth.js";
 
 const router = express.Router();
-
+const profilePic = multer({storage})
 // login route
 router.post("/login", loginUser);
 
@@ -20,7 +22,7 @@ router.post("/signup", signupUser);
 router.get("/profile/:id", getUser);
 
 // update profile route
-router.patch("/profile/:id", requireAuth, updateUser);
+router.put("/profile/:id", profilePic.single("profile-img"),requireAuth, updateUser);
 
 // get all users
 router.get("/profile", getAllUsers);

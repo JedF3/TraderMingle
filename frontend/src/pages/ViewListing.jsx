@@ -113,7 +113,7 @@ const ViewListing = () => {
         }
       }
       console.log(item);
-      if (item.userID.image[0]) {
+      if (item.userID.image) {
         setUserImage(item.userID.image[0].path);
       }
       setPosterName(item.userID.username);
