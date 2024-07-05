@@ -12,11 +12,12 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      try {
-        if (!user || !user.id) {
-          throw new Error('User or user ID is undefined');
-        }
+      if (!user || !user.id) {
+        console.error('User or user ID is undefined');
+        return;
+      }
 
+      try {
         const response = await fetch(`/api/v1/user/profile/${user.id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -40,7 +41,11 @@ const Profile = () => {
   return (
     <div className="profile">
       <div className="details">
-        {userProfile && <ProfileDetails profile={userProfile} />}
+        {userProfile ? (
+          <ProfileDetails profile={userProfile} />
+        ) : (
+          <p>Loading profile...</p>
+        )}
       </div>
       <ProfileTabs />
     </div>

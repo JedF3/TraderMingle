@@ -1,38 +1,24 @@
-import { useUserProfileContext } from '../hooks/useUserProfileContext';
-import { useAuthContext } from '../hooks/useAuthContext';
-
-// date fns
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-
-// components
-import no_avatar from "../images/pain.jpg";
+import React from 'react';
+import { Image } from 'cloudinary-react';
+import no_avatar from '../images/no-avatar.svg';
 
 const ProfileDetails = ({ profile }) => {
-  const { dispatch } = useUserProfileContext();
-  const { user } = useAuthContext();
+  if (!profile) {
+    return <div>Loading...</div>;
+  }
 
-  // delete button
-  // const handleClick = async () => {
-  //   if (!user) {
-  //     return;
-  //   }
-
-  //   const response = await fetch('/api/v1/profiles/' + profile._id, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   });
-  //   const json = await response.json();
-
-  //   if (response.ok) {
-  //     dispatch({ type: 'DELETE_PROFILE', payload: json });
-  //   }
-  // };
+  // Check to make sure that the image exists
+  const imagePath =
+    profile.image && profile.image.length > 0 ? profile.image[0].path : null;
 
   return (
-    <>
-      <img src={no_avatar} alt="" className="avatar" />
+    <div>
+      {profile.image ? (
+        <Image cloudName="dexuiicai" publicId={imagePath} className="avatar" />
+      ) : (
+        <img src={no_avatar} alt="" className="avatar" />
+      )}
+
       <h2>
         {profile.firstname} {profile.lastname}
       </h2>
@@ -40,21 +26,18 @@ const ProfileDetails = ({ profile }) => {
       <p>
         <strong>Phone Number: </strong>0{profile.phone}
       </p>
-      <p>
-        <strong>Image: </strong>
-        {profile.image}
-      </p>
-      <h4>Meet up locations:</h4>
+      <h4>Meetup Locations:</h4>
       <ul>
-        <li> {profile.meetupLocations}</li>
+        {/* Add a conditional check for meetupLocations */}
+        {profile.meetupLocations && Array.isArray(profile.meetupLocations) ? (
+          profile.meetupLocations.map((location, index) => (
+            <li key={index}>{location}</li>
+          ))
+        ) : (
+          <li>No meetup locations found</li>
+        )}
       </ul>
-      {/* <p>
-        {formatDistanceToNow(new Date(profile.createdAt), { addSuffix: true })}
-      </p> */}
-      {/* <span className="material-symbols-outlined" onClick={handleClick}>
-        ❌
-      </span> */}
-    </>
+    </div>
   );
 };
 

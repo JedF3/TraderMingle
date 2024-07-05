@@ -4,7 +4,8 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import { useUserProfileContext } from '../hooks/useUserProfileContext';
-import no_avatar from '../images/pain.jpg';
+import no_avatar from '../images/no-avatar.svg';
+import { Image } from 'cloudinary-react';
 
 // react-icons
 import {
@@ -31,13 +32,13 @@ const Navbar = () => {
     if (searchText !== searchTerm) {
       setSearchTerm(searchText);
     } else {
-      navigate("/search/");
+      navigate('/search/');
     }
   };
 
   useEffect(() => {
     if (!firstRun.current) {
-      navigate("/search/");
+      navigate('/search/');
     } else {
       firstRun.current = false;
     }
@@ -46,16 +47,20 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfile = async () => {
-        const response = await fetch('/api/v1/user/profile', {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-        const json = await response.json();
-        if (response.ok) {
-          dispatch({ type: "SET_USER_PROFILE", payload: json });
-        } else {
-          console.error("Failed to fetch profile", json);
+        try {
+          const response = await fetch('/api/v1/user/profile', {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          });
+          const json = await response.json();
+          if (response.ok) {
+            dispatch({ type: 'SET_USER_PROFILE', payload: json });
+          } else {
+            console.error('Failed to fetch profile', json);
+          }
+        } catch (error) {
+          console.error('Error fetching profile:', error);
         }
       };
 
@@ -70,9 +75,9 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuRef]);
 
@@ -89,28 +94,33 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
+  // Check if userProfile exists and has image data
+  const profileImage =
+    userProfile && userProfile.image && userProfile.image.length > 0
+      ? userProfile.image[0].path
+      : null;
+
   return (
     <header>
       <div className="container">
-        <button className="TMIconButton" onClick={() => {
-          console.log("fire");
-          if (searchTerm) {
-            setSearchTerm("");
-          } else {
-            navigate("/");
-          }
-        }}>
+        <button
+          className="TMIconButton"
+          onClick={() => {
+            if (searchTerm) {
+              setSearchTerm('');
+            } else {
+              navigate('/');
+            }
+          }}
+        >
           <h1 className="noPointers">TM!</h1>
         </button>
         <div className="searchDiv">
-          <input
-            type="text"
-            onChange={(e) => setSearchText(e.target.value)}
-          />
+          <input type="text" onChange={(e) => setSearchText(e.target.value)} />
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          <button onClick={() => navigate("/addListing")}>
+          <button onClick={() => navigate('/addListing')}>
             Have something to sell?
           </button>
           {user ? (
@@ -120,12 +130,16 @@ const Navbar = () => {
                 onClick={toggleMenu}
               >
                 {userProfile ? userProfile.username : 'Profile'}
-                {/* <img src={userProfile?.image || no_avatar} alt="avatar" /> */}
-                <img src={ no_avatar} alt="avatar" />
+                {/* Show user avatar if available */}
+                {profileImage ? (
+                  <Image cloudName="dexuiicai" publicId={profileImage} />
+                ) : (
+                  <img src={no_avatar} alt="avatar" />
+                )}
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
-                className={`sub-menu-wrap ${menuOpen ? "open-menu" : ""}`}
+                className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}
                 id="subMenu"
               >
                 <div className="sub-menu">
