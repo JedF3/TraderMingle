@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useReducer } from "react";
+import { useState, useReducer, Fragment } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext.js";
 import styles from "./reviews.module.css";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
@@ -67,7 +67,6 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
             id={`star${i + 1}`}
             name="rating"
             value={i + 1}
-            defaultChecked
           />
           <label htmlFor={`star${i + 1}`} key={`label${i + 1}`}>
             &#9733;
