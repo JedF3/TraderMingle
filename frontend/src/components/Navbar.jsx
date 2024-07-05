@@ -1,11 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useLogout } from '../hooks/useLogout';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { useContext, useEffect, useRef, useState } from 'react';
-import searchTermContext from '../context/searchTermContext';
-import { useUserProfileContext } from '../hooks/useUserProfileContext';
-import no_avatar from '../images/no-avatar.svg';
-import { Image } from 'cloudinary-react';
+import { Link, useNavigate } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
+import { useContext, useEffect, useRef, useState } from "react";
+import searchTermContext from "../context/searchTermContext";
+import { useUserProfileContext } from "../hooks/useUserProfileContext";
+import no_avatar from "../images/no-avatar.svg";
+import { Image } from "cloudinary-react";
 
 // react-icons
 import {
@@ -14,14 +13,15 @@ import {
   FaArrowRightFromBracket,
   FaChevronDown,
   FaComment,
-} from 'react-icons/fa6';
-import { socket } from '../socket';
+} from "react-icons/fa6";
+import { socket } from "../socket";
+import MyContext from "../MyContext";
 
 const Navbar = () => {
   const { logout } = useLogout();
-  const { user } = useAuthContext();
+  const { user, isLoggedIn, setIsLoggedIn } = useContext(MyContext);
   const { userProfile, dispatch } = useUserProfileContext();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
@@ -36,13 +36,13 @@ const Navbar = () => {
     if (searchText !== searchTerm) {
       setSearchTerm(searchText);
     } else {
-      navigate('/search/');
+      navigate("/search/");
     }
   };
 
   useEffect(() => {
     if (!firstRun.current) {
-      navigate('/search/');
+      navigate("/search/");
     } else {
       firstRun.current = false;
     }
@@ -52,19 +52,19 @@ const Navbar = () => {
     if (user && user.token) {
       const fetchProfile = async () => {
         try {
-          const response = await fetch('/api/v1/user/profile', {
+          const response = await fetch("/api/v1/user/profile", {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
           });
           const json = await response.json();
           if (response.ok) {
-            dispatch({ type: 'SET_USER_PROFILE', payload: json });
+            dispatch({ type: "SET_USER_PROFILE", payload: json });
           } else {
-            console.error('Failed to fetch profile', json);
+            console.error("Failed to fetch profile", json);
           }
         } catch (error) {
-          console.error('Error fetching profile:', error);
+          console.error("Error fetching profile:", error);
         }
       };
 
@@ -79,9 +79,9 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
 
@@ -103,9 +103,9 @@ const Navbar = () => {
     userProfile && userProfile.image && userProfile.image.length > 0
       ? userProfile.image[0].path
       : null;
-  socket.on("pvt_msg", (data)=>{
+  socket.on("pvt_msg", (data) => {
     setChatIconClass(chatNotifIconClass);
-  })
+  });
   return (
     <header>
       <div className="container">
@@ -113,9 +113,9 @@ const Navbar = () => {
           className="TMIconButton"
           onClick={() => {
             if (searchTerm) {
-              setSearchTerm('');
+              setSearchTerm("");
             } else {
-              navigate('/');
+              navigate("/");
             }
           }}
         >
@@ -126,20 +126,23 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-        <FaComment className={chatIconClass} onClick={()=>{
-          navigate("/messages");
-          setChatIconClass(chatDefaultIconClass);
-        }}/>
-          <button onClick={() => navigate('/addListing')}>
+          <FaComment
+            className={chatIconClass}
+            onClick={() => {
+              navigate("/messages");
+              setChatIconClass(chatDefaultIconClass);
+            }}
+          />
+          <button onClick={() => navigate("/addListing")}>
             Have something to sell?
           </button>
-          {user ? (
+          {isLoggedIn ? (
             <div ref={menuRef}>
               <button
                 className="drop-down-menu custom-link outline"
                 onClick={toggleMenu}
               >
-                {userProfile ? userProfile.username : 'Profile'}
+                {userProfile ? user.username : "Profile"}
                 {/* Show user avatar if available */}
                 {profileImage ? (
                   <Image cloudName="dexuiicai" publicId={profileImage} />
@@ -149,7 +152,7 @@ const Navbar = () => {
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
-                className={`sub-menu-wrap ${menuOpen ? 'open-menu' : ''}`}
+                className={`sub-menu-wrap ${menuOpen ? "open-menu" : ""}`}
                 id="subMenu"
               >
                 <div className="sub-menu">

@@ -53,51 +53,36 @@ const getReviewsByUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getListingsByUser = asyncHandler(async (req, res) => {
-  const { userID } = req.params;
-
-  const listingsByID = await listings.find({ userID });
-
-  if (!listingsByID) {
-    res.status(404).json({ message: "User has no listings", error });
-  } else {
-    res.status(200).send({
-      message: `List of listings by user retrieved.`,
-      data: listingIDs,
-    });
-  }
-});
-
 const getAllReviewsOfUserByListing = asyncHandler(async (req, res) => {
   const { userID } = req.params;
 
-  const listingsByID = await listings.find({ userID });
+  try {
+    const listingsByID = await listings.find({ userID });
 
-  const listingIDs = listingsByID.map((object) => {
-    return object._id;
-  });
+    if (!listingsByID.length) {
+      return res.status(404).json({ message: "User has no listings" });
+    }
 
-  if (!listingsByID) {
-    res.status(404).json({ message: "User has no listings", error });
-  } else {
+    const listingIDs = listingsByID.map((listing) => listing._id);
+
     const reviews = await Review.find({ listingID: { $in: listingIDs } })
       .sort({ _id: -1 })
-      .populate({
-        path: "userID",
-        select: "username",
-      })
-      .populate({ path: "listingID" });
+      .populate("listingID");
+    // .populate("userID")
 
-    if (!reviews) {
-      res
+    if (!reviews.length) {
+      return res
         .status(404)
-        .json({ message: "Listings of user have no reviews", error });
-    } else {
-      res.status(200).send({
-        message: `List of reviews for listings of user retrieved.`,
-        data: reviews,
-      });
+        .json({ message: "Listings of user have no reviews" });
     }
+
+    res.status(200).json({
+      message: "List of reviews for listings of user retrieved.",
+      data: reviews,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
@@ -196,7 +181,6 @@ const updateReview = asyncHandler(async (req, res) => {
 export {
   createReview,
   getReviewsByUser,
-  getListingsByUser,
   getAllReviewsOfUserByListing,
   getReviewsByListing,
   getReviewByID,

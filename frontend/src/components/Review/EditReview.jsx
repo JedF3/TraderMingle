@@ -1,22 +1,22 @@
 import axios from "axios";
-import { useState, useReducer, Fragment } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext.js";
+import { useState, useReducer, Fragment, useContext } from "react";
 import styles from "./reviews.module.css";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
+import MyContext from "../../MyContext.js";
+import { useNavigate } from "react-router-dom";
 
-const EditReview = ({ show, onClose }) => {
-  const { user } = useAuthContext();
+const EditReview = () => {
+  const { user, current } = useContext(MyContext);
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
 
-  //   const parsed = JSON.parse(localStorage.getItem("reviews"));
-  //   const currentReview = parsed.find((review) => {
-  //     return review._id == { reviewID };
-  //   });
+  console.log(current);
 
-  const [rating, setRating] = useState("currentReview.rating");
-  const [comment, setComment] = useState("currentReview.comment");
-  const [imageFile, setImageFile] = useState("currentReview.image.path");
-  const [preview, setPreview] = useState("currentReview.image.path");
+  const [rating, setRating] = useState(current.rating);
+  const [comment, setComment] = useState(current.comment);
+  const [imageFile, setImageFile] = useState(current.imageUrl);
+  const [preview, setPreview] = useState(current.imageUrl);
+
+  const navigate = useNavigate();
 
   const handlePreview = (e) => {
     setImageFile(e.target.files[0]);
@@ -33,7 +33,7 @@ const EditReview = ({ show, onClose }) => {
     e.preventDefault();
 
     const editReview = await axios.patch(
-      `http://localhost:4000/api/v1/reviews/${"currentReview._id"}`,
+      `http://localhost:4000/api/v1/reviews/${current.reviewID}`,
       { rating: rating, comment: comment, "review-image": imageFile },
       { headers: { Authorization: `Bearer ${user.token}` } }
     );
@@ -80,13 +80,8 @@ const EditReview = ({ show, onClose }) => {
     })
     .reverse();
 
-  // Modal window controller
-  if (!show) {
-    return null;
-  }
-
   return (
-    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+    <div onClick={handleOverlayClick}>
       <form className={styles.feedbackForm} onSubmit={(e) => handleSubmit(e)}>
         <h2>Edit your review</h2>
 
@@ -119,7 +114,7 @@ const EditReview = ({ show, onClose }) => {
         </label>
 
         <div className={styles.buttonDiv}>
-          <button className={styles.submitBtn} onClick={onClose}>
+          <button className={styles.submitBtn} onClick={() => navigate(-1)}>
             Cancel
           </button>
           <button type="submit" className={styles.submitBtn}>

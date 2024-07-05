@@ -1,15 +1,15 @@
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
 import searchTermContext from "../context/searchTermContext";
 import CreateReviewModalBtn from "../components/Review/CreateReviewModalBtn";
 import ReviewsByListing from "../components/Review/ReviewsByListing";
+import MyContext from "../MyContext";
 
 const ViewListing = () => {
   const location = useLocation();
   const { id } = useParams();
-  const { user } = useAuthContext();
+  const { user } = useContext(MyContext);
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   const navigate = useNavigate();
   const [item, setItem] = useState({
@@ -113,16 +113,16 @@ const ViewListing = () => {
         }
       }
       console.log(item);
-      if(item.userID.image[0]){
+      if (item.userID.image[0]) {
         setUserImage(item.userID.image[0].path);
       }
       setPosterName(item.userID.username);
       setPosterNumber(item.userID.phone);
       setPosterID(item.userID._id);
       setNecessaryChatInfo({
-        _id:item.userID._id, 
-        username:item.userID.username
-    });
+        _id: item.userID._id,
+        username: item.userID.username,
+      });
     } else {
       firstRun.current = false;
     }
@@ -171,10 +171,16 @@ const ViewListing = () => {
         </div>
         <div className="UserInfo">
           <h2>Item posted by</h2>
-          <img src={userImage} className="userListingThumb"/>
+          <img src={userImage} className="userListingThumb" />
           <h3>{posterName}</h3>
           <h3>{posterNumber}</h3>
-          <button onClick={()=>{navigate("../messages/"+posterID, {state:necessaryChatInfo})}}>Send this user a message</button>
+          <button
+            onClick={() => {
+              navigate("../messages/" + posterID, { state: necessaryChatInfo });
+            }}
+          >
+            Send this user a message
+          </button>
         </div>
       </div>
       <div className="reviews">

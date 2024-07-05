@@ -1,16 +1,16 @@
-import User from '../models/user.model.js';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
+import User from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
+  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
 };
 
 // get all users
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).send({ message: 'All users', data: users });
+    res.status(200).send({ message: "All users", data: users });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -21,13 +21,13 @@ const getUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such profile' });
+    return res.status(404).json({ error: "No such profile" });
   }
 
   const profile = await User.findById(id);
 
   if (!profile) {
-    return res.status(404).json({ error: 'No such profile' });
+    return res.status(404).json({ error: "No such profile" });
   }
 
   res.status(200).json(profile);
@@ -79,7 +79,7 @@ const updateUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such user' });
+    return res.status(404).json({ error: "No such user" });
   }
 
   try {
@@ -92,7 +92,7 @@ const updateUser = async (req, res) => {
     );
 
     if (!user) {
-      return res.status(400).json({ error: 'No such user' });
+      return res.status(400).json({ error: "No such user" });
     }
 
     res.status(200).json(user);

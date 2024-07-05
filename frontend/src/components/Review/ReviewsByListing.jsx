@@ -1,29 +1,12 @@
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import ReviewCard from "./ReviewCard.jsx";
-import { useAuthContext } from "../../hooks/useAuthContext.js";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
+import MyContext from "../../MyContext.js";
 
 const ReviewsByListing = ({ listingID }) => {
-  const { user } = useAuthContext();
+  const { user, reload } = useContext(MyContext);
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
-
-  const reviewsList = state.reviews.map((review) => {
-    const imageUrl = review.image ? review.image.path : null;
-    return (
-      <ReviewCard
-        key={review._id}
-        reviewID={review._id}
-        creator={review.userID.username}
-        listing={review.listingID}
-        rating={review.rating}
-        comment={review.comment}
-        date={review.updatedAt}
-        imageUrl={imageUrl}
-        inListing={true}
-      />
-    );
-  });
 
   useEffect(() => {
     const fetchReviewsByListing = async () => {
@@ -42,7 +25,41 @@ const ReviewsByListing = ({ listingID }) => {
       }
     };
     fetchReviewsByListing();
-  }, [user, state.reviews.length]);
+  }, [state.reviews.length, reload]);
+
+  const reviewsList = state.reviews.map((review) => {
+    const imageUrl = review.image ? review.image.path : null;
+    const reviewData = {
+      reviewID: review._id,
+      userID: review.userID,
+      listing: review.listingID,
+      rating: review.rating,
+      comment: review.comment,
+      updatedAt: review.updatedAt,
+      imageUrl: imageUrl,
+    };
+    return (
+      <ReviewCard key={review._id} reviewData={reviewData} inListing={true} />
+    );
+  });
+
+  useEffect(() => {
+    async () => {
+      if (user) {
+        const {
+          data: { data },
+        } = await axios.get(
+          `http://localhost:4000/api/v1/reviews/by-user-listings/${user.id}`
+        );
+        console.log("GET successful");
+        console.log(data);
+
+        localStorage.setItem("reviews", JSON.stringify(data));
+
+        dispatch({ type: "REVIEWS_LIST", payload: data });
+      }
+    };
+  }, [state.reviews.length, user, reload]);
 
   return <div>{reviewsList}</div>;
 };

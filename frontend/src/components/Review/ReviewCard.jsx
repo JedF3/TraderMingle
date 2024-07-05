@@ -1,17 +1,30 @@
-import { Fragment } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./reviews.module.css";
-// import EditReviewBtn from "./EditReviewBtn";
+import MyContext from "../../MyContext";
 
-const ReviewCard = ({
-  reviewID,
-  creator,
-  listing,
-  rating,
-  comment,
-  imageUrl,
-  inListing,
-}) => {
+const ReviewCard = ({ reviewData, inListing }) => {
+  const { user, current, setCurrent } = useContext(MyContext);
+  const [showModal, setShowModal] = useState(false);
+  const { reviewID, userID, listing, rating, comment, updatedAt, imageUrl } =
+    reviewData;
+
+  const parsed = JSON.parse(localStorage.getItem("usernames")) || [];
+  const userObj = parsed.find((item) => item.userID === userID);
+  const username = userObj ? userObj.username : userID.username;
+
+  const isYours = username === user.username;
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+    setCurrent(reviewData);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCurrent({});
+  };
+
   // How many days ago the review was posted.
   const daysAgo = (date) => {
     const parsedDate = new Date(date);
@@ -43,29 +56,53 @@ const ReviewCard = ({
 
   return (
     <div className={styles.cardInListing}>
-      <span className={styles.star}>{stars}</span>
-      by <span>{creator}</span> <small>{daysAgo(listing.updatedAt)}</small>
-      {imageUrl && (
-        <img src={imageUrl} alt="review image" className={styles.reviewIMG} />
-      )}
-      <p>{comment}</p>
-      {!inListing && (
-        <Link
-          to={`../viewListing/${listing._id}`}
-          className={styles.listingPrev}
-        >
-          <img
-            src={listingIMG}
-            alt="listingImg"
-            className={styles.listingIMG}
-          />
-          <div>
-            <h4>{listing.title}</h4>
-            <span>PHP {listing.price}</span>
+      <div className={styles.flexGrow}>
+        <div className={styles.cardHeader}>
+          <div className={styles.headerText}>
+            <span className={styles.star}>{stars}</span>
+            by <span>{username}</span> <small>{daysAgo(updatedAt)}</small>
           </div>
-        </Link>
-      )}
-      {/* <EditReviewBtn reviewID={reviewID} /> */}
+          {isYours && (
+            <>
+              <Link
+                to="/edit-review"
+                onClick={handleOpenModal}
+                className={styles.rightBtn}
+              >
+                Edit
+              </Link>
+            </>
+          )}
+        </div>
+
+        <div>
+          <p>{comment}</p>
+        </div>
+
+        <div>
+          {!inListing && (
+            <Link
+              to={`../viewListing/${listing._id}`}
+              className={styles.listingPrev}
+            >
+              <img
+                src={listingIMG}
+                alt="listingImg"
+                className={styles.listingIMG}
+              />
+              <div>
+                <h4>{listing.title}</h4>
+                <span>PHP {listing.price}</span>
+              </div>
+            </Link>
+          )}
+        </div>
+      </div>
+      <div>
+        {imageUrl && (
+          <img src={imageUrl} alt="review image" className={styles.reviewIMG} />
+        )}
+      </div>
     </div>
   );
 };

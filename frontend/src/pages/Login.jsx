@@ -1,37 +1,35 @@
 import { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error, isLoading } = useLogin();
+  const [error, login] = useLogin();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await login(email, password);
+  const userCredentials = {
+    email,
+    password,
   };
 
   return (
     <>
-      <form className="login" onSubmit={handleSubmit}>
+      <form className="login" onSubmit={(e) => login(e, userCredentials)}>
         <h3>Log In</h3>
 
         <label>Email address:</label>
         <input
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
           value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <label>Password:</label>
         <input
           type="password"
-          onChange={(e) => setPassword(e.target.value)}
           value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-
-        <button disabled={isLoading}>Log in</button>
-        {error && <div className="error">{error}</div>}
+        <button type="submit">Log in</button>
+        {error && <p>{error}</p>}
       </form>
     </>
   );

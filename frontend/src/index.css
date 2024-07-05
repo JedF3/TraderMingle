@@ -179,7 +179,6 @@ h4 {
   margin-bottom: 10px;
 }
 
-
 /* homepage */
 .home {
   display: grid;
@@ -416,76 +415,74 @@ form.login {
   background-color: red;
 }
 
-.chatHistoryScreenDiv{
+.chatHistoryScreenDiv {
   width: 100%;
-  height:90%;
+  height: 90%;
   /* background-color: white; */
   display: flex;
   flex-flow: column nowrap;
-  gap:20px;
+  gap: 20px;
 }
-.chatPersonDiv{
-  height:4em;
-  padding-left:1%;
-  display:flex;
+.chatPersonDiv {
+  height: 4em;
+  padding-left: 1%;
+  display: flex;
   flex-flow: row nowrap;
   align-items: center;
   background-color: white;
   border-radius: 10px;
 }
 
-.chatHistory{
-  width:100%;
-  height:50%;
+.chatHistory {
+  width: 100%;
+  height: 50%;
   max-height: 60vh;
   background-color: white;
-  display:flex;
+  display: flex;
   flex-flow: column nowrap;
 }
 
-.chatInputFooter{
-
-  width:100%;
+.chatInputFooter {
+  width: 100%;
 }
 
-.chatInput{
-  width:100%;
+.chatInput {
+  width: 100%;
 }
-.chatInput:focus{
-  outline: none!important;
+.chatInput:focus {
+  outline: none !important;
 }
-.chatHistoryContent{
+.chatHistoryContent {
   overflow: scroll;
   display: flex;
   flex-flow: column;
-  gap:20px;
+  gap: 20px;
 }
 
-.toUserBaloon{
+.toUserBaloon {
   background-color: #bbb;
   border-radius: 20px;
   display: flex;
   flex-flow: row wrap;
   align-self: flex-start;
-  width:70%;
-  padding:2%;
+  width: 70%;
+  padding: 2%;
 }
 
-.fromUserBaloon{
+.fromUserBaloon {
   background-color: var(--primary);
   border-radius: 20px;
   display: flex;
   flex-flow: row wrap;
   align-self: flex-end;
-  width:70%;
-  padding:2%;
+  width: 70%;
+  padding: 2%;
 }
 
-.userListingThumb{
-  width:100px;
-  height:100px;
+.userListingThumb {
+  width: 100px;
+  height: 100px;
 }
-
 
 img[src=""] {
   display: none;
@@ -609,22 +606,22 @@ nav {
 .reviews {
   width: 70%;
 }
-.standardSize{
-  width:50px;
-  height:50px;
+.standardSize {
+  width: 50px;
+  height: 50px;
 }
 
-.noNew{
-  padding:3%;
+.noNew {
+  padding: 3%;
   border-radius: 10%;
   background-color: var(--primary);
-  color:white;
+  color: white;
 }
 
-.newChat{
-  padding:3%;
+.newChat {
+  padding: 3%;
   border-radius: 10%;
   border: 3px solid red;
-  color:white;
+  color: white;
   background-color: var(--primary);
 }

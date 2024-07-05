@@ -1,6 +1,6 @@
-import React from 'react';
-import { Image } from 'cloudinary-react';
-import no_avatar from '../images/no-avatar.svg';
+import React from "react";
+import { Image } from "cloudinary-react";
+import no_avatar from "../images/no-avatar.svg";
 
 const ProfileDetails = ({ profile }) => {
   if (!profile) {
