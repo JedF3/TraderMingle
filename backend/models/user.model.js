@@ -35,7 +35,7 @@ const userSchema = new Schema(
       {
         path: String,
         filename: String,
-      },
+      }
     ],
     meetupLocations: {
       type: [String],

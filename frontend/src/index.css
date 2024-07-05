@@ -407,6 +407,9 @@ form.login {
 .imageInputContent input {
   display: none;
 }
+.imgUpload {
+  display: none;
+}
 .TMIconButton {
   background-color: transparent;
 }

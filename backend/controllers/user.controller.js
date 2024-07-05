@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-
+import { asyncHandler } from "../middleware/errorHandler.js";
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
 };
@@ -75,30 +75,57 @@ const signupUser = async (req, res) => {
 };
 
 // update a user's profile
-const updateUser = async (req, res) => {
+const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such user" });
-  }
-
-  try {
-    const user = await User.findOneAndUpdate(
-      { _id: id },
-      {
-        ...req.body,
-      },
-      { new: true } // return the updated document
-    );
-
-    if (!user) {
-      return res.status(400).json({ error: "No such user" });
+  const target = await User.findOne({_id:id});
+  if(target){
+    const {username, firstname, lastname, phone, meetupLocations} = req.body;
+    let path, filename;
+    if(req.file){
+      console.log(req.file)
+      path=req.file.path;
+      filename = req.file.filename;
+      console.log(path)
+      console.log(filename)
     }
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    async function updateUserwImg(){
+      await User.updateOne({_id:id},
+        {
+          $set:{
+            username,
+            firstname,
+            lastname,
+            phone,
+            meetupLocations,
+            image:[{path:path, filename:filename}],
+          }
+        }
+      )
+    }
+    async function updateUserwOutImg(){
+      await User.updateOne({_id:id},
+        {
+          $set:{
+            username,
+            firstname,
+            lastname,
+            phone,
+            meetupLocations:meetupLocations.map((location)=>location),
+          }
+        }
+      )
+    }
+    if(req.file){
+      await updateUserwImg();
+    }
+    else{
+      await updateUserwOutImg();
+    }
+    res.status(200).send({message:"Updated"});
   }
-};
+  else{
+    res.status(404).send({ error: "No such profile" });
+  }
+});
 
 export { signupUser, loginUser, updateUser, getAllUsers, getUser };
