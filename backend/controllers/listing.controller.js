@@ -3,13 +3,13 @@ import { asyncHandler } from "../middleware/errorHandler.js";
 import { cloudinary } from "../config/listingStorage.js";
 
 const getListings = asyncHandler(async(req, res, next)=>{
-    const allListings = await listings.find({deleted:{$ne:true}}).populate({path:"userID", select:["_id", "email"]});
+    const allListings = await listings.find({deleted:{$ne:true}}).populate({path:"userID", select:["_id", "email", "username", "phone", "image"]});
     res.status(200).send({message:"Retrieved all listings", data:allListings});
 });
 
 const searchForListing = asyncHandler(async(req, res, next)=>{
     const searchTerm = new RegExp(req.params.searchTerm, "i");
-    const searchedListings = await listings.find({$and:[{$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]}, {deleted:{$ne:true}}]}).populate({path:"userID", select:["_id", "email"]});
+    const searchedListings = await listings.find({$and:[{$or:[{title:{$regex:searchTerm}}, {description:{$regex:searchTerm}}]}, {deleted:{$ne:true}}]}).populate({path:"userID", select:["_id", "email", "username", "phone", "image"]});
     res.status(200).send({message:"Retrieved all listings", data:searchedListings});
 });
 

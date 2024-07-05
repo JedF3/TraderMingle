@@ -15,15 +15,19 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import ListingScreen from "./pages/ListingScreen";
 import AddListing from "./pages/AddListing";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import searchTermContext from "./context/searchTermContext";
 import ViewListing from "./pages/ViewListing";
 import ReviewsTest from "./pages/ReviewsTest";
+import ChatBox from "./components/ChatBox";
+import {socket} from "./socket"
+import ChatHistoryScreen from "./pages/ChatHistoryScreen";
 
 function App() {
   const { user } = useAuthContext();
   let [searchTerm, setSearchTerm] = useState("");
   const search = { searchTerm, setSearchTerm };
+  let firstRun=useRef(true);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
@@ -49,10 +53,21 @@ function App() {
         <Route path="/editListing/:id" element={<AddListing />} />
         <Route path="/viewListing/:id" element={<ViewListing />} />
         <Route path="/reviews" element={<ReviewsTest />} />
+        <Route path="/messages" element={<ChatHistoryScreen/>}/>
+        <Route path="/messages/:id" element={<ChatBox/>}/>
       </Route>
     )
   );
-
+  useEffect(()=>{
+    if(!firstRun.current){
+      if(user){
+        socket.emit('join', user.id);
+      }
+    }
+    else{
+      firstRun.current=false;
+    }
+  },[user])
   return (
     <div className="App">
       <searchTermContext.Provider value={search}>

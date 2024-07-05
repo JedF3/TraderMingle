@@ -13,7 +13,9 @@ import {
   FaGear,
   FaArrowRightFromBracket,
   FaChevronDown,
+  FaComment,
 } from 'react-icons/fa6';
+import { socket } from '../socket';
 
 const Navbar = () => {
   const { logout } = useLogout();
@@ -27,7 +29,9 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   let firstRun = useRef(true);
-
+  const chatDefaultIconClass = "react-icons standardSize noNew";
+  const chatNotifIconClass = "react-icons standardSize newChat";
+  let [chatIconClass, setChatIconClass] = useState(chatDefaultIconClass);
   const handleSearch = () => {
     if (searchText !== searchTerm) {
       setSearchTerm(searchText);
@@ -99,7 +103,9 @@ const Navbar = () => {
     userProfile && userProfile.image && userProfile.image.length > 0
       ? userProfile.image[0].path
       : null;
-
+  socket.on("pvt_msg", (data)=>{
+    setChatIconClass(chatNotifIconClass);
+  })
   return (
     <header>
       <div className="container">
@@ -120,6 +126,10 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
+        <FaComment className={chatIconClass} onClick={()=>{
+          navigate("/messages");
+          setChatIconClass(chatDefaultIconClass);
+        }}/>
           <button onClick={() => navigate('/addListing')}>
             Have something to sell?
           </button>

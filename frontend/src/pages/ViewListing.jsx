@@ -23,7 +23,11 @@ const ViewListing = () => {
   const [isMyItem, setIsMyItem] = useState(false);
   const [itemSold, setItemSold] = useState(false);
   const [itemDeleted, setItemDeleted] = useState(false);
-
+  const [userImage, setUserImage] = useState("");
+  const [posterName, setPosterName] = useState("");
+  const [posterNumber, setPosterNumber] = useState("");
+  const [posterID, setPosterID] = useState("");
+  const [necessaryChatInfo, setNecessaryChatInfo] = useState({});
   let firstRun = useRef(true);
   async function getListingifNot() {
     console.log("not");
@@ -108,6 +112,17 @@ const ViewListing = () => {
           setItemDeleted(false);
         }
       }
+      console.log(item);
+      if(item.userID.image[0]){
+        setUserImage(item.userID.image[0].path);
+      }
+      setPosterName(item.userID.username);
+      setPosterNumber(item.userID.phone);
+      setPosterID(item.userID._id);
+      setNecessaryChatInfo({
+        _id:item.userID._id, 
+        username:item.userID.username
+    });
     } else {
       firstRun.current = false;
     }
@@ -155,7 +170,11 @@ const ViewListing = () => {
           <h3>{item.description}</h3>
         </div>
         <div className="UserInfo">
-          <h1>User Info goes here</h1>
+          <h2>Item posted by</h2>
+          <img src={userImage} className="userListingThumb"/>
+          <h3>{posterName}</h3>
+          <h3>{posterNumber}</h3>
+          <button onClick={()=>{navigate("../messages/"+posterID, {state:necessaryChatInfo})}}>Send this user a message</button>
         </div>
       </div>
       <div className="reviews">
