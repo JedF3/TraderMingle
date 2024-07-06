@@ -60,7 +60,12 @@ const ChatBox = () => {
   }, []);
   useEffect(() => {
     setHistoryWindow(document.getElementById("chatHistoryContent"));
+    if(!firstRun.current){
     historyWindow.scrollTop = historyWindow.scrollHeight;
+    }
+    else{
+      firstRun.current=false;
+    }
   }, [chatHistory]);
   return (
     <div className="chatHistory">
