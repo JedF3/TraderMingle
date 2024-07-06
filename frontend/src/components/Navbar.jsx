@@ -130,13 +130,15 @@ const Navbar = () => {
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          <FaComment
-            className={chatIconClass}
-            onClick={() => {
-              navigate("/messages");
-              setChatIconClass(chatDefaultIconClass);
-            }}
-          />
+          {isLoggedIn&&
+            <FaComment
+              className={chatIconClass}
+              onClick={() => {
+                navigate("/messages");
+                setChatIconClass(chatDefaultIconClass);
+              }}
+            />
+          }
           <button onClick={() => navigate("/addListing")}>
             Have something to sell?
           </button>
@@ -160,14 +162,13 @@ const Navbar = () => {
                 id="subMenu"
               >
                 <div className="sub-menu">
-                  <Link
-                    to="/profile"
+                  <div
                     className="sub-menu-link"
-                    onClick={handleMenuItemClick}
+                    onClick={()=>{handleMenuItemClick(); navigate("/profile/"+user.id)}}
                   >
                     <FaUser className="react-icons" />
                     <p>Profile</p>
-                  </Link>
+                  </div>
                   <Link
                     to="/settings"
                     className="sub-menu-link"

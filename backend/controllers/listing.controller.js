@@ -13,6 +13,12 @@ const searchForListing = asyncHandler(async(req, res, next)=>{
     res.status(200).send({message:"Retrieved all listings", data:searchedListings});
 });
 
+const listingOfUser = asyncHandler(async(req, res, next)=>{
+    const {id}=req.params;
+    const allListings = await listings.find({$and:[{deleted:{$ne:true}}, {userID:id}]}).populate({path:"userID", select:["_id", "email", "username", "phone", "image"]});
+    res.status(200).send({message:"Retrieved all user listings", data:allListings});
+});
+
 const addListing = asyncHandler(async(req, res, next)=>{
     const {userID, title, description, price, category, isSold, createDate} = req.body;
     let newListing;
@@ -115,4 +121,4 @@ const deleteListing = asyncHandler(async(req, res, next)=>{
         res.status(404).send({message:"Listing not found"});
     }
 })
-export {getListings, addListing, viewOneListing, editListing, searchForListing, deleteListing, markListingSold};
+export {getListings, addListing, listingOfUser, viewOneListing, editListing, searchForListing, deleteListing, markListingSold};

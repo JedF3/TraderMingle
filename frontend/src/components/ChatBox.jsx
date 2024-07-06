@@ -3,20 +3,31 @@ import { socket } from "../socket";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import MyContext from "../MyContext";
+import { FaCircleRight } from "react-icons/fa6";
 const ChatBox = () => {
   const { user } = useContext(MyContext);
-  let msgDestination = "66872612835444fa55b28747";
   let location = useLocation();
   const [destination, setDestination] = useState(location.state);
   let [msgBody, setMsgBody] = useState("");
   let firstRun = useRef(true);
   let [chatHistory, setChatHistory] = useState([]);
+  let [historyWindow, setHistoryWindow]= useState(document.getElementById("chatHistoryContent"));
   const toUserClass = "toUserBaloon";
   const fromUserClass = "fromUserBaloon";
   function sendMessage(e) {
-    if (e.keyCode == 13) {
-      console.log(e.target.value);
+    if (e.keyCode == 13&&msgBody!="") {
       setMsgBody("");
+      socket.emit("newMsg", {
+        fromUser: user.id,
+        toUser: destination._id,
+        messageBody: msgBody,
+      });
+      getHistory();
+    }
+  }
+  function sendMessageButton(){
+    if(msgBody!=""){
+    setMsgBody("");
       socket.emit("newMsg", {
         fromUser: user.id,
         toUser: destination._id,
@@ -36,7 +47,6 @@ const ChatBox = () => {
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
       .then((result) => {
-        console.log(result.data.data);
         setChatHistory(result.data.data);
       });
   }
@@ -48,12 +58,19 @@ const ChatBox = () => {
     console.log(destination);
   }, []);
   useEffect(() => {
-    let historyWindow = document.getElementById("chatHistoryContent");
+    setHistoryWindow(document.getElementById("chatHistoryContent"));
+    if(!firstRun.current){
     historyWindow.scrollTop = historyWindow.scrollHeight;
+    }
+    else{
+      firstRun.current=false;
+      console.log(user.id);
+    }
   }, [chatHistory]);
   return (
     <div className="chatHistory">
       <header className="chatHistoryHeader">
+        <img src={destination.image[0].path} className="chatPicture"></img>
         <h3>{destination.username}</h3>
       </header>
       <div className="chatHistoryContent" id="chatHistoryContent">
@@ -78,7 +95,9 @@ const ChatBox = () => {
           onKeyDown={(e) => {
             sendMessage(e);
           }}
+          placeholder="Type out a message!"
         ></input>
+        <FaCircleRight className="sendChatButton" onClick={sendMessageButton}/>
       </footer>
     </div>
   );
