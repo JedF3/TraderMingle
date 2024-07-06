@@ -38,7 +38,7 @@ function App() {
           element={isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />}
         />
         <Route
-          path="profile"
+          path="profile/:id"
           element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
         />
         <Route

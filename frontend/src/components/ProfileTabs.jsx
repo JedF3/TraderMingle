@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ReviewTabs from "./Review/ReviewTabs";
+import axios from "axios";
+import MyContext from "../MyContext";
+import ListingItem from "./ListingItem";
 
-function ProfileTabs() {
+function ProfileTabs({profile}) {
+  const {user} = useContext(MyContext);
   const [toggleState, setToggleState] = useState(1); // Initialize to a default value
-
+  const [userListings, setUserListings] = useState([]);
+  const firstRun=useRef(true);
   function handleTabToggle(index) {
     setToggleState(index);
   }
-
+  async function getUserListings(id){
+    await axios.get("http://127.0.0.1:4000/api/v1/listings/users/"+id)
+    .then((result)=>{
+      setUserListings(result.data.data);
+    })
+    .catch((error)=>{console.log(error)})
+  }
+  useEffect(()=>{
+      if(profile._id!=null){
+        console.log("haveprofile");
+        console.log(profile)
+        getUserListings(profile._id)
+        console.log("geddit?")
+      }
+      else{
+        console.log("didnt get profile")
+        getUserListings(user.id);
+      }
+  },[profile])
+  useEffect(()=>{console.log(userListings)},[userListings])
   return (
     <div className="profile-tabs">
       <div className="header-tabs">
@@ -28,12 +52,9 @@ function ProfileTabs() {
       <div className="content-tabs">
         <div className={toggleState === 1 ? "content active" : "content"}>
           <h2>Listings</h2>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-            repudiandae itaque praesentium, minima, provident tempora quos quas
-            error amet sunt corporis asperiores esse vero vitae obcaecati minus
-            laudantium rerum molestiae.
-          </p>
+          <div className="listingWindow">
+            {userListings.map((listing, i)=><ListingItem key={i} listing={listing}/> )}
+          </div>
         </div>
 
         <div className={toggleState === 2 ? "content active" : "content"}>

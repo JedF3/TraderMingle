@@ -171,9 +171,12 @@ const ViewListing = () => {
         </div>
         <div className="UserInfo">
           <h2>Item posted by</h2>
+          <div className="listingClickable" onClick={()=>{navigate("../profile/"+posterID)}}>
           <img src={userImage} className="userListingThumb" />
           <h3>{posterName}</h3>
           <h3>{posterNumber}</h3>
+          </div>
+          {!isMyItem&&
           <button
             onClick={() => {
               navigate("../messages/" + posterID, { state: necessaryChatInfo });
@@ -181,6 +184,7 @@ const ViewListing = () => {
           >
             Send this user a message
           </button>
+          }
         </div>
       </div>
       <div className="reviews">

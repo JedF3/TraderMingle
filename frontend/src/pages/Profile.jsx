@@ -1,40 +1,42 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useUserProfileContext } from "../hooks/useUserProfileContext";
 
 // components
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileTabs from "../components/ProfileTabs";
 import MyContext from "../MyContext";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useContext(MyContext);
+  const {id} = useParams();
+  const [profile, setProfile] = useState({});
+  const fetchUserProfile = async () => {
+    // if (!user || !user.id) {
+    //   console.error("User or user ID is undefined");
+    //   return;
+    // }
 
+    try {
+      const response = await fetch(`/api/v1/user/profile/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+      }
+
+      const json = await response.json();
+      dispatch({ type: "SET_USER_PROFILE", payload: json });
+      setProfile(json);
+    } catch (error) {
+      console.error("Error fetching profile:", error.message);
+    }
+  };
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (!user || !user.id) {
-        console.error("User or user ID is undefined");
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/v1/user/profile/${user.id}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile");
-        }
-
-        const json = await response.json();
-        dispatch({ type: "SET_USER_PROFILE", payload: json });
-      } catch (error) {
-        console.error("Error fetching profile:", error.message);
-      }
-    };
-
     fetchUserProfile();
   }, [dispatch, user]);
 
@@ -47,7 +49,11 @@ const Profile = () => {
           <p>Loading profile...</p>
         )}
       </div>
-      <ProfileTabs />
+      {userProfile?(
+        <ProfileTabs profile={profile}/>): (
+          <p>Loading profile...</p>
+        )
+      }
     </div>
   );
 };
