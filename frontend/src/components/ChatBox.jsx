@@ -50,16 +50,20 @@ const ChatBox = () => {
         setChatHistory(result.data.data);
       });
   }
-  socket.on("pvt_msg", (data) => {
-    getHistory();
-  });
+
   useEffect(() => {
     getHistory();
+    socket.on("pvt_msg", (data) => {
+      getHistory();
+    });
     console.log(destination);
   }, []);
   useEffect(() => {
     setHistoryWindow(document.getElementById("chatHistoryContent"));
     if(!firstRun.current){
+      if (user) {
+        socket.emit("join", user.id);
+      }
     historyWindow.scrollTop = historyWindow.scrollHeight;
     }
     else{
