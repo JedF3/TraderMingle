@@ -47,7 +47,7 @@ io.on("connection", (socket)=>{
   })
   socket.on("newMsg", (msg)=>{
     console.log(msg)
-    io.sockets.in(msg.toUser).emit("pvt_msg", {message:msg.messageBody});
+    io.sockets.in(msg.toUser).in(msg.fromUser).emit("pvt_msg", {message:msg.messageBody});
     logMessage(msg);
   })
 })
