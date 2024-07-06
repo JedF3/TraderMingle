@@ -6,7 +6,6 @@ import MyContext from "../MyContext";
 import { FaCircleRight } from "react-icons/fa6";
 const ChatBox = () => {
   const { user } = useContext(MyContext);
-  let msgDestination = "66872612835444fa55b28747";
   let location = useLocation();
   const [destination, setDestination] = useState(location.state);
   let [msgBody, setMsgBody] = useState("");
@@ -65,6 +64,7 @@ const ChatBox = () => {
     }
     else{
       firstRun.current=false;
+      console.log(user.id);
     }
   }, [chatHistory]);
   return (
