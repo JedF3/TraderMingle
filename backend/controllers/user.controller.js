@@ -121,7 +121,8 @@ const updateUser = asyncHandler(async (req, res) => {
     else{
       await updateUserwOutImg();
     }
-    res.status(200).send({message:"Updated"});
+    let updatedUser = await User.findOne({_id:id});
+    res.status(200).send({message:"Updated", data:updatedUser});
   }
   else{
     res.status(404).send({ error: "No such profile" });

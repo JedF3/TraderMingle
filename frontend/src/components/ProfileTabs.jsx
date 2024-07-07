@@ -21,13 +21,9 @@ function ProfileTabs({profile}) {
   }
   useEffect(()=>{
       if(profile._id!=null){
-        console.log("haveprofile");
-        console.log(profile)
         getUserListings(profile._id)
-        console.log("geddit?")
       }
       else{
-        console.log("didnt get profile")
         getUserListings(user.id);
       }
   },[profile])

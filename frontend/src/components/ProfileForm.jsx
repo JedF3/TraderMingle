@@ -76,6 +76,7 @@ const ProfileForm = () => {
     const url = `http://127.0.0.1:4000/api/v1/user/profile/${user.id}`;
     axios.put(url, data, { headers: { Authorization: `Bearer ${user.token}` } })
     .then((result)=>{
+      dispatch({ type: "SET_USER_PROFILE", payload: result.data.data });
       navigate("../profile/"+user.id);
     })
 

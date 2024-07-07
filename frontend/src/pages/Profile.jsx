@@ -30,7 +30,6 @@ const Profile = () => {
       }
 
       const json = await response.json();
-      dispatch({ type: "SET_USER_PROFILE", payload: json });
       setProfile(json);
     } catch (error) {
       console.error("Error fetching profile:", error.message);
@@ -38,18 +37,18 @@ const Profile = () => {
   };
   useEffect(() => {
     fetchUserProfile();
-  }, [dispatch, user]);
+  }, []);
 
   return (
     <div className="profile">
       <div className="details">
-        {userProfile ? (
-          <ProfileDetails profile={userProfile} />
+        {profile ? (
+          <ProfileDetails profile={profile} />
         ) : (
           <p>Loading profile...</p>
         )}
       </div>
-      {userProfile ? (
+      {profile ? (
         <ProfileTabs profile={profile} />
       ) : (
         <p>Loading profile...</p>
