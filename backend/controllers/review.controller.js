@@ -9,10 +9,11 @@ const createReview = asyncHandler(async (req, res) => {
 
   const alreadyExists = await Review.find({ userID, listingID });
 
-  if (alreadyExists == []) {
-    return res
-      .status(400)
-      .json({ message: "User has already made a review for listing" });
+  if (alreadyExists.length > 0) {
+    res
+      .status(409)
+      .json({ message: "You have already made a review for this listing." });
+    throw new Error("You have already made a review for this listing.");
   }
 
   let path, filename;
@@ -38,7 +39,7 @@ const createReview = asyncHandler(async (req, res) => {
       data: newReview,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: "Something went wrong", error });
   }
 });
 
@@ -187,35 +188,22 @@ const updateReview = asyncHandler(async (req, res) => {
 const deleteReview = asyncHandler(async (req, res) => {
   const { reviewID } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(reviewID)) {
-    return res.status(404).json({ error: "No such review" });
+  const isExist = await Review.findById(reviewID);
+  if (!isExist) {
+    res.status(404).json("The review does not exist.");
+    throw new Error("The review does not exist");
   }
+
   try {
     // uses mongoose-delete's delete()
     const review = await Review.delete({ _id: reviewID });
 
-    res.status(204).send();
-  } catch (error) {
-    res.status(500);
-    throw new Error("Something went wrong while deleting the review.");
-  }
-});
-
-const deleteReviewWithImage = asyncHandler(async (req, res) => {
-  const { reviewID, imageFilename } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(reviewID)) {
-    return res.status(404).json({ error: "No such review" });
-  }
-  try {
-    // uses mongoose-delete's delete()
-    const review = await Review.delete({ _id: reviewID });
     // delete image from cloudinary
-    const { result } = await cloudinary.uploader.destroy(
-      `grp_proj_listings/${imageFilename}`
-    );
-    console.log(result);
-    res.status(204).send(result);
+    // const { result } = await cloudinary.uploader.destroy(
+    //   `grp_proj_listings/${isExist.image.filename}`
+    // );
+    // console.log(result);
+    res.status(204).send(review);
   } catch (error) {
     res.status(500);
     throw new Error("Something went wrong while deleting the review.");
@@ -230,5 +218,4 @@ export {
   getReviewByID,
   updateReview,
   deleteReview,
-  deleteReviewWithImage,
 };
