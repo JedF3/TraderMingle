@@ -43,7 +43,7 @@ const Navbar = () => {
     }
   };
   const handleEnterKeySearch = (e) => {
-    if(e.keyCode==13){
+    if (e.keyCode == 13) {
       if (searchText !== searchTerm) {
         setSearchTerm(searchText);
       } else {
@@ -63,10 +63,13 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfile = async () => {
-        await axios.get(`http://127.0.0.1:4000/api/v1/user/profile/${user.id}`, {headers: {Authorization: `Bearer ${user.token}`,},})
-        .then((result)=>{
-          dispatch({ type: "SET_USER_PROFILE", payload: result.data });
-        })
+        await axios
+          .get(`http://127.0.0.1:4000/api/v1/user/profile/${user.id}`, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          })
+          .then((result) => {
+            dispatch({ type: "SET_USER_PROFILE", payload: result.data });
+          });
       };
 
       fetchProfile();
@@ -99,22 +102,22 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  useEffect(()=>{
-    if(!firstRun.current){
-      if(userProfile){
-        if(userProfile.image[0]!=undefined){
-          setDisplayUsername(userProfile.username)
+  useEffect(() => {
+    if (!firstRun.current) {
+      if (userProfile) {
+        if (userProfile.image[0] != undefined) {
+          setDisplayUsername(userProfile.username);
           setProfileImage(userProfile.image[0].path);
         }
-      } 
+      }
     }
-  },[userProfile])
+  }, [userProfile]);
 
-  useEffect(()=>{
+  useEffect(() => {
     socket.on("pvt_msg", (data) => {
       setChatIconClass(chatNotifIconClass);
     });
-  },[])
+  }, []);
   return (
     <header>
       <div className="container">
@@ -132,11 +135,18 @@ const Navbar = () => {
           <h1 className="noPointers">TM!</h1>
         </button>
         <div className="searchDiv">
-          <input type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} onKeyDown={(e)=>{handleEnterKeySearch(e)}}/>
+          <input
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={(e) => {
+              handleEnterKeySearch(e);
+            }}
+          />
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>
-          {isLoggedIn&&
+          {isLoggedIn && (
             <FaComment
               className={chatIconClass}
               onClick={() => {
@@ -144,7 +154,7 @@ const Navbar = () => {
                 setChatIconClass(chatDefaultIconClass);
               }}
             />
-          }
+          )}
           <button onClick={() => navigate("/addListing")}>
             Have something to sell?
           </button>
@@ -157,7 +167,7 @@ const Navbar = () => {
                 {displayUsername}
                 {/* Show user avatar if available */}
                 {profileImage ? (
-                  <img src={profileImage}/>
+                  <img src={profileImage} />
                 ) : (
                   <img src={no_avatar} alt="avatar" />
                 )}
@@ -170,7 +180,10 @@ const Navbar = () => {
                 <div className="sub-menu">
                   <div
                     className="sub-menu-link"
-                    onClick={()=>{handleMenuItemClick(); navigate("/profile/"+user.id)}}
+                    onClick={() => {
+                      handleMenuItemClick();
+                      navigate("/profile/" + user.id);
+                    }}
                   >
                     <FaUser className="react-icons" />
                     <p>Profile</p>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useUserProfileContext } from "../hooks/useUserProfileContext";
 import MyContext from "../MyContext";
-import { Image } from "cloudinary-react";
-import Axios from "axios";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -37,7 +35,6 @@ const ProfileForm = () => {
       setPhone(userProfile.phone || "");
       setMeetupLocations(userProfile.meetupLocations || "");
 
-      
       if (userProfile.image && userProfile.image.length > 0) {
         getImgForEdit(userProfile.image[0].path);
         setDisplayImg(userProfile.image[0].path);
@@ -51,7 +48,6 @@ const ProfileForm = () => {
     setDisplayImg(URL.createObjectURL(e.target.files[0]));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,25 +57,25 @@ const ProfileForm = () => {
     }
 
     const data = new FormData();
-    data.append("username",username);
-    data.append("firstname",firstname);
-    data.append("lastname",lastname);
-    data.append("phone",phone);
-    meetupLocations.forEach((location)=>{
-      data.append("meetupLocations",location);
-    })
-    
-    if(selectedImage){
-      data.append("profile-img", selectedImage)
+    data.append("username", username);
+    data.append("firstname", firstname);
+    data.append("lastname", lastname);
+    data.append("phone", phone);
+    meetupLocations.forEach((location) => {
+      data.append("meetupLocations", location);
+    });
+
+    if (selectedImage) {
+      data.append("profile-img", selectedImage);
     }
 
     const url = `http://127.0.0.1:4000/api/v1/user/profile/${user.id}`;
-    axios.put(url, data, { headers: { Authorization: `Bearer ${user.token}` } })
-    .then((result)=>{
-      dispatch({ type: "SET_USER_PROFILE", payload: result.data.data });
-      navigate("../profile/"+user.id);
-    })
-
+    axios
+      .put(url, data, { headers: { Authorization: `Bearer ${user.token}` } })
+      .then((result) => {
+        dispatch({ type: "SET_USER_PROFILE", payload: result.data.data });
+        navigate("../profile/" + user.id);
+      });
   };
 
   return (
@@ -87,11 +83,16 @@ const ProfileForm = () => {
       <h3>Edit Profile</h3>
 
       <div className="upload-image-container">
-      <input type="file" id="profileImgInput" onChange={handleFileChange} className="imgUpload"/>
+        <input
+          type="file"
+          id="profileImgInput"
+          onChange={handleFileChange}
+          className="imgUpload"
+        />
         <div className="img-details">
           <label>ProfilePhoto</label>
           <label htmlFor="profileImgInput">
-          <img src={displayImg} className="uploadThumb"/>
+            <img src={displayImg} className="uploadThumb" />
           </label>
         </div>
         <div className="desc-details">
@@ -148,4 +149,3 @@ const ProfileForm = () => {
 };
 
 export default ProfileForm;
-

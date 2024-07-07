@@ -12,12 +12,13 @@ const ReviewCard = ({ reviewData, inListing }) => {
   const parsed = JSON.parse(localStorage.getItem("usernames")) || [];
   const userObj = parsed.find((item) => item.userID === userID);
   const username = userObj ? userObj.username : userID.username;
+  const id = userObj ? userObj.userID : userID._id;
   let userIDIMG = "";
   if (userID.image && userID.image[0]) userIDIMG = userID.image[0].path;
   const profileIMG = userObj ? userObj.profileIMG : userIDIMG;
 
   // checks if the review belongs to the active user
-  const isYours = username === user.username;
+  const isYours = id === user.id;
 
   const handleOnClick = () => {
     setCurrent(reviewData);
