@@ -16,14 +16,16 @@ import {
 } from "react-icons/fa6";
 import { socket } from "../socket";
 import MyContext from "../MyContext";
+import axios from "axios";
 
 const Navbar = () => {
   const { logout } = useLogout();
-  const { user, isLoggedIn, setIsLoggedIn } = useContext(MyContext);
+  const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(MyContext);
   const { userProfile, dispatch } = useUserProfileContext();
   const [searchText, setSearchText] = useState("");
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   const [profileImage, setProfileImage] = useState(null);
+  const [displayUsername, setDisplayUsername] = useState("");
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -52,27 +54,14 @@ const Navbar = () => {
   useEffect(() => {
     if (user && user.token) {
       const fetchProfile = async () => {
-        try {
-          const response = await fetch("/api/v1/user/profile", {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          });
-          const json = await response.json();
-          if (response.ok) {
-            dispatch({ type: "SET_USER_PROFILE", payload: json });
-          } else {
-            console.error("Failed to fetch profile", json);
-          }
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-        }
+        await axios.get(`http://127.0.0.1:4000/api/v1/user/profile/${user.id}`, {headers: {Authorization: `Bearer ${user.token}`,},})
+        .then((result)=>{
+          console.log(result)
+          dispatch({ type: "SET_USER_PROFILE", payload: result.data });
+        })
       };
 
       fetchProfile();
-      if(user.image[0]!=null){
-        setProfileImage(user.image[0].path)
-      }
     }
   }, [user, dispatch]);
 
@@ -102,14 +91,23 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  // Check if userProfile exists and has image data
-  // const profileImage =
-  //   userProfile && userProfile.image && userProfile.image.length > 0
-  //     ? userProfile.image[0].path
-  //     : null;
-  socket.on("pvt_msg", (data) => {
-    setChatIconClass(chatNotifIconClass);
-  });
+  useEffect(()=>{
+    console.log(user)
+    if(!firstRun.current){
+      if(userProfile){
+        if(userProfile.image!=null){
+          setDisplayUsername(userProfile.username)
+          setProfileImage(userProfile.image[0].path);
+        }
+      } 
+    }
+  },[userProfile])
+
+  useEffect(()=>{
+    socket.on("pvt_msg", (data) => {
+      setChatIconClass(chatNotifIconClass);
+    });
+  },[])
   return (
     <header>
       <div className="container">
@@ -148,7 +146,7 @@ const Navbar = () => {
                 className="drop-down-menu custom-link outline"
                 onClick={toggleMenu}
               >
-                {userProfile ? user.username : "Profile"}
+                {displayUsername}
                 {/* Show user avatar if available */}
                 {profileImage ? (
                   <img src={profileImage}/>
