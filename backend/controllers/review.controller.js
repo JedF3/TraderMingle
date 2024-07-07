@@ -1,10 +1,19 @@
 import mongoose from "mongoose";
-import { asyncHandler } from "../middleware/errorHandler.js";
 import Review from "../models/review.model.js";
 import listings from "../models/listing.model.js";
+import { asyncHandler } from "../middleware/errorHandler.js";
+import { cloudinary } from "../config/reviewStorage.js";
 
 const createReview = asyncHandler(async (req, res) => {
   const { userID, listingID, rating, comment } = req.body;
+
+  const alreadyExists = await Review.find({ userID, listingID });
+
+  if (alreadyExists == []) {
+    return res
+      .status(400)
+      .json({ message: "User has already made a review for listing" });
+  }
 
   let path, filename;
   if (req.file) {
@@ -39,7 +48,7 @@ const getReviewsByUser = asyncHandler(async (req, res) => {
   const reviews = await Review.find({ userID })
     .populate({
       path: "userID",
-      select: "username",
+      select: "username image",
     })
     .populate({ path: "listingID" });
 
@@ -93,7 +102,7 @@ const getReviewsByListing = asyncHandler(async (req, res) => {
     .sort({ _id: -1 })
     .populate({
       path: "userID",
-      select: "username",
+      select: "username image",
     })
     .populate({ path: "listingID" });
 
@@ -114,7 +123,7 @@ const getReviewByID = asyncHandler(async (req, res) => {
     .sort({ _id: -1 })
     .populate({
       path: "userID",
-      select: "username",
+      select: "username image",
     })
     .populate({ path: "listingID" });
 
@@ -128,53 +137,88 @@ const getReviewByID = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteReview = asyncHandler(async (req, res) => {
-  const { userID } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(userID)) {
-    return res.status(404).json({ error: "No such review" });
-  }
-
-  // uses mongoose-delete's delete()
-  const review = await Review.delete({ _id: userID });
-
-  res.status(200).json(review);
-});
-
 // update a review
 const updateReview = asyncHandler(async (req, res) => {
   const { reviewID } = req.params;
   const { rating, comment } = req.body;
 
-  let path, filename;
-  if (req.file) {
-    ({ path, filename } = req.file);
-  } else {
-    path = "";
-    filename = "";
-  }
-
-  const isExist = await Review.findById(reviewID);
-  console.log(isExist);
-  if (!isExist) {
-    res.status(404);
-    throw new Error("The review does not exist.");
+  const alreadyExists = await Review.findById(reviewID);
+  if (!alreadyExists) {
+    res.status(404).json("The review does not exist.");
+    throw new Error("The review does not exist");
   }
 
   try {
-    const review = await Review.findOneAndUpdate(
-      { _id: reviewID },
-      { rating, comment, image: { path, filename } },
-      { new: true }
-    );
+    if (req.file) {
+      const { path, filename } = req.file;
 
-    res.status(200).send({
-      message: "Review has been updated.",
-      data: review,
-    });
+      const { result } = await cloudinary.uploader.destroy(
+        `grp_proj_listings/${alreadyExists.image.filename}`
+      );
+      console.log(result);
+
+      const review = await Review.findOneAndUpdate(
+        { _id: reviewID },
+        { rating, comment, image: { path, filename } },
+        { new: true }
+      );
+
+      res.status(200).send({
+        message: "Review has been updated.",
+        data: review,
+      });
+    } else {
+      const review = await Review.findOneAndUpdate(
+        { _id: reviewID },
+        { rating, comment },
+        { new: true }
+      );
+      res.status(200).send({
+        message: "Review has been updated.",
+        data: review,
+      });
+    }
   } catch {
     res.status(500);
     throw new Error("Something went wrong while updating the review.");
+  }
+});
+
+const deleteReview = asyncHandler(async (req, res) => {
+  const { reviewID } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(reviewID)) {
+    return res.status(404).json({ error: "No such review" });
+  }
+  try {
+    // uses mongoose-delete's delete()
+    const review = await Review.delete({ _id: reviewID });
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500);
+    throw new Error("Something went wrong while deleting the review.");
+  }
+});
+
+const deleteReviewWithImage = asyncHandler(async (req, res) => {
+  const { reviewID, imageFilename } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(reviewID)) {
+    return res.status(404).json({ error: "No such review" });
+  }
+  try {
+    // uses mongoose-delete's delete()
+    const review = await Review.delete({ _id: reviewID });
+    // delete image from cloudinary
+    const { result } = await cloudinary.uploader.destroy(
+      `grp_proj_listings/${imageFilename}`
+    );
+    console.log(result);
+    res.status(204).send(result);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Something went wrong while deleting the review.");
   }
 });
 
@@ -184,6 +228,7 @@ export {
   getAllReviewsOfUserByListing,
   getReviewsByListing,
   getReviewByID,
-  deleteReview,
   updateReview,
+  deleteReview,
+  deleteReviewWithImage,
 };

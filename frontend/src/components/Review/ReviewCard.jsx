@@ -1,28 +1,26 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext } from "react";
 import { Link } from "react-router-dom";
-import styles from "./reviews.module.css";
 import MyContext from "../../MyContext";
+import no_avatar from "../../images/no-avatar.svg";
+import styles from "./reviews.module.css";
 
 const ReviewCard = ({ reviewData, inListing }) => {
-  const { user, current, setCurrent } = useContext(MyContext);
-  const [showModal, setShowModal] = useState(false);
-  const { reviewID, userID, listing, rating, comment, updatedAt, imageUrl } =
-    reviewData;
+  const { user, setCurrent, reload, setReload } = useContext(MyContext);
+  const { userID, listing, rating, comment, updatedAt, imageUrl } = reviewData;
 
+  // finds details of userID for when Query population fails to work
   const parsed = JSON.parse(localStorage.getItem("usernames")) || [];
   const userObj = parsed.find((item) => item.userID === userID);
   const username = userObj ? userObj.username : userID.username;
+  let userIDIMG = "";
+  if (userID.image && userID.image[0]) userIDIMG = userID.image[0].path;
+  const profileIMG = userObj ? userObj.profileIMG : userIDIMG;
 
+  // checks if the review belongs to the active user
   const isYours = username === user.username;
 
-  const handleOpenModal = () => {
-    setShowModal(true);
+  const handleOnClick = () => {
     setCurrent(reviewData);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setCurrent({});
   };
 
   // How many days ago the review was posted.
@@ -32,18 +30,26 @@ const ReviewCard = ({ reviewData, inListing }) => {
 
     // Calculate the difference in milliseconds
     const ms = currentDate - parsedDate;
+    const oneHour = 1000 * 60 * 60;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const days = Math.floor(ms / oneDay);
+    const months = Math.floor(days / 30);
 
-    // Convert milliseconds to days
-    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-
-    if (days >= 30) {
-      const months = Math.floor(days / 30);
+    if (ms < 60000) {
+      return "Less than a minute ago";
+    } else if (ms < oneHour) {
+      const minutes = Math.floor(ms / 60000);
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    } else if (ms < oneDay) {
+      const hours = Math.floor(ms / oneHour);
+      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+    } else if (days < 30) {
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
+    } else if (months < 12) {
       return `${months} month${months !== 1 ? "s" : ""} ago`;
-    } else if (days >= 365) {
+    } else if (months >= 12) {
       const years = Math.floor(days / 365);
       return `${years} year${years !== 1 ? "s" : ""} ago`;
-    } else {
-      return `${days} day${days !== 1 ? "s" : ""} ago`;
     }
   };
 
@@ -58,15 +64,20 @@ const ReviewCard = ({ reviewData, inListing }) => {
     <div className={styles.cardInListing}>
       <div className={styles.flexGrow}>
         <div className={styles.cardHeader}>
-          <div className={styles.headerText}>
-            <span className={styles.star}>{stars}</span>
-            by <span>{username}</span> <small>{daysAgo(updatedAt)}</small>
+          <div className={styles.flexCenter}>
+            <img
+              src={profileIMG || no_avatar}
+              alt="profile image"
+              className={styles.profileIMG}
+            />
+            {username}
+            <small>&emsp;{daysAgo(updatedAt)}</small>
           </div>
           {isYours && (
             <>
               <Link
                 to="/edit-review"
-                onClick={handleOpenModal}
+                onClick={handleOnClick}
                 className={styles.rightBtn}
               >
                 Edit
@@ -74,15 +85,19 @@ const ReviewCard = ({ reviewData, inListing }) => {
             </>
           )}
         </div>
+        <div>
+          <span className={styles.starReview}>{stars}</span>
+        </div>
 
         <div>
           <p>{comment}</p>
         </div>
 
-        <div>
+        <div className={styles.listingMini}>
           {!inListing && (
             <Link
               to={`../viewListing/${listing._id}`}
+              onClick={() => setReload(!reload)}
               className={styles.listingPrev}
             >
               <img
@@ -99,8 +114,12 @@ const ReviewCard = ({ reviewData, inListing }) => {
         </div>
       </div>
       <div>
-        {imageUrl && (
-          <img src={imageUrl} alt="review image" className={styles.reviewIMG} />
+        {imageUrl.path && (
+          <img
+            src={imageUrl.path}
+            alt="review image"
+            className={styles.reviewIMG}
+          />
         )}
       </div>
     </div>

@@ -1,12 +1,15 @@
 import axios from "axios";
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
+import { useParams } from "react-router-dom";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
-import MyContext from "../../MyContext.js";
+import getUsers from "../../hooks/getUsers.js";
 import ReviewCard from "./ReviewCard.jsx";
 
 const ReviewsByUser = () => {
-  const { user } = useContext(MyContext);
+  const user = useParams();
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
+
+  getUsers();
 
   useEffect(() => {
     const fetchReviewsByUser = async () => {
@@ -26,7 +29,6 @@ const ReviewsByUser = () => {
   }, [state.reviews.length]);
 
   const reviewsList = state.reviews.map((review) => {
-    const imageUrl = review.image ? review.image.path : null;
     const reviewData = {
       reviewID: review._id,
       userID: review.userID,
@@ -34,7 +36,7 @@ const ReviewsByUser = () => {
       rating: review.rating,
       comment: review.comment,
       updatedAt: review.updatedAt,
-      imageUrl: imageUrl,
+      imageUrl: review.image,
     };
     return <ReviewCard key={review._id} reviewData={reviewData} method={2} />;
   });
