@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import searchTermContext from '../context/searchTermContext';
 import { useUserProfileContext } from '../hooks/useUserProfileContext';
 import no_avatar from '../images/no-avatar.svg';
+
 // react-icons
 import {
   FaUser,
@@ -18,10 +19,20 @@ import MyContext from '../MyContext';
 const Navbar = () => {
   const { logout } = useLogout();
   const { user, isLoggedIn, setIsLoggedIn } = useContext(MyContext);
-  const { userProfile, dispatch } = useUserProfileContext();
   const [searchText, setSearchText] = useState('');
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
-  const [profileImage, setProfileImage] = useState(null);
+
+  const { userProfile, dispatch } = useUserProfileContext();
+  const [imagePath, setImagePath] = useState(no_avatar);
+
+  useEffect(() => {
+    if (userProfile && userProfile.image && userProfile.image.length > 0) {
+      setImagePath(userProfile.image[0].path);
+    } else {
+      setImagePath(no_avatar);
+    }
+  }, [userProfile]);
+
   // dropdown menu
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -31,6 +42,7 @@ const Navbar = () => {
   const chatDefaultIconClass = 'react-icons standardSize noNew';
   const chatNotifIconClass = 'react-icons standardSize newChat';
   let [chatIconClass, setChatIconClass] = useState(chatDefaultIconClass);
+
   const handleSearch = () => {
     if (searchText !== searchTerm) {
       setSearchTerm(searchText);
@@ -68,9 +80,6 @@ const Navbar = () => {
       };
 
       fetchProfile();
-      if (user.image[0] != null) {
-        setProfileImage(user.image[0].path);
-      }
     }
   }, [user, dispatch]);
 
@@ -87,7 +96,6 @@ const Navbar = () => {
     };
   }, [menuRef]);
 
-  // menu buttons
   const handleLogout = () => {
     logout();
   };
@@ -99,12 +107,6 @@ const Navbar = () => {
   const handleMenuItemClick = () => {
     setMenuOpen(false);
   };
-
-  // Check if userProfile exists and has image data
-  const imagePath =
-    userProfile && userProfile.image && userProfile.image.length > 0
-      ? userProfile.image[0].path
-      : no_avatar;
 
   socket.on('pvt_msg', (data) => {
     setChatIconClass(chatNotifIconClass);
@@ -149,8 +151,7 @@ const Navbar = () => {
                 onClick={toggleMenu}
               >
                 {userProfile ? user.username : 'Profile'}
-                {/* Show user avatar if available */}
-                <img src={imagePath} alt="avatar" />
+                <img src={imagePath} alt="User Avatar" />
                 <FaChevronDown className="react-icons icon-small" />
               </button>
               <div
