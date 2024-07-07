@@ -54,7 +54,7 @@ const addListing = asyncHandler(async(req, res, next)=>{
 })
 
 const viewOneListing = asyncHandler(async(req, res, next)=>{
-    const selectedListing = await listings.findOne({_id:req.params.id}).populate({path:"userID", select:"username"});
+    const selectedListing = await listings.findOne({_id:req.params.id}).populate({path:"userID", select:["username", "image"]});
     res.status(200).send({message:"Retrieved Listing", data:selectedListing});
 })
 
