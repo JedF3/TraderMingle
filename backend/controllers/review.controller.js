@@ -156,7 +156,6 @@ const updateReview = asyncHandler(async (req, res) => {
       const { result } = await cloudinary.uploader.destroy(
         `grp_proj_listings/${alreadyExists.image.filename}`
       );
-      console.log(result);
 
       const review = await Review.findOneAndUpdate(
         { _id: reviewID },
@@ -197,12 +196,6 @@ const deleteReview = asyncHandler(async (req, res) => {
   try {
     // uses mongoose-delete's delete()
     const review = await Review.delete({ _id: reviewID });
-
-    // delete image from cloudinary
-    // const { result } = await cloudinary.uploader.destroy(
-    //   `grp_proj_listings/${isExist.image.filename}`
-    // );
-    // console.log(result);
     res.status(204).send(review);
   } catch (error) {
     res.status(500);

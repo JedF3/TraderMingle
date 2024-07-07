@@ -8,6 +8,7 @@ const ListingScreen = () => {
   const location = useLocation();
   const { searchTerm } = useContext(searchTermContext);
   const [searchResults, setSearchResults] = useState([]);
+  const [haveResults, setHaveResults] = useState(false);
   let firstRun = useRef("true");
   let navigate = useNavigate();
   async function getSearchItems() {
@@ -50,17 +51,18 @@ const ListingScreen = () => {
     }
   }, [searchTerm]);
   useEffect(() => {
-    console.log(searchResults);
+    setHaveResults(Boolean(searchResults.length));
   }, [searchResults]);
   return (
     <div className="listingWindow">
-      {searchResults.length &&
+      {haveResults &&
         searchResults.map((listing, index) => (
           <ListingItem key={index} listing={listing} />
         ))}
-      {!searchResults.length && (
-        <div className="materialWhite">
+      {!haveResults && (
+        <div className="listingWindow noResult">
           <h2>No results for search term</h2>
+          <button onClick={()=>{navigate("/")}}>Back to Home</button>
         </div>
       )}
     </div>

@@ -90,7 +90,7 @@ const ProfileForm = () => {
       <input type="file" id="profileImgInput" onChange={handleFileChange} className="imgUpload"/>
         <div className="img-details">
           <label>ProfilePhoto</label>
-          <label for="profileImgInput">
+          <label htmlFor="profileImgInput">
           <img src={displayImg} className="uploadThumb"/>
           </label>
         </div>

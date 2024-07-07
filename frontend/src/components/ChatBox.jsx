@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { socket } from "../socket";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MyContext from "../MyContext";
 import { FaCircleRight } from "react-icons/fa6";
 const ChatBox = () => {
@@ -16,6 +16,7 @@ const ChatBox = () => {
   let [DUsername, setDUsername] = useState("")
   const toUserClass = "toUserBaloon";
   const fromUserClass = "fromUserBaloon";
+  const navigate = useNavigate();
   function sendMessage(e) {
     if (e.keyCode == 13&&msgBody!="") {
       setMsgBody("");
@@ -76,6 +77,9 @@ const ChatBox = () => {
   }, [chatHistory]);
   return (
     <div className="chatHistory">
+      <div>
+        <button className="historyBackButton" onClick={()=>{navigate("/")}}>← Home</button>
+      </div>
       <header className="chatHistoryHeader">
         <img src={DImage} className="chatPicture"></img>
         <h3>{DUsername}</h3>

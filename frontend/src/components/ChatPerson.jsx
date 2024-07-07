@@ -7,9 +7,6 @@ const ChatPerson = ({userInfo})=>{
     const [image, setImage] = useState("");
     const [userName, setUserName] = useState("");
 
-    // useEffect(()=>{
-    //     console.log(userInfo)
-    // }, [])
     useEffect(()=>{
         if(userInfo){
             if(userInfo.image[0]!=null){
@@ -20,7 +17,7 @@ const ChatPerson = ({userInfo})=>{
     }, [])
     return(
         <div className="chatPersonDiv" onClick={()=>{navigate("/messages/"+userInfo._id, {state:userInfo})}}>
-            <img src={image} class="chatPicture"></img>
+            <img src={image} className="chatPicture"></img>
             <h3>{userName}</h3>
         </div>
     );

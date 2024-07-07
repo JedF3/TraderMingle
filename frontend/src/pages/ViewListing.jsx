@@ -30,7 +30,6 @@ const ViewListing = () => {
   const [necessaryChatInfo, setNecessaryChatInfo] = useState({});
   let firstRun = useRef(true);
   async function getListingifNot() {
-    console.log("not");
     await axios
       .get("http://127.0.0.1:4000/api/v1/listings/viewListing/" + id)
       .then((result) => {
@@ -56,7 +55,6 @@ const ViewListing = () => {
       });
   }
   function gotoEdit() {
-    console.log(item._id);
     navigate("../editListing/" + item._id, { state: item });
   }
   async function deleteItem() {
@@ -112,7 +110,6 @@ const ViewListing = () => {
           setItemDeleted(false);
         }
       }
-      console.log(item);
       if (item.userID.image) {
         setUserImage(item.userID.image[0].path);
       }
@@ -158,8 +155,8 @@ const ViewListing = () => {
       </div>
       <h1>{itemName}</h1>
       <div className="imageInputContent">
-        {item.image.map((image) => (
-          <div className="imgUploadDisplay materialWhite noPointers">
+        {item.image.map((image, i) => (
+          <div key={i}className="imgUploadDisplay materialWhite noPointers">
             <img src={image.path} className="uploadThumb" />
           </div>
         ))}

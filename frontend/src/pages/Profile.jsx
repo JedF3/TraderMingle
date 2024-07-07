@@ -13,10 +13,6 @@ const Profile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState({});
   const fetchUserProfile = async () => {
-    // if (!user || !user.id) {
-    //   console.error("User or user ID is undefined");
-    //   return;
-    // }
 
     try {
       const response = await fetch(`/api/v1/user/profile/${id}`, {

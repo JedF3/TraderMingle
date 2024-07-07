@@ -27,7 +27,6 @@ function ProfileTabs({profile}) {
         getUserListings(user.id);
       }
   },[profile])
-  useEffect(()=>{console.log(userListings)},[userListings])
   return (
     <div className="profile-tabs">
       <div className="header-tabs">

@@ -42,6 +42,15 @@ const Navbar = () => {
       navigate("/search/");
     }
   };
+  const handleEnterKeySearch = (e) => {
+    if(e.keyCode==13){
+      if (searchText !== searchTerm) {
+        setSearchTerm(searchText);
+      } else {
+        navigate("/search/");
+      }
+    }
+  };
 
   useEffect(() => {
     if (!firstRun.current) {
@@ -56,7 +65,6 @@ const Navbar = () => {
       const fetchProfile = async () => {
         await axios.get(`http://127.0.0.1:4000/api/v1/user/profile/${user.id}`, {headers: {Authorization: `Bearer ${user.token}`,},})
         .then((result)=>{
-          console.log(result)
           dispatch({ type: "SET_USER_PROFILE", payload: result.data });
         })
       };
@@ -92,10 +100,9 @@ const Navbar = () => {
   };
 
   useEffect(()=>{
-    console.log(user)
     if(!firstRun.current){
       if(userProfile){
-        if(userProfile.image!=null){
+        if(userProfile.image[0]!=undefined){
           setDisplayUsername(userProfile.username)
           setProfileImage(userProfile.image[0].path);
         }
@@ -116,6 +123,7 @@ const Navbar = () => {
           onClick={() => {
             if (searchTerm) {
               setSearchTerm("");
+              setSearchText("");
             } else {
               navigate("/");
             }
@@ -124,7 +132,7 @@ const Navbar = () => {
           <h1 className="noPointers">TM!</h1>
         </button>
         <div className="searchDiv">
-          <input type="text" onChange={(e) => setSearchText(e.target.value)} />
+          <input type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} onKeyDown={(e)=>{handleEnterKeySearch(e)}}/>
           <button onClick={handleSearch}>Search</button>
         </div>
         <nav>

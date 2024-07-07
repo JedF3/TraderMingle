@@ -10,8 +10,8 @@ const ListingItem = (listing)=>{
     return (
         <div className="listingItem materialWhite" onClick={gotoListing}>
             <img className="Thumbnail noPointer" src={item.image[0].path}></img>
-            <h3 className="noPointer">{item.title}</h3>
-            <h3 className="noPointer">PHP {item.price}</h3>
+            <h3 className="breakit noPointer">{item.title}</h3>
+            <h3 className="breakit noPointer">PHP {item.price}</h3>
         </div>
     );
 }

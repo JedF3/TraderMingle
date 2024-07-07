@@ -187,9 +187,6 @@ const AddListing = () => {
       });
     }
   }, []);
-  useEffect(() => {
-    console.log("NNN" + selectedImg1);
-  }, [selectedImg1]);
   return (
     <form
       className="listingWindow materialWhite addListingDiv"
@@ -302,14 +299,14 @@ const AddListing = () => {
         required
       ></input>
       <h3>Description</h3>
-      <input
-        type="text"
+      <textarea
         onChange={(e) => {
           setListingDescription(e.target.value);
         }}
         value={listingDescription}
+        className="listingDesc"
         required
-      ></input>
+      ></textarea>
       <h3>Price</h3>
       <input
         type="number"
@@ -320,14 +317,6 @@ const AddListing = () => {
         required
       ></input>
       <h3>Category</h3>
-      {/* <select id="category">
-                <option value="Cars and car parts">Cars and car parts</option>
-                <option value="Computers">Computers</option>
-                <option value="Gadgets">Gadgets</option>
-                <option value="Home Improvement">Home Improvement</option>
-                <option value="Appliances">Appliances</option>
-            </select>
-             */}
       <div className="categorySelect">
         <Select
           value={listingCategory}

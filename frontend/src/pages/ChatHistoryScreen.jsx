@@ -2,9 +2,11 @@ import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ChatPerson from "../components/ChatPerson";
 import MyContext from "../MyContext";
+import { useNavigate } from "react-router-dom";
 
 const ChatHistoryScreen = () => {
   const { user } = useContext(MyContext);
+  const navigate = useNavigate();
   let [chatUsers, setChatUsers] = useState([]);
   let [chatUserIDs, setChatUserIDs] = useState([]);
   let firstRun = useRef(true);
@@ -45,11 +47,11 @@ const ChatHistoryScreen = () => {
   }, [chatUserIDs]);
   return (
     <div className="chatHistoryScreenDiv">
-      {/* {
-                chatUserIDs.map((uid)=><ChatPerson id={uid}/>)
-            } */}
-      {chatUsers.map((userInfo) => (
-        <ChatPerson userInfo={userInfo} />
+      <div>
+        <button onClick={()=>{navigate("/")}}>← Home</button>
+      </div>
+      {chatUsers.map((userInfo, i) => (
+        <ChatPerson key={i} userInfo={userInfo} />
       ))}
     </div>
   );

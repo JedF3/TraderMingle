@@ -82,11 +82,8 @@ const updateUser = asyncHandler(async (req, res) => {
     const {username, firstname, lastname, phone, meetupLocations} = req.body;
     let path, filename;
     if(req.file){
-      console.log(req.file)
       path=req.file.path;
       filename = req.file.filename;
-      console.log(path)
-      console.log(filename)
     }
     async function updateUserwImg(){
       await User.updateOne({_id:id},
