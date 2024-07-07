@@ -1,5 +1,5 @@
 /* google font */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
 
 /* layout */
 :root {
@@ -12,7 +12,7 @@
 body {
   background: #164067;
   margin: 0;
-  font-family: "Poppins";
+  font-family: 'Poppins';
 }
 header {
   background: #78beff;
@@ -92,7 +92,7 @@ h4 {
   user-select: none; /* Standard syntax */
 }
 .profile-tabs .tab:before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 10px;
   left: 20px;
@@ -233,7 +233,7 @@ button {
   border: 0;
   color: #fff;
   padding: 10px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   border-radius: 4px;
   cursor: pointer;
 }
@@ -264,7 +264,7 @@ nav button,
   color: #fff;
   padding: 6px 10px;
   border-radius: 4px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   cursor: pointer;
   font-size: 1em;
   margin-left: 10px;
@@ -434,12 +434,12 @@ form.login {
   align-items: center;
   background-color: white;
   border-radius: 10px;
-  gap:2%;
+  gap: 2%;
 }
 
-.chatPicture{
+.chatPicture {
   width: 75px;
-  height:75px;
+  height: 75px;
   border-radius: 50%;
 }
 
@@ -451,14 +451,14 @@ form.login {
   flex-flow: column nowrap;
   border-radius: 20px;
 }
-.chatHistoryHeader{
-  display:flex;
+.chatHistoryHeader {
+  display: flex;
   flex-flow: row nowrap;
-  padding:1%;
+  padding: 1%;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1);
   align-items: center;
-  gap:20px;
+  gap: 20px;
 }
 
 .chatInputFooter {
@@ -467,9 +467,9 @@ form.login {
   flex-flow: row nowrap;
   padding: 1%;
   box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1);
-  gap:20px;
+  gap: 20px;
   border-radius: 0px 0px 20px 20px;
-  background-color:#1aac83
+  background-color: #1aac83;
 }
 
 .chatInput {
@@ -479,34 +479,36 @@ form.login {
   font-weight: 1000;
 }
 
-:-moz-placeholder { /* Firefox 18- */
+:-moz-placeholder {
+  /* Firefox 18- */
   font-weight: 1000;
 }
 
-::-moz-placeholder {  /* Firefox 19+ */
+::-moz-placeholder {
+  /* Firefox 19+ */
   font-weight: 1000;
 }
 
-:-ms-input-placeholder {  
+:-ms-input-placeholder {
   font-weight: 1000;
 }
 .chatInput:focus {
   outline: none !important;
 }
 
-.sendChatButton{
+.sendChatButton {
   color: #78beff;
-  width:50px;
-  height:50px;
+  width: 50px;
+  height: 50px;
   background-color: white;
   border: 3px solid white;
   border-radius: 50%;
-  padding:0;
-  margin:0
+  padding: 0;
+  margin: 0;
 }
 
-.sendChatButton:hover{
-  color:red;
+.sendChatButton:hover {
+  color: red;
   box-shadow: 0 2px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -544,7 +546,7 @@ form.login {
   height: 100px;
 }
 
-img[src=""] {
+img[src=''] {
   display: none;
 }
 
@@ -645,7 +647,10 @@ nav {
   display: flex;
   align-items: center;
   text-decoration: none;
+  margin-left: 0px !important;
+  cursor: pointer !important;
 }
+
 .sub-menu-link p {
   width: 100%;
   transition: transform 0.2s;
