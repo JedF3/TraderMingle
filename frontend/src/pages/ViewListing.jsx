@@ -122,6 +122,7 @@ const ViewListing = () => {
       setNecessaryChatInfo({
         _id: item.userID._id,
         username: item.userID.username,
+        image:item.userID.image
       });
     } else {
       firstRun.current = false;
