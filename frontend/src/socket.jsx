@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
-const URL = 'https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/'; 
+const URL = 'https://tradermingle.onrender.com/'; 
 export const socket = io(URL);

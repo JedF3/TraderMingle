@@ -15,7 +15,7 @@ const ReviewsOfUserByListing = () => {
     const fetchReviewsOfUserByListing = async () => {
       try {
         const response = await axios.get(
-          `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews/by-user-listings/${user.id}`
+          `https://tradermingle.onrender.com/api/v1/reviews/by-user-listings/${user.id}`
         );
 
         localStorage.setItem("reviews", JSON.stringify(response.data.data));

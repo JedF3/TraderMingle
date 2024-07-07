@@ -13,7 +13,7 @@ function ProfileTabs({profile}) {
     setToggleState(index);
   }
   async function getUserListings(id){
-    await axios.get("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/users/"+id)
+    await axios.get("https://tradermingle.onrender.com/api/v1/listings/users/"+id)
     .then((result)=>{
       setUserListings(result.data.data);
     })

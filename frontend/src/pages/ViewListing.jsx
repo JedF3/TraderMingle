@@ -31,7 +31,7 @@ const ViewListing = () => {
   let firstRun = useRef(true);
   async function getListingifNot() {
     await axios
-      .get("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/viewListing/" + id)
+      .get("https://tradermingle.onrender.com/api/v1/listings/viewListing/" + id)
       .then((result) => {
         setItem(result.data.data);
       })
@@ -42,7 +42,7 @@ const ViewListing = () => {
   async function markSold() {
     await axios
       .put(
-        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/markSold/" + id,
+        "https://tradermingle.onrender.com/api/v1/listings/markSold/" + id,
         {},
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
@@ -60,7 +60,7 @@ const ViewListing = () => {
   async function deleteItem() {
     await axios
       .put(
-        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/deleteListing/" + id,
+        "https://tradermingle.onrender.com/api/v1/listings/deleteListing/" + id,
         {},
         { headers: { Authorization: `Bearer ${user.token}` } }
       )

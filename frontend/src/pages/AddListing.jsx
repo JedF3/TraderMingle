@@ -94,7 +94,7 @@ const AddListing = () => {
   }
   async function registerNewListing(data) {
     await axios
-      .post("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/addListing", data, {
+      .post("https://tradermingle.onrender.com/api/v1/listings/addListing", data, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((result) => {
@@ -107,7 +107,7 @@ const AddListing = () => {
   async function editListing(data) {
     await axios
       .put(
-        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/editListing/" + editListingID,
+        "https://tradermingle.onrender.com/api/v1/listings/editListing/" + editListingID,
         data,
         { headers: { Authorization: `Bearer ${user.token}` } }
       )

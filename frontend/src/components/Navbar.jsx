@@ -64,7 +64,7 @@ const Navbar = () => {
     if (user && user.token) {
       const fetchProfile = async () => {
         await axios
-          .get(`https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/${user.id}`, {
+          .get(`https://tradermingle.onrender.com/api/v1/user/profile/${user.id}`, {
             headers: { Authorization: `Bearer ${user.token}` },
           })
           .then((result) => {

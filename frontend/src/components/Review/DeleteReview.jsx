@@ -26,7 +26,7 @@ const DeleteReview = ({ show, onClose }) => {
 
     try {
       const deleteReview = await axios.delete(
-        `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews/${current.reviewID}`,
+        `https://tradermingle.onrender.com/api/v1/reviews/${current.reviewID}`,
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
 

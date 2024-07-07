@@ -16,7 +16,7 @@ export const useSignup = () => {
     try {
       e.preventDefault();
 
-      await axios.post("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/users/register", {
+      await axios.post("https://tradermingle.onrender.com/api/v1/users/register", {
         username,
         email,
         password,

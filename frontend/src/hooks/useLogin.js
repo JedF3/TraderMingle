@@ -11,7 +11,7 @@ const useLogin = () => {
       e.preventDefault();
 
       const login = await axios.post(
-        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/login",
+        "https://tradermingle.onrender.com/api/v1/user/login",
         {
           email: userCredentials.email,
           password: userCredentials.password,

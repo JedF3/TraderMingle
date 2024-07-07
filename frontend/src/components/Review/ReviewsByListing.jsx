@@ -16,7 +16,7 @@ const ReviewsByListing = ({ listingID }) => {
       if (listingID) {
         try {
           const response = await axios.get(
-            `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews//by-listing/${listingID}`
+            `https://tradermingle.onrender.com/api/v1/reviews//by-listing/${listingID}`
           );
 
           localStorage.setItem("reviews", JSON.stringify(response.data.data));
