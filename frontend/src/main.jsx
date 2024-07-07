@@ -4,11 +4,14 @@ import App from "./App";
 import MyProvider from "./MyProvider";
 import { UserProfileContextProvider } from "./context/UserProfileContext";
 import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <MyProvider>
     <UserProfileContextProvider>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </UserProfileContextProvider>
   </MyProvider>
 );

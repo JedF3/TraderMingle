@@ -12,6 +12,8 @@ const ChatBox = () => {
   let firstRun = useRef(true);
   let [chatHistory, setChatHistory] = useState([]);
   let [historyWindow, setHistoryWindow]= useState(document.getElementById("chatHistoryContent"));
+  let [DImage, setDImage] = useState("");
+  let [DUsername, setDUsername] = useState("")
   const toUserClass = "toUserBaloon";
   const fromUserClass = "fromUserBaloon";
   function sendMessage(e) {
@@ -56,7 +58,8 @@ const ChatBox = () => {
     socket.on("pvt_msg", (data) => {
       getHistory();
     });
-    console.log(destination);
+    setDImage(destination.image[0].path);
+    setDUsername(destination.username);
   }, []);
   useEffect(() => {
     setHistoryWindow(document.getElementById("chatHistoryContent"));
@@ -74,8 +77,8 @@ const ChatBox = () => {
   return (
     <div className="chatHistory">
       <header className="chatHistoryHeader">
-        <img src={destination.image[0].path} className="chatPicture"></img>
-        <h3>{destination.username}</h3>
+        <img src={DImage} className="chatPicture"></img>
+        <h3>{DUsername}</h3>
       </header>
       <div className="chatHistoryContent" id="chatHistoryContent">
         {chatHistory.map((message) => (

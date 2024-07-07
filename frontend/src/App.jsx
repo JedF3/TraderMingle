@@ -1,9 +1,7 @@
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
   Route,
   Navigate,
+  Routes,
 } from "react-router-dom";
 import { useEffect, useRef, useState, useContext } from "react";
 
@@ -23,6 +21,7 @@ import ChatBox from "./components/ChatBox";
 import { socket } from "./socket";
 import ChatHistoryScreen from "./pages/ChatHistoryScreen";
 import EditReview from "./pages/EditReview";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 function App() {
   const { user } = useContext(MyContext);
@@ -30,40 +29,6 @@ function App() {
   let [searchTerm, setSearchTerm] = useState("");
   const search = { searchTerm, setSearchTerm };
   let firstRun = useRef(true);
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<MainLayout />}>
-        <Route
-          index
-          element={isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="profile/:id"
-          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="settings"
-          element={isLoggedIn ? <Settings /> : <Navigate to="/settings" />}
-        />
-        <Route
-          path="login"
-          element={!isLoggedIn ? <Login /> : <Navigate to="/" />}
-        />
-        <Route
-          path="signup"
-          element={!isLoggedIn ? <Signup /> : <Navigate to="/" />}
-        />
-        <Route path="/search/" element={<ListingScreen />} />
-        <Route path="/addListing" element={<AddListing />} />
-        <Route path="/editListing/:id" element={<AddListing />} />
-        <Route path="/viewListing/:id" element={<ViewListing />} />
-        <Route path="/reviews" element={<ReviewsTest />} />
-        <Route path="/messages" element={<ChatHistoryScreen />} />
-        <Route path="/messages/:id" element={<ChatBox />} />
-        <Route path="/edit-review" element={<EditReview />} />
-      </Route>
-    )
-  );
   useEffect(() => {
     if (!firstRun.current) {
       if (user) {
@@ -74,11 +39,46 @@ function App() {
     }
   }, [user]);
   return (
+    
     <div className="App">
-      <searchTermContext.Provider value={search}>
-        <RouterProvider router={router} />
-      </searchTermContext.Provider>
+      <ErrorBoundary>
+        <searchTermContext.Provider value={search}>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route
+                index
+                element={isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="profile/:id"
+                element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="settings"
+                element={isLoggedIn ? <Settings /> : <Navigate to="/settings" />}
+              />
+              <Route
+                path="login"
+                element={!isLoggedIn ? <Login /> : <Navigate to="/" />}
+              />
+              <Route
+                path="signup"
+                element={!isLoggedIn ? <Signup /> : <Navigate to="/" />}
+              />
+              <Route path="/search/" element={<ListingScreen />} />
+              <Route path="/addListing" element={<AddListing />} />
+              <Route path="/editListing/:id" element={<AddListing />} />
+              <Route path="/viewListing/:id" element={<ViewListing />} />
+              <Route path="/reviews" element={<ReviewsTest />} />
+              <Route path="/messages" element={<ChatHistoryScreen />} />
+              <Route path="/messages/:id" element={<ChatBox />} />
+              <Route path="/edit-review" element={<EditReview />} />
+            </Route>
+          </Routes>
+        </searchTermContext.Provider>
+      </ErrorBoundary>
     </div>
+    
   );
 }
 
