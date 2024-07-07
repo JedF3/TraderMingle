@@ -47,7 +47,7 @@ const EditReview = () => {
     data.append("review-image", imageFile);
 
     const editReview = await axios.patch(
-      `http://localhost:4000/api/v1/reviews/${current.reviewID}`,
+      `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews/${current.reviewID}`,
       data,
       { headers: { Authorization: `Bearer ${user.token}` } }
     );

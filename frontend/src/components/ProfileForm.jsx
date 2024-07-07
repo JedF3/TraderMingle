@@ -69,7 +69,7 @@ const ProfileForm = () => {
       data.append("profile-img", selectedImage);
     }
 
-    const url = `http://127.0.0.1:4000/api/v1/user/profile/${user.id}`;
+    const url = `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/${user.id}`;
     axios
       .put(url, data, { headers: { Authorization: `Bearer ${user.token}` } })
       .then((result) => {

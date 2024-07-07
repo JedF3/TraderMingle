@@ -64,7 +64,7 @@ const Navbar = () => {
     if (user && user.token) {
       const fetchProfile = async () => {
         await axios
-          .get(`http://127.0.0.1:4000/api/v1/user/profile/${user.id}`, {
+          .get(`https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/${user.id}`, {
             headers: { Authorization: `Bearer ${user.token}` },
           })
           .then((result) => {

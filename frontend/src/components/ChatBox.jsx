@@ -42,7 +42,7 @@ const ChatBox = () => {
   async function getHistory() {
     await axios
       .post(
-        "http://127.0.0.1:4000/api/v1/chat/getHistory/",
+        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/chat/getHistory/",
         {
           fromUser: user.id,
           toUser: destination._id,

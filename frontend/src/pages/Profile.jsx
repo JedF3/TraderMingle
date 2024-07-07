@@ -15,7 +15,7 @@ const Profile = () => {
   const fetchUserProfile = async () => {
 
     try {
-      const response = await fetch(`/api/v1/user/profile/${id}`, {
+      const response = await fetch(`https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/${id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

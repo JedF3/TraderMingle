@@ -26,7 +26,7 @@ const DeleteReview = ({ show, onClose }) => {
 
     try {
       const deleteReview = await axios.delete(
-        `http://localhost:4000/api/v1/reviews/${current.reviewID}`,
+        `https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews/${current.reviewID}`,
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const getUsers = async () => {
-  const users = await axios.get(`http://localhost:4000/api/v1/user/profile`);
+  const users = await axios.get(`https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile`);
 
   const usernames = users.data.data.map((item) => {
     const image = item.image[0] || "";

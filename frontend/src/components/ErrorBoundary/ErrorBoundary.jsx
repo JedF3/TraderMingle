@@ -19,7 +19,6 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-        console.log("HAAAAAAAAAAA")
       return (
         <div className="confirmWindowBackdrop">
             <div className="errorBoundaryDiv">

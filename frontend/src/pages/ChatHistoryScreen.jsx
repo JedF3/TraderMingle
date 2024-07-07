@@ -13,7 +13,7 @@ const ChatHistoryScreen = () => {
   async function getChatHistory() {
     await axios
       .post(
-        "http://127.0.0.1:4000/api/v1/chat/getUserChatHistory/",
+        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/chat/getUserChatHistory/",
         { selectedUser: user.id },
         { headers: { Authorization: `Bearer ${user.token}` } }
       )
@@ -25,7 +25,7 @@ const ChatHistoryScreen = () => {
     let tempArray = [...chatUsers];
     for await (const userID of chatUserIDs) {
       await axios
-        .get("http://127.0.0.1:4000/api/v1/user/profile/" + userID)
+        .get("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/" + userID)
         .then((result) => {
           tempArray.push(result.data);
         })

@@ -14,7 +14,7 @@ const Settings = () => {
           throw new Error("User or user ID is undefined");
         }
 
-        const response = await fetch(`/api/v1/user/profile/${user.id}`, {
+        const response = await fetch(`https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/user/profile/${user.id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

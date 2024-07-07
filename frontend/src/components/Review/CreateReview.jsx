@@ -52,7 +52,7 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
       data.append("review-image", imageFile);
 
       const newReview = await axios.post(
-        "http://localhost:4000/api/v1/reviews/",
+        "https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/reviews/",
         data,
         {
           headers: { Authorization: `Bearer ${user.token}` },

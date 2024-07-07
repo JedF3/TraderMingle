@@ -14,7 +14,7 @@ const ListingScreen = () => {
   async function getSearchItems() {
     console.log(searchTerm);
     axios
-      .get("http://127.0.0.1:4000/api/v1/listings/search/" + searchTerm)
+      .get("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/search/" + searchTerm)
       .then((result) => {
         setSearchResults(result.data.data);
       })
@@ -24,7 +24,7 @@ const ListingScreen = () => {
   }
   async function getAllItems() {
     axios
-      .get("http://127.0.0.1:4000/api/v1/listings/viewAllListings/")
+      .get("https://trader-mingle-jqkjj3174-jedidiah-franciscos-projects.vercel.app/api/v1/listings/viewAllListings/")
       .then((result) => {
         setSearchResults(result.data.data);
       })
