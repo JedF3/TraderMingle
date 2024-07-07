@@ -8,8 +8,9 @@ import {
   getAllReviewsOfUserByListing,
   getReviewsByListing,
   getReviewByID,
-  deleteReview,
   updateReview,
+  deleteReview,
+  deleteReviewWithImage,
 } from "../controllers/review.controller.js";
 
 const router = express.Router();
@@ -20,7 +21,13 @@ router.get("/by-user/:userID", getReviewsByUser); // GET all reviews by user
 router.get("/by-user-listings/:userID", getAllReviewsOfUserByListing); // GET reviews for all listings of a user
 router.get("/by-listing/:listingID", getReviewsByListing); // GET all reviews by listing
 router.get("/:reviewID", getReviewByID); // GET a single review
-router.delete("/:reviewID", requireAuth, deleteReview); // DELETE a review
-router.patch("/:reviewID", requireAuth, updateReview); // UPDATE a review
+router.patch(
+  "/:reviewID",
+  reviewImage.single("review-image"),
+  requireAuth,
+  updateReview
+); // UPDATE a review
+router.delete("/:reviewID", requireAuth, deleteReview); // DELETE a review without image
+router.delete("/:reviewID/:/imageFilename", requireAuth, deleteReviewWithImage); // DELETE a review with an image
 
 export default router;

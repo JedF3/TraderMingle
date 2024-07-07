@@ -22,7 +22,7 @@ import ReviewsTest from "./pages/ReviewsTest";
 import ChatBox from "./components/ChatBox";
 import { socket } from "./socket";
 import ChatHistoryScreen from "./pages/ChatHistoryScreen";
-import EditReview from "./components/Review/EditReview";
+import EditReview from "./pages/EditReview";
 
 function App() {
   const { user } = useContext(MyContext);

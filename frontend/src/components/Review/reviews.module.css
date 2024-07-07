@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+.flexCenter,
+.rightBtn,
+.cardInListing,
+.listingPrev {
+  display: flex;
+  align-items: center;
+}
+
 /* CreateReview */
 /* 5 Star rating by https://dev.to/vikas2426/5-star-rating-component-a-step-by-step-guide-37bk */
 .modalOverlay {
@@ -63,6 +71,10 @@
   resize: none;
 }
 
+.fileUpload {
+  text-align: center;
+}
+
 .previewIMG {
   height: 100px;
   cursor: pointer;
@@ -84,7 +96,8 @@
 }
 
 .submitBtn,
-.rightBtn {
+.rightBtn,
+.deleteBtn {
   background-color: #1aac83;
   color: #fff;
   padding: 10px 20px;
@@ -98,7 +111,9 @@
 }
 
 .rightBtn {
-  /* flex-grow: 1; */
+  justify-content: center;
+  height: 30px;
+  max-width: 1rem;
 }
 
 .error {
@@ -132,8 +147,6 @@ a,
 
 .cardInListing {
   height: 200px;
-  display: flex;
-  align-items: center;
 }
 
 .card p {
@@ -145,7 +158,6 @@ a,
   flex-grow: 2;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
 }
 
@@ -165,20 +177,35 @@ a,
   margin-left: 10px;
 }
 
-.star {
+.star,
+.starReview {
   color: orange;
   font-size: 40px;
   text-decoration: none;
-  margin-right: 1rem;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
+  margin: 0;
+}
+
+.starReview {
+  font-size: 30px;
+  margin-top: -10px;
+}
+
+.profileIMG {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.listingMini {
+  margin-top: auto;
 }
 
 .listingPrev {
   background-color: #1aac83;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
   color: white;
 }
 
@@ -193,4 +220,18 @@ a,
 .listingIMG {
   height: 50px;
   margin: 5px;
+}
+
+/* DeleteReview */
+
+.deleteWindow {
+  background-color: white;
+  max-width: 400px;
+  padding: 20px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.deleteBtn {
+  background-color: red;
 }

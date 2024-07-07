@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 const Profile = () => {
   const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useContext(MyContext);
-  const {id} = useParams();
+  const { id } = useParams();
   const [profile, setProfile] = useState({});
   const fetchUserProfile = async () => {
     // if (!user || !user.id) {
@@ -49,11 +49,11 @@ const Profile = () => {
           <p>Loading profile...</p>
         )}
       </div>
-      {userProfile?(
-        <ProfileTabs profile={profile}/>): (
-          <p>Loading profile...</p>
-        )
-      }
+      {userProfile ? (
+        <ProfileTabs profile={profile} />
+      ) : (
+        <p>Loading profile...</p>
+      )}
     </div>
   );
 };

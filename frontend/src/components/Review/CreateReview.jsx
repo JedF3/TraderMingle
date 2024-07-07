@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useReducer, useContext, Fragment } from "react";
-import styles from "./reviews.module.css";
 import { initialState, reviewsReducer } from "../../reducers/reviewsReducer.js";
 import MyContext from "../../MyContext.js";
+import styles from "./reviews.module.css";
 
 const CreateReview = ({ listingID, show, onClose, error, setError }) => {
   const { user } = useContext(MyContext);
@@ -27,31 +27,40 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const isExists = state.reviews.find((item) => {
+      return item.listingID._id === listingID && item.userID._id === user.id;
+    });
+
     if (!rating) {
-      setError(true);
-      return console.error("Please at least enter a star rating.");
+      setError(2);
+      throw new Error("Please at least enter a star rating.");
     }
 
-    const data = new FormData();
-    data.append("userID", user.id);
-    data.append("listingID", listingID);
-    data.append("rating", rating);
-    data.append("comment", comment);
-    data.append("review-image", imageFile);
+    if (isExists) {
+      setError(1);
+      throw new Error("You have already made a review for this listing.");
+    }
 
-    const newReview = await axios.post(
-      "http://localhost:4000/api/v1/reviews/",
-      data,
-      { headers: { Authorization: `Bearer ${user.token}` } }
-    );
+    try {
+      const data = new FormData();
+      data.append("userID", user.id);
+      data.append("listingID", listingID);
+      data.append("rating", rating);
+      data.append("comment", comment);
+      data.append("review-image", imageFile);
 
-    setError(false);
-    setReload(true);
-    onClose();
+      const newReview = await axios.post(
+        "http://localhost:4000/api/v1/reviews/",
+        data,
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
 
-    dispatch({ type: "CREATE_REVIEW", payload: newReview.data.data });
+      setError(false);
+      setReload(true);
+      onClose();
 
-    console.log(state);
+      dispatch({ type: "CREATE_REVIEW", payload: newReview.data.data });
+    } catch (error) {}
   };
 
   // Modal window controller
@@ -78,6 +87,13 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
     })
     .reverse();
 
+  let errorMsg = "";
+  if (error === 1) {
+    errorMsg = "You have already made a review for this listing.";
+  } else if (error === 2) {
+    errorMsg = "Please at least enter a star rating.";
+  }
+
   return (
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <form className={styles.feedbackForm} onSubmit={(e) => handleSubmit(e)}>
@@ -102,13 +118,11 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
           className={styles.fileInput}
           onChange={(e) => handlePreview(e)}
         />
-        <label htmlFor="fileUpload">
+        <label htmlFor="fileUpload" className={styles.fileUpload}>
           <img src={preview} alt="preview" className={styles.previewIMG} />
         </label>
 
-        <div className={error ? styles.error : styles.noError}>
-          Please at least enter a star rating.
-        </div>
+        <div className={error ? styles.error : styles.noError}>{errorMsg}</div>
         <div className={styles.buttonDiv}>
           <button className={styles.submitBtn} onClick={onClose}>
             Cancel

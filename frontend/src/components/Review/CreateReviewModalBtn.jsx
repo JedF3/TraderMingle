@@ -3,7 +3,7 @@ import CreateReview from "./CreateReview";
 
 const CreateReviewModalBtn = ({ listingID }) => {
   const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(0);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -11,7 +11,7 @@ const CreateReviewModalBtn = ({ listingID }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setError(false);
+    setError(0);
   };
 
   const handleError = (state) => {

@@ -1,4 +1,4 @@
-import EditReview from "../components/Review/EditReview";
+import EditReview from "./EditReview";
 
 const ReviewsTest = () => {
   return (
