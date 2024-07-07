@@ -5,22 +5,29 @@ import MyContext from "../../MyContext.js";
 import styles from "./reviews.module.css";
 
 const CreateReview = ({ listingID, show, onClose, error, setError }) => {
-  const { user } = useContext(MyContext);
-  const [rating, setRating] = useState(0);
+  const { user, reload, setReload } = useContext(MyContext);
+  const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("/img/addImg.png");
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
-  const { setReload } = useContext(MyContext);
 
   const handlePreview = (e) => {
     setImageFile(e.target.files[0]);
     setPreview(URL.createObjectURL(e.target.files[0]));
   };
 
+  const handleCloseModal = () => {
+    setRating("");
+    setComment("");
+    setImageFile(null);
+    setError(false);
+    onClose();
+  };
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      setRating("");
+      handleCloseModal();
     }
   };
 
@@ -31,17 +38,12 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
       return item.listingID._id === listingID && item.userID._id === user.id;
     });
 
-    if (!rating) {
-      setError(2);
-      throw new Error("Please at least enter a star rating.");
-    }
-
-    if (isExists) {
-      setError(1);
-      throw new Error("You have already made a review for this listing.");
-    }
-
     try {
+      if (!rating) {
+        setError("Please at least enter a star rating.");
+        throw new Error("Please at least enter a star rating.");
+      }
+
       const data = new FormData();
       data.append("userID", user.id);
       data.append("listingID", listingID);
@@ -52,15 +54,23 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
       const newReview = await axios.post(
         "http://localhost:4000/api/v1/reviews/",
         data,
-        { headers: { Authorization: `Bearer ${user.token}` } }
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
       );
 
-      setError(false);
-      setReload(true);
-      onClose();
+      setReload(!reload);
+      handleCloseModal();
 
       dispatch({ type: "CREATE_REVIEW", payload: newReview.data.data });
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.status === 409) {
+        setError("You have already made a review for this listing.");
+        console.error(error.message);
+      } else {
+        console.error(error);
+      }
+    }
   };
 
   // Modal window controller
@@ -122,9 +132,9 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
           <img src={preview} alt="preview" className={styles.previewIMG} />
         </label>
 
-        <div className={error ? styles.error : styles.noError}>{errorMsg}</div>
+        <div className={error ? styles.error : styles.noError}>{error}</div>
         <div className={styles.buttonDiv}>
-          <button className={styles.submitBtn} onClick={onClose}>
+          <button className={styles.submitBtn} onClick={handleCloseModal}>
             Cancel
           </button>
           <button type="submit" className={styles.submitBtn}>

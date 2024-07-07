@@ -1,8 +1,4 @@
-import {
-  Route,
-  Navigate,
-  Routes,
-} from "react-router-dom";
+import { Route, Navigate, Routes } from "react-router-dom";
 import { useEffect, useRef, useState, useContext } from "react";
 
 // pages & components
@@ -16,7 +12,6 @@ import ListingScreen from "./pages/ListingScreen";
 import AddListing from "./pages/AddListing";
 import searchTermContext from "./context/searchTermContext";
 import ViewListing from "./pages/ViewListing";
-import ReviewsTest from "./pages/ReviewsTest";
 import ChatBox from "./components/ChatBox";
 import { socket } from "./socket";
 import ChatHistoryScreen from "./pages/ChatHistoryScreen";
@@ -39,7 +34,6 @@ function App() {
     }
   }, [user]);
   return (
-    
     <div className="App">
       <ErrorBoundary>
         <searchTermContext.Provider value={search}>
@@ -47,7 +41,9 @@ function App() {
             <Route path="/" element={<MainLayout />}>
               <Route
                 index
-                element={isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />}
+                element={
+                  isLoggedIn ? <ListingScreen /> : <Navigate to="/login" />
+                }
               />
               <Route
                 path="profile/:id"
@@ -55,7 +51,9 @@ function App() {
               />
               <Route
                 path="settings"
-                element={isLoggedIn ? <Settings /> : <Navigate to="/settings" />}
+                element={
+                  isLoggedIn ? <Settings /> : <Navigate to="/settings" />
+                }
               />
               <Route
                 path="login"
@@ -69,7 +67,6 @@ function App() {
               <Route path="/addListing" element={<AddListing />} />
               <Route path="/editListing/:id" element={<AddListing />} />
               <Route path="/viewListing/:id" element={<ViewListing />} />
-              <Route path="/reviews" element={<ReviewsTest />} />
               <Route path="/messages" element={<ChatHistoryScreen />} />
               <Route path="/messages/:id" element={<ChatBox />} />
               <Route path="/edit-review" element={<EditReview />} />
@@ -78,7 +75,6 @@ function App() {
         </searchTermContext.Provider>
       </ErrorBoundary>
     </div>
-    
   );
 }
 

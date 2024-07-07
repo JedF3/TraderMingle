@@ -24,21 +24,19 @@ const DeleteReview = ({ show, onClose }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
 
-    if (current.imageUrl.filename) {
-      const deleteReviewWithImage = await axios.delete(
-        `http://localhost:4000/api/v1/reviews/${current.reviewID}/${current.reviewID.filename}`,
-        { headers: { Authorization: `Bearer ${user.token}` } }
-      );
-    } else {
+    try {
       const deleteReview = await axios.delete(
         `http://localhost:4000/api/v1/reviews/${current.reviewID}`,
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
-    }
 
-    dispatch({ type: "DELETE_REVIEW", payload: current.reviewID });
-    setReload(!reload);
-    navigate(-1);
+      dispatch({ type: "DELETE_REVIEW", payload: current.reviewID });
+      setReload(!reload);
+      onClose();
+      navigate(-1);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (

@@ -10,7 +10,6 @@ import {
   getReviewByID,
   updateReview,
   deleteReview,
-  deleteReviewWithImage,
 } from "../controllers/review.controller.js";
 
 const router = express.Router();
@@ -28,6 +27,5 @@ router.patch(
   updateReview
 ); // UPDATE a review
 router.delete("/:reviewID", requireAuth, deleteReview); // DELETE a review without image
-router.delete("/:reviewID/:/imageFilename", requireAuth, deleteReviewWithImage); // DELETE a review with an image
 
 export default router;
