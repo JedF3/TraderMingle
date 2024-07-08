@@ -799,3 +799,21 @@ li {
   cursor: pointer !important;
   margin-left: 0 !important;
 }
+
+@media only screen and (max-width: 870px) {
+  .listingItem{
+    min-height:30vw;
+    max-height:30vw;
+    font-size: 70%;
+  }
+  .breakit{
+    word-break:break-all;
+  }
+  .imageInputContent {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  .reviewIMG{
+    width:40%;
+  }
+}

@@ -235,3 +235,16 @@ a,
 .deleteBtn {
   background-color: red;
 }
+
+
+
+
+
+@media only screen and (max-width: 870px) {
+  .reviewIMG {
+    width:150px;
+    height: 150px;
+    margin: auto;
+    margin-left: 10px;
+  }
+}
