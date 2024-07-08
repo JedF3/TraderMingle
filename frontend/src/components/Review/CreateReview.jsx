@@ -129,7 +129,7 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
           onChange={(e) => handlePreview(e)}
         />
         <label htmlFor="fileUpload" className={styles.fileUpload}>
-          <img src={preview} alt="preview" className={styles.previewIMG} />
+          <img src={preview} alt="Upload an image" className={styles.previewIMG} />
         </label>
 
         <div className={error ? styles.error : styles.noError}>{error}</div>
