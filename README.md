@@ -36,8 +36,8 @@ You can leave a review of an item by going to it's listing page and clicking the
 
 ## Authors and acknowledgment
 
-Jedidiah Francisco - Listing, Chat, Deployment
-Jose Perez Jr. - Profile
-David Del Rio - Reviews
-Milo Somera & Jaypee Hindang - Adviser
+Jedidiah Francisco - Listing, Chat, Deployment,
+Jose Perez Jr. - Profile,
+David Del Rio - Reviews,
+Milo Somera & Jaypee Hindang - Adviser,
 Uplift Code Camp
