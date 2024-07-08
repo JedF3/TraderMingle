@@ -20,7 +20,6 @@ function ProfileTabs({profile}) {
     .catch((error)=>{console.log(error)})
   }
   useEffect(()=>{
-    console.log(profile);
       if(profile._id!=null){
         getUserListings(profile._id)
       }

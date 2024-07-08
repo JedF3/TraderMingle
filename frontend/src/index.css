@@ -813,7 +813,5 @@ li {
     display: flex;
     flex-flow: row wrap;
   }
-  .reviewIMG{
-    width:40%;
-  }
+  
 }
