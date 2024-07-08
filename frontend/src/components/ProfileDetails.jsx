@@ -36,7 +36,7 @@ const ProfileDetails = ({ profile }) => {
       ) : (
         <img src={no_avatar} alt="" className="avatar" />
       )}
-      {!isMe&& isLoggedIn &&
+      {(!isMe&& isLoggedIn) &&
         <button onClick={() => {navigate("../messages/" + profileID, { state: necessaryChatInfo });}}>Send this user a message</button>
       }
       <h2>
