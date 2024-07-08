@@ -10,6 +10,7 @@ const ViewListing = () => {
   const location = useLocation();
   const { id } = useParams();
   const { user } = useContext(MyContext);
+  const { isLoggedIn } = useContext(MyContext);
   const { searchTerm, setSearchTerm } = useContext(searchTermContext);
   const navigate = useNavigate();
   const [item, setItem] = useState({
@@ -151,7 +152,7 @@ const ViewListing = () => {
             Delete Listing
           </button>
         )}
-        {!isMyItem && <CreateReviewModalBtn listingID={id} />}
+        {!isMyItem && isLoggedIn && <CreateReviewModalBtn listingID={id} />}
       </div>
       <h1>{itemName}</h1>
       <div className="imageInputContent">
@@ -174,7 +175,7 @@ const ViewListing = () => {
           <h3>{posterName}</h3>
           <h3>{posterNumber}</h3>
           </div>
-          {!isMyItem&&
+          {!isMyItem&& isLoggedIn &&
           <button
             onClick={() => {
               navigate("../messages/" + posterID, { state: necessaryChatInfo });

@@ -6,6 +6,7 @@ import MyContext from "../MyContext";
 
 const ProfileDetails = ({ profile }) => {
   const {user} = useContext(MyContext);
+  const { isLoggedIn } = useContext(MyContext);
   const [necessaryChatInfo, setNecessaryChatInfo] = useState({});
   const [profileID, setProfileID] = useState("");
   const [isMe, setIsMe] = useState(true);
@@ -35,7 +36,7 @@ const ProfileDetails = ({ profile }) => {
       ) : (
         <img src={no_avatar} alt="" className="avatar" />
       )}
-      {!isMe&&
+      {!isMe&& isLoggedIn &&
         <button onClick={() => {navigate("../messages/" + profileID, { state: necessaryChatInfo });}}>Send this user a message</button>
       }
       <h2>
