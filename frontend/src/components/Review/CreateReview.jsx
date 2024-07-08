@@ -9,7 +9,7 @@ const CreateReview = ({ listingID, show, onClose, error, setError }) => {
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState("/img/addImg.png");
+  const [preview, setPreview] = useState("https://res.cloudinary.com/dmqffmafb/image/upload/v1720398289/AddListingsImg/nhxdruqggj68byx4sklm.png");
   const [state, dispatch] = useReducer(reviewsReducer, initialState);
 
   const handlePreview = (e) => {

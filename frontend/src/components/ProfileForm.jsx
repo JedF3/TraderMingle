@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const ProfileForm = () => {
   const { userProfile, dispatch } = useUserProfileContext();
   const { user } = useContext(MyContext);
-  let defaultImgURL = "/img/addImg.png";
+  let defaultImgURL = "https://res.cloudinary.com/dmqffmafb/image/upload/v1720398289/AddListingsImg/nhxdruqggj68byx4sklm.png";
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");

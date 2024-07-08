@@ -12,7 +12,7 @@ const AddListing = () => {
   let [listingName, setListingName] = useState("");
   let [listingDescription, setListingDescription] = useState("");
   let [listingPrice, setListingPrice] = useState(0);
-  let defaultImgURL = "/img/addImg.png";
+  let defaultImgURL = "https://res.cloudinary.com/dmqffmafb/image/upload/v1720398289/AddListingsImg/nhxdruqggj68byx4sklm.png";
   let [displayImg1, setDisplayImg1] = useState(defaultImgURL);
   let [displayImg2, setDisplayImg2] = useState(defaultImgURL);
   let [displayImg3, setDisplayImg3] = useState(defaultImgURL);

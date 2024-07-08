@@ -15,7 +15,7 @@ const EditReview = () => {
   const [comment, setComment] = useState(current.comment);
   const [imageFile, setImageFile] = useState();
   const [preview, setPreview] = useState(
-    current.imageUrl.path || "img/addImg.png"
+    current.imageUrl.path || "https://res.cloudinary.com/dmqffmafb/image/upload/v1720398289/AddListingsImg/nhxdruqggj68byx4sklm.png"
   );
   const navigate = useNavigate();
 
