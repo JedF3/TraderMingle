@@ -6,6 +6,7 @@ import MyContext from "../MyContext";
 
 const ProfileDetails = ({ profile }) => {
   const {user} = useContext(MyContext);
+  const { isLoggedIn } = useContext(MyContext);
   const [necessaryChatInfo, setNecessaryChatInfo] = useState({});
   const [profileID, setProfileID] = useState("");
   const [isMe, setIsMe] = useState(true);
@@ -25,7 +26,12 @@ const ProfileDetails = ({ profile }) => {
         image:profile.image
       });
       setProfileID(profile._id)
-      setIsMe(profile._id==user.id);
+      if(user){
+        setIsMe(profile._id==user.id);
+      }
+      else{
+        setIsMe(false);
+      }
     }
   },[profile])
   return (
@@ -35,8 +41,8 @@ const ProfileDetails = ({ profile }) => {
       ) : (
         <img src={no_avatar} alt="" className="avatar" />
       )}
-      {!isMe&&
-        <button onClick={() => {navigate("../messages/" + profileID, { state: necessaryChatInfo });}}>Send this user a message</button>
+      {(!isMe&& isLoggedIn) ?
+        <button onClick={() => {navigate("../messages/" + profileID, { state: necessaryChatInfo });}}>Send this user a message</button>:<p></p>
       }
       <h2>
         {profile.firstname} {profile.lastname}

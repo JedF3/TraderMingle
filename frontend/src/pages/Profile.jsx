@@ -15,11 +15,7 @@ const Profile = () => {
   const fetchUserProfile = async () => {
 
     try {
-      const response = await fetch(`https://tradermingle.onrender.com/api/v1/user/profile/${id}`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const response = await fetch(`https://tradermingle.onrender.com/api/v1/user/profile/${id}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch profile");

@@ -23,9 +23,9 @@ class ErrorBoundary extends Component {
         <div className="confirmWindowBackdrop">
             <div className="errorBoundaryDiv">
                 <h2>Something went wrong</h2>
-                <button onClick={()=>{window.location.replace("http://localhost:5173/")}}>Back to Home</button>
+                <button onClick={()=>{window.location.replace("https://trader-mingle-61w8x27j2-jedidiah-franciscos-projects.vercel.app/")}}>Back to Home</button>
                 <button onClick={()=>{window.location.reload()}}>Reload</button> 
-                <button onClick={()=>{localStorage.clear();window.location.replace("http://localhost:5173/")}}>Remove session data and relogin</button>
+                <button onClick={()=>{localStorage.clear();window.location.replace("https://trader-mingle-61w8x27j2-jedidiah-franciscos-projects.vercel.app/")}}>Remove session data and relogin</button>
             </div>
          </div> 
       );

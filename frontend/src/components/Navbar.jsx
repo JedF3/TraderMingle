@@ -155,9 +155,11 @@ const Navbar = () => {
               }}
             />
           )}
-          <button onClick={() => navigate("/addListing")}>
-            Have something to sell?
-          </button>
+          {isLoggedIn&&
+            <button onClick={() => navigate("/addListing")}>
+              Have something to sell?
+            </button>
+          }
           {isLoggedIn ? (
             <div ref={menuRef}>
               <button
