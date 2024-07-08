@@ -1,13 +1,12 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MyContext from "../../MyContext";
 import no_avatar from "../../images/no-avatar.svg";
 import styles from "./reviews.module.css";
 
 const ReviewCard = ({ reviewData, inListing }) => {
-  const { user, setCurrent, reload, setReload } = useContext(MyContext);
+  const { user, setCurrent, reload, setReload, isLoggedIn } = useContext(MyContext);
   const { userID, listing, rating, comment, updatedAt, imageUrl } = reviewData;
-
   // finds details of userID for when Query population fails to work
   const parsed = JSON.parse(localStorage.getItem("usernames")) || [];
   const userObj = parsed.find((item) => item.userID === userID);
@@ -18,7 +17,7 @@ const ReviewCard = ({ reviewData, inListing }) => {
   const profileIMG = userObj ? userObj.profileIMG : userIDIMG;
 
   // checks if the review belongs to the active user
-  const isYours = id === user.id;
+  const [isYours, setIsYours] = useState(false);
 
   const handleOnClick = () => {
     setCurrent(reviewData);
@@ -60,7 +59,11 @@ const ReviewCard = ({ reviewData, inListing }) => {
     if (i <= rating - 1)
       return <Fragment key={`star${i + 1}`}>&#9733;</Fragment>;
   });
-
+  useEffect(()=>{
+    if(isLoggedIn){
+      setIsYours(id === user.id);
+    }
+  }, [])
   return (
     <div className={styles.cardInListing}>
       <div className={styles.flexGrow}>

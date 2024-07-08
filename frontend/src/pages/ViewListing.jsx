@@ -152,7 +152,7 @@ const ViewListing = () => {
             Delete Listing
           </button>
         )}
-        {(!isMyItem && isLoggedIn) && <CreateReviewModalBtn listingID={id} />}
+        {(!isMyItem && isLoggedIn) ? <CreateReviewModalBtn listingID={id} /> :<p></p>}
       </div>
       <h1>{itemName}</h1>
       <div className="imageInputContent">
